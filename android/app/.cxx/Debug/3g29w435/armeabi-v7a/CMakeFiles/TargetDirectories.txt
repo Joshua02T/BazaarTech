@@ -1,0 +1,2 @@
+C:/Users/sh3sh/StudioProjects/bazaartech/android/app/.cxx/Debug/3g29w435/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/sh3sh/StudioProjects/bazaartech/android/app/.cxx/Debug/3g29w435/armeabi-v7a/CMakeFiles/rebuild_cache.dir

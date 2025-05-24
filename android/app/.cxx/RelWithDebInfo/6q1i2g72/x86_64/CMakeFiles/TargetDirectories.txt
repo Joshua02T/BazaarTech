@@ -1,0 +1,2 @@
+C:/Users/sh3sh/StudioProjects/bazaartech/android/app/.cxx/RelWithDebInfo/6q1i2g72/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/sh3sh/StudioProjects/bazaartech/android/app/.cxx/RelWithDebInfo/6q1i2g72/x86_64/CMakeFiles/rebuild_cache.dir

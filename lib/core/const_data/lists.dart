@@ -1,0 +1,637 @@
+import 'package:bazaartech/core/const_data/app_image.dart';
+import 'package:bazaartech/view/home/model/bazaarmodel.dart';
+import 'package:bazaartech/view/home/model/productmodel.dart';
+import 'package:bazaartech/view/home/model/storemodel.dart';
+
+List categoryItem = ['All', 'Products', 'Stores', 'Bazaars'];
+
+List searchCategoryItem = ['Products', 'Stores', 'Bazaars'];
+
+List ratingNumbers = ['1+', '2+', '3+', '4+', '5'];
+
+List bazaarStatus = ['past', 'ongoing', 'upcoming'];
+
+final List<Store> storeCardItems = [
+  Store(
+    id: "store1",
+    image: AppImages.storePhoto,
+    rating: 3,
+    name: 'LV',
+    address: 'Al Hadara - Homs',
+    sort: 'Clothing brand',
+    storeNumber: 0994340513,
+    latitude: 34.7335,
+    longitude: 36.7171,
+    reviews: [
+      Review(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        review: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+    ],
+    products: [],
+  ),
+  Store(
+    id: "store2",
+    image: AppImages.storePhoto,
+    rating: 4,
+    name: 'Adidas',
+    storeNumber: 0994340513,
+    address: 'Al Hadara - Homs',
+    sort: 'Clothing brand',
+    latitude: 34.7335,
+    longitude: 36.7171,
+    reviews: [
+      Review(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        review: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+    ],
+    products: [],
+  ),
+  Store(
+    id: "store3",
+    image: AppImages.storePhoto,
+    rating: 5,
+    name: 'Nike',
+    storeNumber: 0994340513,
+    address: 'Al Hadara - Homs',
+    sort: 'Clothing brand',
+    latitude: 34.7335,
+    longitude: 36.7171,
+    reviews: [
+      Review(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        review: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+    ],
+    products: [],
+  ),
+  Store(
+    id: "store4",
+    image: AppImages.storePhoto,
+    rating: 5,
+    name: 'Nike',
+    storeNumber: 0994340513,
+    address: 'Al Hadara - Homs',
+    sort: 'Clothing brand',
+    latitude: 34.7335,
+    longitude: 36.7171,
+    reviews: [
+      Review(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        review: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+    ],
+    products: [],
+  ),
+  Store(
+    id: "store5",
+    image: AppImages.storePhoto,
+    rating: 5,
+    name: 'Nike',
+    storeNumber: 0994340513,
+    address: 'Al Hadara - Homs',
+    sort: 'Clothing brand',
+    latitude: 34.7335,
+    longitude: 36.7171,
+    reviews: [
+      Review(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        review: 'Great boots! Very comfortable and lightweight.',
+      ),
+    ],
+    products: [],
+  ),
+  Store(
+    id: "store6",
+    image: AppImages.storePhoto,
+    rating: 2,
+    name: 'FILA',
+    storeNumber: 0994340513,
+    address: 'Fairouza - Homs',
+    sort: 'Clothing brand',
+    latitude: 34.7335,
+    longitude: 36.7171,
+    reviews: [],
+    products: [
+      Product(
+        id: "product3",
+        image: AppImages.pijama,
+        status: 'DISCOUNT',
+        price: 120,
+        oldPrice: 200,
+        size: 'L',
+        name: 'Pejama',
+        markerName: 'SheIn',
+        category: 'Pejama',
+        rating: 2,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+          Comment(
+            profilePhoto: AppImages.user3,
+            name: 'Jane Smith',
+            rating: 5,
+            comment:
+                'Absolutely love it! The craftsmanship is impeccable, and the leather feels so luxurious. Worth every penny. It\'s both stylish and practical for everyday use.',
+          ),
+        ],
+        details:
+            "Chic and versatile, this lightweight blouse features a flattering V-neckline, flowy sleeves, and a delicate floral print. Perfect for casual or polished looks!",
+      ),
+      Product(
+        id: "product1",
+        image: AppImages.productPhoto,
+        status: 'NEW',
+        price: 24,
+        oldPrice: 0,
+        name: 'Castro Oil',
+        size: '',
+        markerName: 'Peaches Skin Care',
+        category: 'Cosmetics',
+        rating: 4,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+        ],
+        details:
+            "Natural, multipurpose oil known for its moisturizing and nourishing properties...",
+      ),
+      Product(
+        id: "product1",
+        image: AppImages.productPhoto,
+        status: 'NEW',
+        price: 24,
+        oldPrice: 0,
+        name: 'Castro Oil',
+        size: '',
+        markerName: 'Peaches Skin Care',
+        category: 'Cosmetics',
+        rating: 4,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+        ],
+        details:
+            "Natural, multipurpose oil known for its moisturizing and nourishing properties...",
+      ),
+      Product(
+        id: "product1",
+        image: AppImages.productPhoto,
+        status: 'NEW',
+        price: 24,
+        oldPrice: 0,
+        name: 'Castro Oil',
+        size: '',
+        markerName: 'Peaches Skin Care',
+        category: 'Cosmetics',
+        rating: 4,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+        ],
+        details:
+            "Natural, multipurpose oil known for its moisturizing and nourishing properties...",
+      ),
+      Product(
+        id: "product4",
+        image: AppImages.boots,
+        status: 'NONE',
+        price: 1299,
+        oldPrice: 0,
+        name: 'Ultrafly',
+        size: '44',
+        category: 'Shoes',
+        markerName: 'Nike',
+        rating: 5,
+        comments: [],
+        details:
+            "The UltraFly Nike Boots are a popular line of soccer cleats designed for speed, agility, and precision on the field. Known for their lightweight construction, they feature a snug, sock-like fit with a dynamic collar for enhanced support and comfort.",
+      ),
+    ],
+  ),
+];
+
+final List<Product> productCardItems = [
+  Product(
+    id: "product1",
+    image: AppImages.productPhoto,
+    status: 'NEW',
+    price: 24,
+    oldPrice: 0,
+    name: 'Castro Oil',
+    size: '',
+    markerName: 'Peaches Skin Care',
+    category: 'Cosmetics',
+    rating: 4,
+    comments: [
+      Comment(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        comment: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Comment(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+    ],
+    details:
+        "Natural, multipurpose oil known for its moisturizing and nourishing properties...",
+  ),
+  Product(
+    id: "product2",
+    image: AppImages.productbag,
+    status: 'DISCOUNT',
+    price: 599,
+    oldPrice: 799,
+    name: 'Women’s Bag',
+    size: '',
+    markerName: 'LouisVuitton',
+    category: 'Cosmetics',
+    rating: 3,
+    comments: [
+      Comment(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        comment: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Comment(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Comment(
+        profilePhoto: AppImages.user3,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Comment(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Comment(
+        profilePhoto: AppImages.user3,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Comment(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Comment(
+        profilePhoto: AppImages.user3,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+    ],
+    details:
+        "Elevate your style with this iconic Louis Vuitton women's bag, a timeless piece blending sophistication and functionality. Crafted from the brand's signature Monogram Canvas or Epi leather, this bag embodies luxury and durability.",
+  ),
+  Product(
+    id: "product3",
+    image: AppImages.pijama,
+    status: 'DISCOUNT',
+    price: 120,
+    oldPrice: 200,
+    name: 'Pejama',
+    size: 'L',
+    markerName: 'SheIn',
+    category: 'Pejama',
+    rating: 2,
+    comments: [
+      Comment(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        comment: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Comment(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        comment: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+      Comment(
+        profilePhoto: AppImages.user3,
+        name: 'Jane Smith',
+        rating: 5,
+        comment:
+            'Absolutely love it! The craftsmanship is impeccable, and the leather feels so luxurious. Worth every penny. It\'s both stylish and practical for everyday use.',
+      ),
+    ],
+    details:
+        "Chic and versatile, this lightweight blouse features a flattering V-neckline, flowy sleeves, and a delicate floral print. Perfect for casual or polished looks!",
+  ),
+  Product(
+    id: "product4",
+    image: AppImages.boots,
+    status: 'NONE',
+    price: 1299,
+    oldPrice: 0,
+    name: 'Ultrafly',
+    size: '44',
+    category: 'Shoes',
+    markerName: 'Nike',
+    rating: 5,
+    comments: [],
+    details:
+        "The UltraFly Nike Boots are a popular line of soccer cleats designed for speed, agility, and precision on the field. Known for their lightweight construction, they feature a snug, sock-like fit with a dynamic collar for enhanced support and comfort.",
+  ),
+  Product(
+    id: "product5",
+    image: AppImages.productCart,
+    status: 'NONE',
+    price: 899,
+    oldPrice: 0,
+    name: 'Ultrafly',
+    size: '45',
+    category: 'Shoes',
+    markerName: 'Nike',
+    rating: 3,
+    comments: [],
+    details:
+        "The UltraFly Nike Boots are a popular line of soccer cleats designed for speed, agility, and precision on the field. Known for their lightweight construction, they feature a snug, sock-like fit with a dynamic collar for enhanced support and comfort.",
+  ),
+];
+
+final List<Bazaar> bazaarCardItems = [
+  Bazaar(
+    id: "bazaar1",
+    image: AppImages.bazaarimage1,
+    name: 'Christmas Al-Hadara',
+    details: 'Sales up to %70 !!',
+    firstDate: '1 Oct',
+    lastDate: '10 Oct',
+    status: 'online',
+    reviews: [
+      Review(
+        profilePhoto: AppImages.user1,
+        name: 'John Doe',
+        rating: 4,
+        review: 'Great boots! Very comfortable and lightweight.',
+      ),
+      Review(
+        profilePhoto: AppImages.user2,
+        name: 'Jane Smith',
+        rating: 5,
+        review: 'Amazing quality and perfect fit. Highly recommend!',
+      ),
+    ],
+    products: [
+      Product(
+        id: "product3",
+        image: AppImages.pijama,
+        status: 'DISCOUNT',
+        price: 120,
+        oldPrice: 200,
+        size: 'L',
+        name: 'Pejama',
+        markerName: 'SheIn',
+        category: 'Pejama',
+        rating: 2,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+          Comment(
+            profilePhoto: AppImages.user3,
+            name: 'Jane Smith',
+            rating: 5,
+            comment:
+                'Absolutely love it! The craftsmanship is impeccable, and the leather feels so luxurious. Worth every penny. It\'s both stylish and practical for everyday use.',
+          ),
+        ],
+        details:
+            "Chic and versatile, this lightweight blouse features a flattering V-neckline, flowy sleeves, and a delicate floral print. Perfect for casual or polished looks!",
+      ),
+      Product(
+        id: "product1",
+        image: AppImages.productPhoto,
+        status: 'NEW',
+        price: 24,
+        oldPrice: 0,
+        name: 'Castro Oil',
+        size: '',
+        markerName: 'Peaches Skin Care',
+        category: 'Cosmetics',
+        rating: 4,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+        ],
+        details:
+            "Natural, multipurpose oil known for its moisturizing and nourishing properties...",
+      ),
+      Product(
+        id: "product1",
+        image: AppImages.productPhoto,
+        status: 'NEW',
+        price: 24,
+        oldPrice: 0,
+        name: 'Castro Oil',
+        size: '',
+        markerName: 'Peaches Skin Care',
+        category: 'Cosmetics',
+        rating: 4,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+        ],
+        details:
+            "Natural, multipurpose oil known for its moisturizing and nourishing properties...",
+      ),
+      Product(
+        id: "product1",
+        image: AppImages.productPhoto,
+        status: 'NEW',
+        price: 24,
+        oldPrice: 0,
+        name: 'Castro Oil',
+        size: '',
+        markerName: 'Peaches Skin Care',
+        category: 'Cosmetics',
+        rating: 4,
+        comments: [
+          Comment(
+            profilePhoto: AppImages.user1,
+            name: 'John Doe',
+            rating: 4,
+            comment: 'Great boots! Very comfortable and lightweight.',
+          ),
+          Comment(
+            profilePhoto: AppImages.user2,
+            name: 'Jane Smith',
+            rating: 5,
+            comment: 'Amazing quality and perfect fit. Highly recommend!',
+          ),
+        ],
+        details:
+            "Natural, multipurpose oil known for its moisturizing and nourishing properties...",
+      ),
+      Product(
+        id: "product4",
+        image: AppImages.boots,
+        status: 'NONE',
+        price: 1299,
+        oldPrice: 0,
+        name: 'Ultrafly',
+        size: '44',
+        category: 'Shoes',
+        markerName: 'Nike',
+        rating: 5,
+        comments: [],
+        details:
+            "The UltraFly Nike Boots are a popular line of soccer cleats designed for speed, agility, and precision on the field. Known for their lightweight construction, they feature a snug, sock-like fit with a dynamic collar for enhanced support and comfort.",
+      ),
+    ],
+  ),
+  Bazaar(
+      id: "bazaar2",
+      image: AppImages.bazaarimage2,
+      name: 'New Year',
+      details: 'New Year’s sales and many other things!!',
+      firstDate: '25 Dec',
+      lastDate: '30 Dec',
+      status: '',
+      reviews: [],
+      products: []),
+];
