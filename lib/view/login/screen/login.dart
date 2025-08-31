@@ -97,9 +97,20 @@ class Login extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: MediaQueryUtil.screenHeight / 21.1),
-                        CustomButton(
-                          title: 'Sign In',
+                        MaterialButton(
                           onPressed: () => controller.login(),
+                          color: AppColors.primaryOrangeColor,
+                          textColor: AppColors.white,
+                          minWidth: MediaQueryUtil.screenWidth / 1.08,
+                          height: MediaQueryUtil.screenHeight / 12.98,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  MediaQueryUtil.screenWidth / 34.33)),
+                          child: Obx(() => controller.isLoading.value
+                              ? const CircularProgressIndicator(
+                                  color: AppColors.white)
+                              : Text('Sign In',
+                                  style: FontStyles.buttonTextStyle(context))),
                         ),
                       ],
                     ),

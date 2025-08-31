@@ -9,6 +9,7 @@ class Store {
   final String name;
   final String address;
   final int storeNumber;
+  final int userRate;
   final double latitude;
   final double longitude;
   final List<Product> products;
@@ -23,6 +24,7 @@ class Store {
       required this.name,
       required this.storeNumber,
       required this.address,
+      required this.userRate,
       required this.latitude,
       required this.longitude,
       required this.products})
@@ -34,11 +36,14 @@ class Review {
   final String name;
   final double rating;
   final String review;
+  int likes;
+  bool isLiked;
 
-  Review({
-    required this.profilePhoto,
-    required this.name,
-    required this.rating,
-    required this.review,
-  });
+  Review(
+      {required this.profilePhoto,
+      required this.name,
+      required this.rating,
+      required this.review,
+      required this.likes,
+      this.isLiked = false});
 }

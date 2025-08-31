@@ -1,12 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bazaartech/core/const_data/app_colors.dart';
+import 'package:bazaartech/core/const_data/const_data.dart';
 import 'package:bazaartech/core/const_data/themes.dart';
+import 'package:bazaartech/core/service/link.dart';
 import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/routes.dart';
+import 'package:bazaartech/core/service/shared_preferences_key.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 class SettingsController extends GetxController {
   RxString selectedLanguage = 'English'.obs;
@@ -61,14 +66,46 @@ class SettingsController extends GetxController {
   }
 
   Future<void> deleteUserInfo() async {
-    final myService = Get.find<MyService>();
-    myService.sharedPreferences.clear();
-    final tempFile = File('${Directory.systemTemp.path}/profile_image.jpg');
-    if (await tempFile.exists()) {
-      await tempFile.delete();
+    try {
+      final myService = Get.find<MyService>();
+      final token =
+          myService.sharedPreferences.getString(SharedPreferencesKey.tokenKey);
+      if (token == null) {
+        Get.snackbar("Error", "No token found");
+        return;
+      }
+      final response = await http.post(
+        Uri.parse(AppLink.logout),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        await myService.sharedPreferences.clear();
+
+        ConstData.token = "";
+        AccountController accountController = Get.find<AccountController>();
+
+        accountController.user.value = null;
+        accountController.profileImage.value = null;
+
+        final tempFile = File('${Directory.systemTemp.path}/profile_image.jpg');
+        if (await tempFile.exists()) {
+          await tempFile.delete();
+        }
+
+        Get.offAllNamed(Routes.login);
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to logout");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
     }
-    AccountController accountController = Get.find<AccountController>();
-    accountController.profileImage.value = null;
   }
 
   Future<void> logout() async {
@@ -85,7 +122,6 @@ class SettingsController extends GetxController {
         confirmTextColor: AppColors.white,
         onConfirm: () async {
           deleteUserInfo();
-          Get.offAllNamed(Routes.login);
         },
         onCancel: () => Get.back());
   }

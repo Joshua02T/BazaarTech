@@ -16,14 +16,10 @@ class GenderField extends StatelessWidget {
       Text('Gender', style: FontStyles.fieldTitleStyle(context)),
       SizedBox(width: MediaQueryUtil.screenWidth / 6.4375),
       GenderSelector(
-          controller: controller,
-          imagename: AppImages.maleIcon,
-          gender: 'Male'),
+          controller: controller, imagename: AppImages.maleIcon, gender: '0'),
       SizedBox(width: MediaQueryUtil.screenWidth / 11.77),
       GenderSelector(
-          controller: controller,
-          imagename: AppImages.femaleIcon,
-          gender: 'Female'),
+          controller: controller, imagename: AppImages.femaleIcon, gender: '1'),
     ]);
   }
 }

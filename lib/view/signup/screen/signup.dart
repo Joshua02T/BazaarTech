@@ -3,7 +3,6 @@ import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/const_data/text_style.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/view/signup/controller/signupcontroller.dart';
-import 'package:bazaartech/widget/custombutton.dart';
 import 'package:bazaartech/widget/customconfirmpassword.dart';
 import 'package:bazaartech/widget/customnamefield.dart';
 import 'package:bazaartech/widget/customphonefield.dart';
@@ -99,9 +98,21 @@ class SignUp extends StatelessWidget {
                           controller: controller,
                         ),
                         SizedBox(height: MediaQueryUtil.screenHeight / 21.1),
-                        CustomButton(
-                            title: 'Sign Up',
-                            onPressed: () => controller.signUp()),
+                        MaterialButton(
+                          onPressed: () => controller.signUp(),
+                          color: AppColors.primaryOrangeColor,
+                          textColor: AppColors.white,
+                          minWidth: MediaQueryUtil.screenWidth / 1.08,
+                          height: MediaQueryUtil.screenHeight / 12.98,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  MediaQueryUtil.screenWidth / 34.33)),
+                          child: Obx(() => controller.isLoading.value
+                              ? const CircularProgressIndicator(
+                                  color: AppColors.white)
+                              : Text('Register',
+                                  style: FontStyles.buttonTextStyle(context))),
+                        ),
                       ],
                     ),
                   ),

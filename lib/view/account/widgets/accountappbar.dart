@@ -43,21 +43,32 @@ class AccountAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ]),
               ),
               Transform.translate(
-                offset: Offset(MediaQueryUtil.screenWidth / 82.4, 0),
-                child: IconButton(
-                    onPressed: () {
-                      if (controller.globalKey.currentState!.validate()) {
-                        if (controller.selectedGender.value != '') {
-                          controller.saveInfo();
-                        } else {
-                          ToastUtil.showToast(
-                              'Please select a gender before saving!');
-                        }
-                      }
-                    },
-                    icon: Image.asset(AppImages.sendreportIcon,
-                        width: MediaQueryUtil.screenWidth / 15.84)),
-              )
+                  offset: Offset(MediaQueryUtil.screenWidth / 82.4, 0),
+                  child: Obx(() => IconButton(
+                        onPressed: () {
+                          if (controller.globalKey.currentState!.validate()) {
+                            if (controller.selectedGender.value != '') {
+                              controller.saveInfo();
+                            } else {
+                              ToastUtil.showToast(
+                                  'Please select a gender before saving!');
+                            }
+                          }
+                        },
+                        icon: controller.isLoading.value
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: AppColors.primaryOrangeColor,
+                                ),
+                              )
+                            : Image.asset(
+                                AppImages.sendreportIcon,
+                                width: MediaQueryUtil.screenWidth / 15.84,
+                              ),
+                      )))
             ],
           ),
         ),

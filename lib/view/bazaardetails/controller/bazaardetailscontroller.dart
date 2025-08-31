@@ -19,6 +19,12 @@ class BazaarDetailsController extends GetxController {
   final RxString reviewText = ''.obs;
   PageController pageController = PageController();
   TextEditingController reviewController = TextEditingController();
+  final reviews = <Review>[].obs;
+  int rating = 0;
+  void setRating(int value) {
+    rating = value;
+    update();
+  }
 
   void updateSelectedProductCategoryIndex(int index) {
     selectedProductCategoryIndex.value = index;
@@ -29,6 +35,7 @@ class BazaarDetailsController extends GetxController {
       isLoadingFetching.value = true;
       bazaar.value = await _bazaarRepository.fetchBazaarById(id);
       fetchProductCategories();
+      reviews.assignAll(bazaar.value!.reviews);
     } catch (e) {
       ToastUtil.showToast('Failed to load bazaar, ${e.toString()}');
     } finally {
@@ -41,6 +48,18 @@ class BazaarDetailsController extends GetxController {
       final categories = bazaar.value!.products.map((p) => p.category).toSet();
       productCategories.assignAll(categories);
     }
+  }
+
+  void toggleLike(int index) {
+    final review = reviews[index];
+    if (review.isLiked == true) {
+      review.likes -= 1;
+      review.isLiked = false;
+    } else {
+      review.likes += 1;
+      review.isLiked = true;
+    }
+    reviews[index] = review;
   }
 
   Future<void> addReview(Bazaar bazaar, String review) async {
@@ -56,16 +75,17 @@ class BazaarDetailsController extends GetxController {
           prefs.getString(SharedPreferencesKey.userImageKey);
 
       final newReview = Review(
-        profilePhoto: userImage != null && userImage.isNotEmpty
-            ? userImage
-            : AppImages.profilephoto,
-        name:
-            userName != null && userName.isNotEmpty ? userName : "Current User",
-        rating: 5,
-        review: review,
-      );
+          profilePhoto: userImage != null && userImage.isNotEmpty
+              ? userImage
+              : AppImages.profilephoto,
+          name: userName != null && userName.isNotEmpty
+              ? userName
+              : "Current User",
+          rating: 5,
+          review: review,
+          likes: 0);
       await _bazaarRepository.addReview(bazaar.id, newReview);
-
+      reviews.insert(0, newReview);
       reviewText.value = '';
       reviewController.clear();
       ToastUtil.showToast('Review added!');

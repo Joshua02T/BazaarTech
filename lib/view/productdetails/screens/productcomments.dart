@@ -21,15 +21,13 @@ class ProductComments extends StatelessWidget {
       body: Column(
         children: [
           Obx(() {
-            final currentProduct = controller.product.value;
-            if (currentProduct == null) {
-              return const Expanded(child: CustomProgressIndicator());
-            }
             if (controller.isLoadingFetching.value) {
               return const Expanded(child: CustomProgressIndicator());
             }
 
-            return currentProduct.comments.isNotEmpty
+            final comments = controller.comments;
+
+            return comments.isNotEmpty
                 ? Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -41,88 +39,142 @@ class ProductComments extends StatelessWidget {
                             .fetchProduct(controller.product.value!.id),
                         child: ListView.builder(
                           clipBehavior: Clip.none,
-                          itemCount: currentProduct.comments.length,
+                          itemCount: comments.length,
                           itemBuilder: (context, index) {
-                            final comment = currentProduct.comments[index];
-                            return Container(
-                              margin: EdgeInsets.only(
-                                bottom: MediaQueryUtil.screenHeight / 52.75,
-                              ),
-                              padding: EdgeInsets.all(
-                                MediaQueryUtil.screenWidth / 25.75,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(
-                                  MediaQueryUtil.screenWidth / 51.5,
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(children: [
-                                        buildCommentImage(comment.profilePhoto),
-                                        SizedBox(
-                                            width: MediaQueryUtil.screenWidth /
-                                                68.66),
-                                        Text(
-                                          comment.name,
-                                          style: TextStyle(
-                                            fontSize:
-                                                MediaQueryUtil.screenWidth /
-                                                    25.75,
-                                            color: AppColors.primaryFontColor,
-                                          ),
+                            return GetBuilder<ProductDetailsController>(
+                              id: 'comment_$index',
+                              builder: (_) {
+                                final comment = controller.comments[index];
+                                return Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                          MediaQueryUtil.screenWidth / 25.75),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(
+                                          MediaQueryUtil.screenWidth / 51.5,
                                         ),
-                                      ]),
-                                      Row(children: [
-                                        Text(
-                                          '${comment.rating.toInt().toString()} ',
-                                          style: TextStyle(
-                                            fontSize:
-                                                MediaQueryUtil.screenWidth /
-                                                    25.75,
-                                            color: AppColors.primaryFontColor,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  buildCommentImage(
+                                                      comment.profilePhoto),
+                                                  SizedBox(
+                                                    width: MediaQueryUtil
+                                                            .screenWidth /
+                                                        68.66,
+                                                  ),
+                                                  Text(
+                                                    ' ${comment.name}',
+                                                    style: TextStyle(
+                                                      fontSize: MediaQueryUtil
+                                                              .screenWidth /
+                                                          25.75,
+                                                      color: AppColors
+                                                          .primaryFontColor,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    '${comment.rating.toInt()} ',
+                                                    style: TextStyle(
+                                                      fontSize: MediaQueryUtil
+                                                              .screenWidth /
+                                                          25.75,
+                                                      color: AppColors
+                                                          .primaryFontColor,
+                                                    ),
+                                                  ),
+                                                  Image.asset(
+                                                    AppImages.starIcon,
+                                                    width: 16,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
-                                        ),
-                                        Image.asset(AppImages.starIcon,
-                                            width: 16),
-                                      ]),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          MediaQueryUtil.screenHeight / 140.6),
-                                  Text(
-                                    comment.comment,
-                                    style: TextStyle(
-                                      fontSize:
-                                          MediaQueryUtil.screenWidth / 25.75,
-                                      color: AppColors.black60,
+                                          SizedBox(
+                                            height:
+                                                MediaQueryUtil.screenHeight /
+                                                    140.6,
+                                          ),
+                                          Text(
+                                            comment.comment,
+                                            style: TextStyle(
+                                              fontSize:
+                                                  MediaQueryUtil.screenWidth /
+                                                      25.75,
+                                              color: AppColors.black60,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {
+                                              controller.toggleLike(index);
+                                              controller
+                                                  .update(['comment_$index']);
+                                            },
+                                            icon: Image.asset(
+                                              comment.isLiked
+                                                  ? AppImages.filledHeart
+                                                  : AppImages.heart,
+                                              width:
+                                                  MediaQueryUtil.screenWidth /
+                                                      25.75,
+                                              color:
+                                                  AppColors.primaryOrangeColor,
+                                            )),
+                                        if (comment.likes > 0)
+                                          Text(
+                                            comment.likes > 1
+                                                ? '${comment.likes} likes'
+                                                : '${comment.likes} like',
+                                            style: TextStyle(
+                                              fontSize:
+                                                  MediaQueryUtil.screenWidth /
+                                                      29.42,
+                                              color: AppColors.black60,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            MediaQueryUtil.screenHeight / 70.33)
+                                  ],
+                                );
+                              },
                             );
                           },
                         ),
                       ),
                     ),
                   )
-                : Expanded(
+                : const Expanded(
                     child: Center(
                       child: Text(
                         'No comments yet',
-                        style: TextStyle(
-                          fontSize: MediaQueryUtil.screenWidth / 25.75,
-                          color: AppColors.black60,
-                        ),
+                        style: TextStyle(color: AppColors.black60),
                       ),
                     ),
                   );

@@ -14,22 +14,21 @@ class StoreReviews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StoreDetailsController controller = Get.find<StoreDetailsController>();
+    final controller = Get.find<StoreDetailsController>();
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: const CustomAppBarWithBack(text: 'Reviews'),
       body: Column(
         children: [
           Obx(() {
-            final currentStore = controller.store.value;
-            if (currentStore == null) {
-              return const Expanded(child: CustomProgressIndicator());
-            }
             if (controller.isLoadingFetching.value) {
               return const Expanded(child: CustomProgressIndicator());
             }
 
-            return currentStore.reviews.isNotEmpty
+            final reviews = controller.reviews;
+
+            return reviews.isNotEmpty
                 ? Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -37,92 +36,143 @@ class StoreReviews extends StatelessWidget {
                         vertical: MediaQueryUtil.screenHeight / 70,
                       ),
                       child: RefreshIndicator(
-                        onRefresh: () =>
-                            controller.fetchStore(controller.store.value!.id),
+                        onRefresh: () async {
+                          final store = controller.store.value;
+                          if (store != null) {
+                            await controller.fetchStore(store.id);
+                          }
+                        },
                         child: ListView.builder(
                           clipBehavior: Clip.none,
-                          itemCount: currentStore.reviews.length,
+                          itemCount: reviews.length,
                           itemBuilder: (context, index) {
-                            final review = currentStore.reviews[index];
-                            return Container(
-                              margin: EdgeInsets.only(
-                                bottom: MediaQueryUtil.screenHeight / 52.75,
-                              ),
-                              padding: EdgeInsets.all(
-                                MediaQueryUtil.screenWidth / 25.75,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(
-                                  MediaQueryUtil.screenWidth / 51.5,
-                                ),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Row(children: [
-                                        buildReviewImage(review.profilePhoto),
-                                        SizedBox(
-                                            width: MediaQueryUtil.screenWidth /
-                                                68.66),
-                                        Text(
-                                          review.name,
-                                          style: TextStyle(
-                                            fontSize:
-                                                MediaQueryUtil.screenWidth /
-                                                    25.75,
-                                            color: AppColors.primaryFontColor,
-                                          ),
+                            return GetBuilder<StoreDetailsController>(
+                              id: 'reviewstore_$index',
+                              builder: (_) {
+                                final review = controller.reviews[index];
+                                return Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(
+                                        MediaQueryUtil.screenWidth / 25.75,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(
+                                          MediaQueryUtil.screenWidth / 51.5,
                                         ),
-                                      ]),
-                                      Row(children: [
-                                        Text(
-                                          '${review.rating.toInt().toString()} ',
-                                          style: TextStyle(
-                                            fontSize:
-                                                MediaQueryUtil.screenWidth /
-                                                    25.75,
-                                            color: AppColors.primaryFontColor,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Row(children: [
+                                                buildReviewImage(
+                                                    review.profilePhoto),
+                                                SizedBox(
+                                                    width: MediaQueryUtil
+                                                            .screenWidth /
+                                                        68.66),
+                                                Text(
+                                                  review.name,
+                                                  style: TextStyle(
+                                                    fontSize: MediaQueryUtil
+                                                            .screenWidth /
+                                                        25.75,
+                                                    color: AppColors
+                                                        .primaryFontColor,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ]),
+                                              Row(children: [
+                                                Text(
+                                                  '${review.rating.toInt()} ',
+                                                  style: TextStyle(
+                                                    fontSize: MediaQueryUtil
+                                                            .screenWidth /
+                                                        25.75,
+                                                    color: AppColors
+                                                        .primaryFontColor,
+                                                  ),
+                                                ),
+                                                Image.asset(
+                                                  AppImages.starIcon,
+                                                  width: 16,
+                                                ),
+                                              ]),
+                                            ],
                                           ),
-                                        ),
-                                        Image.asset(AppImages.starIcon,
-                                            width: 16),
-                                      ]),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                      height:
-                                          MediaQueryUtil.screenHeight / 140.6),
-                                  Text(
-                                    review.review,
-                                    style: TextStyle(
-                                      fontSize:
-                                          MediaQueryUtil.screenWidth / 25.75,
-                                      color: AppColors.black60,
+                                          SizedBox(
+                                              height:
+                                                  MediaQueryUtil.screenHeight /
+                                                      140.6),
+                                          Text(
+                                            review.review,
+                                            style: TextStyle(
+                                              fontSize:
+                                                  MediaQueryUtil.screenWidth /
+                                                      25.75,
+                                              color: AppColors.black60,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () {
+                                            controller.toggleLike(index);
+                                            controller
+                                                .update(['reviewstore_$index']);
+                                          },
+                                          icon: Image.asset(
+                                            review.isLiked
+                                                ? AppImages.filledHeart
+                                                : AppImages.heart,
+                                            width: MediaQueryUtil.screenWidth /
+                                                25.75,
+                                            color: AppColors.primaryOrangeColor,
+                                          ),
+                                        ),
+                                        if (review.likes > 0)
+                                          Text(
+                                            review.likes > 1
+                                                ? '${review.likes} likes'
+                                                : '${review.likes} like',
+                                            style: TextStyle(
+                                              fontSize:
+                                                  MediaQueryUtil.screenWidth /
+                                                      29.42,
+                                              color: AppColors.black60,
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        height:
+                                            MediaQueryUtil.screenHeight / 70.33)
+                                  ],
+                                );
+                              },
                             );
                           },
                         ),
                       ),
                     ),
                   )
-                : Expanded(
+                : const Expanded(
                     child: Center(
                       child: Text(
                         'No reviews yet',
-                        style: TextStyle(
-                          fontSize: MediaQueryUtil.screenWidth / 25.75,
-                          color: AppColors.black60,
-                        ),
+                        style: TextStyle(color: AppColors.black60),
                       ),
                     ),
                   );

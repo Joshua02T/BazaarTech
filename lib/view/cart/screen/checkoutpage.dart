@@ -48,6 +48,8 @@ class CheckoutPage extends StatelessWidget {
                                 place: addr.place,
                                 number: addr.number,
                                 address: addr.address,
+                                latitude: addr.latitude,
+                                longitude: addr.longitude,
                                 isSelected: addr.isSelected,
                                 addressValue: addr.id,
                                 onSelect: () =>

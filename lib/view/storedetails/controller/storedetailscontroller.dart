@@ -19,6 +19,13 @@ class StoreDetailsController extends GetxController {
   final RxList<String> productCategories = <String>[].obs;
   RxInt selectedProductCategoryIndex = 0.obs;
   PageController pageController = PageController();
+  final reviews = <Review>[].obs;
+
+  int rating = 0;
+  void setRating(int value) {
+    rating = value;
+    update();
+  }
 
   void updateSelectedProductCategoryIndex(int index) {
     selectedProductCategoryIndex.value = index;
@@ -29,6 +36,7 @@ class StoreDetailsController extends GetxController {
       isLoadingFetching.value = true;
       store.value = await _storeRepository.fetchStoreById(id);
       fetchProductCategories();
+      reviews.assignAll(store.value!.reviews);
     } catch (e) {
       ToastUtil.showToast('Failed to load store, ${e.toString()}');
     } finally {
@@ -60,6 +68,18 @@ class StoreDetailsController extends GetxController {
     }
   }
 
+  void toggleLike(int index) {
+    final review = reviews[index];
+    if (review.isLiked == true) {
+      review.likes -= 1;
+      review.isLiked = false;
+    } else {
+      review.likes += 1;
+      review.isLiked = true;
+    }
+    reviews[index] = review;
+  }
+
   Future<void> addReview(Store store, String review) async {
     if (review.isEmpty || isLoadingAddingReview.value) return;
 
@@ -73,16 +93,17 @@ class StoreDetailsController extends GetxController {
           prefs.getString(SharedPreferencesKey.userImageKey);
 
       final newReview = Review(
-        profilePhoto: userImage != null && userImage.isNotEmpty
-            ? userImage
-            : AppImages.profilephoto,
-        name:
-            userName != null && userName.isNotEmpty ? userName : "Current User",
-        rating: 5,
-        review: review,
-      );
+          profilePhoto: userImage != null && userImage.isNotEmpty
+              ? userImage
+              : AppImages.profilephoto,
+          name: userName != null && userName.isNotEmpty
+              ? userName
+              : "Current User",
+          rating: 5,
+          review: review,
+          likes: 0);
       await _storeRepository.addReview(store.id, newReview);
-
+      reviews.insert(0, newReview);
       reviewText.value = '';
       reviewController.clear();
       ToastUtil.showToast('Review added!');

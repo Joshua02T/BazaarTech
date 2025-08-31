@@ -6,7 +6,8 @@ import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/view/storedetails/controller/storedetailscontroller.dart';
 import 'package:bazaartech/view/storedetails/widgets/customcategory.dart';
-import 'package:bazaartech/view/storedetails/widgets/reviewwidgte.dart';
+import 'package:bazaartech/view/storedetails/widgets/ratingwidget.dart';
+import 'package:bazaartech/view/storedetails/widgets/reviewstorewidget.dart';
 import 'package:bazaartech/view/storedetails/widgets/storeproductcard.dart';
 import 'package:bazaartech/widget/customdetailsfavicon.dart';
 import 'package:bazaartech/widget/customdetailsiconback.dart';
@@ -75,7 +76,8 @@ class StoreDetails extends StatelessWidget {
                         Expanded(
                             child: Padding(
                                 padding: EdgeInsets.only(
-                                    top: MediaQueryUtil.screenHeight / 42.2),
+                                    top: MediaQueryUtil.screenHeight / 42.2,
+                                    bottom: MediaQueryUtil.screenHeight / 42.2),
                                 child: ListView(
                                     padding: EdgeInsets.symmetric(
                                         horizontal:
@@ -375,72 +377,114 @@ class StoreDetails extends StatelessWidget {
                                         }
 
                                         final hasReviews =
-                                            store.reviews.isNotEmpty;
+                                            controller.reviews.isNotEmpty;
                                         final reviewsToShow = hasReviews
-                                            ? store.reviews.take(2).toList()
+                                            ? controller.reviews
+                                                .take(2)
+                                                .toList()
                                             : <Review>[];
 
-                                        return Column(children: [
-                                          hasReviews
-                                              ? ListView.builder(
-                                                  shrinkWrap: true,
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  itemCount:
-                                                      reviewsToShow.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    final review =
-                                                        reviewsToShow[index];
-                                                    return GestureDetector(
-                                                        onTap: () =>
-                                                            Get.toNamed(Routes
-                                                                .storeReviews),
-                                                        child: ReviewWidget(
-                                                            profilePhoto: review
-                                                                .profilePhoto,
-                                                            name: review.name,
-                                                            rating: review
-                                                                .rating
-                                                                .toInt(),
-                                                            review:
-                                                                review.review));
-                                                  })
-                                              : Center(
-                                                  child: Text('No Reviews!',
+                                        return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              hasReviews
+                                                  ? ListView.builder(
+                                                      shrinkWrap: true,
+                                                      physics:
+                                                          const NeverScrollableScrollPhysics(),
+                                                      itemCount:
+                                                          reviewsToShow.length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return GetBuilder<
+                                                                StoreDetailsController>(
+                                                            id: 'reviewstore_$index',
+                                                            builder: (_) {
+                                                              final review =
+                                                                  controller
+                                                                          .reviews[
+                                                                      index];
+                                                              return GestureDetector(
+                                                                  onTap: () =>
+                                                                      Get.toNamed(
+                                                                          Routes
+                                                                              .storeReviews),
+                                                                  child:
+                                                                      ReviewStoreWidget(
+                                                                    index:
+                                                                        index,
+                                                                    profilePhoto:
+                                                                        review
+                                                                            .profilePhoto,
+                                                                    name: review
+                                                                        .name,
+                                                                    rating: review
+                                                                        .rating
+                                                                        .toInt(),
+                                                                    review: review
+                                                                        .review,
+                                                                    likes: review
+                                                                        .likes,
+                                                                    isLiked: review
+                                                                        .isLiked,
+                                                                  ));
+                                                            });
+                                                      })
+                                                  : Center(
+                                                      child: Text('No Reviews!',
+                                                          style: TextStyle(
+                                                              fontSize:
+                                                                  MediaQueryUtil
+                                                                          .screenWidth /
+                                                                      25.75,
+                                                              color: AppColors
+                                                                  .black60))),
+                                              MaterialButton(
+                                                  onPressed: () => Get.toNamed(
+                                                      Routes.storeReviews),
+                                                  color: AppColors
+                                                      .backgroundColor,
+                                                  elevation: 0.0,
+                                                  height:
+                                                      MediaQueryUtil
+                                                              .screenHeight /
+                                                          32.46,
+                                                  minWidth: double.infinity,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      MediaQueryUtil
+                                                              .screenWidth /
+                                                          103,
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                      hasReviews
+                                                          ? 'Show all'
+                                                          : 'Add Review',
                                                       style: TextStyle(
                                                           fontSize: MediaQueryUtil
                                                                   .screenWidth /
-                                                              25.75,
+                                                              34.33,
                                                           color: AppColors
                                                               .black60))),
-                                          MaterialButton(
-                                              onPressed: () => Get.toNamed(
-                                                  Routes.storeReviews),
-                                              color: AppColors.backgroundColor,
-                                              elevation: 0.0,
-                                              height:
-                                                  MediaQueryUtil.screenHeight /
-                                                      32.46,
-                                              minWidth: double.infinity,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  MediaQueryUtil.screenWidth /
-                                                      103,
-                                                ),
-                                              ),
-                                              child: Text(
-                                                  hasReviews
-                                                      ? 'Show all'
-                                                      : 'Add Review',
+                                              SizedBox(
+                                                  height: MediaQueryUtil
+                                                          .screenHeight /
+                                                      26.375),
+                                              Text('Rate this store!',
                                                   style: TextStyle(
                                                       fontSize: MediaQueryUtil
                                                               .screenWidth /
-                                                          34.33,
-                                                      color:
-                                                          AppColors.black60)))
-                                        ]);
+                                                          17.16,
+                                                      color: AppColors
+                                                          .primaryFontColor,
+                                                      fontFamily:
+                                                          FontFamily.russoOne)),
+                                              RatingWidget(
+                                                  userRate: store.userRate)
+                                            ]);
                                       })
                                     ]))),
                         Padding(

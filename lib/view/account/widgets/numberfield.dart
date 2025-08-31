@@ -17,6 +17,7 @@ class NumberField extends StatelessWidget {
         SizedBox(width: MediaQueryUtil.screenWidth / 8.4),
         Expanded(
           child: TextFormField(
+            maxLength: 10,
             keyboardType: TextInputType.phone,
             controller: controller.phoneController,
             validator: (phoneNumber) {

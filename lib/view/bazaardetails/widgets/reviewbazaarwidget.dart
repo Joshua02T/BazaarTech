@@ -1,35 +1,34 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
-import 'package:bazaartech/view/productdetails/controller/productdetailscontroller.dart';
-import 'package:bazaartech/view/productdetails/widgets/commentimage.dart';
+import 'package:bazaartech/view/bazaardetails/controller/bazaardetailscontroller.dart';
+import 'package:bazaartech/view/storedetails/widgets/reviewimage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CommentWidget extends StatelessWidget {
+class ReviewBazaarWidget extends StatelessWidget {
   final int index;
   final String profilePhoto;
   final String name;
-  final double rating;
-  final String comment;
+  final int rating;
+  final String review;
   final int likes;
   final bool isLiked;
 
-  const CommentWidget({
+  const ReviewBazaarWidget({
     super.key,
-    required this.index,
     required this.profilePhoto,
     required this.name,
     required this.rating,
-    required this.comment,
+    required this.review,
+    required this.index,
     required this.likes,
     required this.isLiked,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ProductDetailsController>();
-
+    final controller = Get.find<BazaarDetailsController>();
     MediaQueryUtil.init(context);
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQueryUtil.screenHeight / 105.5),
@@ -41,7 +40,7 @@ class CommentWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(children: [
-                  buildCommentImage(profilePhoto),
+                  buildReviewImage(profilePhoto),
                   SizedBox(width: MediaQueryUtil.screenWidth / 68.66),
                   Text(name,
                       style: TextStyle(
@@ -49,7 +48,7 @@ class CommentWidget extends StatelessWidget {
                           color: AppColors.primaryFontColor))
                 ]),
                 Row(children: [
-                  Text('${rating.toInt()} ',
+                  Text('${rating.toString()} ',
                       style: TextStyle(
                           fontSize: MediaQueryUtil.screenWidth / 25.75,
                           color: AppColors.primaryFontColor)),
@@ -57,20 +56,17 @@ class CommentWidget extends StatelessWidget {
                 ])
               ]),
           SizedBox(height: MediaQueryUtil.screenHeight / 140.6),
-          Text(
-            comment,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                fontSize: MediaQueryUtil.screenWidth / 25.75,
-                color: AppColors.black60),
-          ),
+          Text(review,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  fontSize: MediaQueryUtil.screenWidth / 25.75,
+                  color: AppColors.black60)),
           Row(children: [
             IconButton(
                 onPressed: () {
                   controller.toggleLike(index);
-
-                  controller.update(['comment_$index']);
+                  controller.update(['reviewbazaar_$index']);
                 },
                 icon: Image.asset(
                   isLiked ? AppImages.filledHeart : AppImages.heart,

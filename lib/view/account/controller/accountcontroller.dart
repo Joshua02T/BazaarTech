@@ -3,13 +3,16 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bazaartech/core/const_data/app_colors.dart';
+import 'package:bazaartech/core/service/link.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/shared_preferences_key.dart';
+import 'package:bazaartech/model/usermodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AccountController extends GetxController {
@@ -23,18 +26,51 @@ class AccountController extends GetxController {
 
   Rx<File?> profileImage = Rx<File?>(null);
   RxString selectedGender = ''.obs;
-  void loadUserData() {
-    final prefs = myService.sharedPreferences;
+  var user = Rx<UserModel?>(null);
+  var isLoading = false.obs;
 
-    nameController.text =
-        prefs.getString(SharedPreferencesKey.userNameKey) ?? '';
-    emailController.text =
-        prefs.getString(SharedPreferencesKey.userEmailKey) ?? '';
-    phoneController.text =
-        prefs.getString(SharedPreferencesKey.userNumberKey) ?? '';
-    ageController.text = prefs.getString(SharedPreferencesKey.userAgeKey) ?? '';
-    selectedGender.value =
-        prefs.getString(SharedPreferencesKey.userGenderKey) ?? '';
+  Future<void> loadUserData() async {
+    try {
+      isLoading.value = true;
+
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+      if (token == null) {
+        Get.snackbar("Error", "No token found, please login again");
+        return;
+      }
+
+      final response = await http.get(
+        Uri.parse(AppLink.profile),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        user.value = UserModel.fromJson(data["data"]);
+        nameController.text = user.value!.name;
+        emailController.text = user.value!.email;
+        phoneController.text = user.value!.phoneNumber;
+        if (user.value!.age != null) {
+          ageController.text = user.value!.age.toString();
+        }
+        if (user.value!.gender != null) {
+          selectedGender.value = user.value!.gender.toString();
+        }
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to load profile");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   void loadProfileImage() {
@@ -55,19 +91,48 @@ class AccountController extends GetxController {
   }
 
   Future<void> saveInfo() async {
-    final prefs = myService.sharedPreferences;
+    try {
+      isLoading.value = true;
 
-    await prefs.setString(
-        SharedPreferencesKey.userNameKey, nameController.text);
-    await prefs.setString(
-        SharedPreferencesKey.userEmailKey, emailController.text);
-    await prefs.setString(
-        SharedPreferencesKey.userNumberKey, phoneController.text);
-    await prefs.setString(SharedPreferencesKey.userAgeKey, ageController.text);
-    await prefs.setString(
-        SharedPreferencesKey.userGenderKey, selectedGender.value);
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
 
-    ToastUtil.showToast('Account information updated');
+      if (token == null) {
+        Get.snackbar("Error", "No token found, please login again");
+        return;
+      }
+
+      final response = await http.put(
+        Uri.parse(AppLink.profile),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          "name": nameController.text,
+          "email": emailController.text,
+          "number": phoneController.text,
+          "age": ageController.text,
+          "gender": selectedGender.value,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        //data coming from put profile api are all String which is different from User model which has int types age and gender
+        // user.value = UserModel.fromJson(data["data"]);
+        loadUserData();
+        ToastUtil.showToast('Account information updated');
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to update profile");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> pickImage(ImageSource source) async {

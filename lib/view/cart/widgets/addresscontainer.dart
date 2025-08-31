@@ -6,12 +6,15 @@ import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
 import 'package:bazaartech/view/cart/widgets/addaddressdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddressContainer extends StatelessWidget {
   final String place;
   final String number;
   final String addressValue;
   final String address;
+  final double latitude;
+  final double longitude;
   final bool isSelected;
   final VoidCallback onSelect;
 
@@ -23,6 +26,8 @@ class AddressContainer extends StatelessWidget {
     required this.addressValue,
     required this.isSelected,
     required this.onSelect,
+    required this.latitude,
+    required this.longitude,
   });
 
   @override
@@ -57,11 +62,16 @@ class AddressContainer extends StatelessWidget {
                     color: AppColors.black60,
                   ),
                 ),
-                Text(
-                  address,
-                  style: TextStyle(
-                    fontSize: MediaQueryUtil.screenWidth / 25.75,
-                    color: AppColors.black60,
+                SizedBox(
+                  width: MediaQueryUtil.screenWidth / 2,
+                  child: Text(
+                    address,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: MediaQueryUtil.screenWidth / 25.75,
+                      color: AppColors.black60,
+                    ),
                   ),
                 ),
               ],
@@ -78,6 +88,7 @@ class AddressContainer extends StatelessWidget {
                         initialPlace: place,
                         initialNumber: number,
                         initialAddress: address,
+                        initialLatLng: LatLng(latitude, longitude),
                         isSelected: isSelected,
                         isFirstAddress: false,
                         onAdd: (updatedAddress) {

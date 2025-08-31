@@ -6,6 +6,7 @@ import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/view/productdetails/controller/productdetailscontroller.dart';
+import 'package:bazaartech/view/productdetails/screens/ratingwidget.dart';
 import 'package:bazaartech/view/productdetails/widgets/commentwidget.dart';
 import 'package:bazaartech/widget/customdetailsfavicon.dart';
 import 'package:bazaartech/widget/customdetailsiconback.dart';
@@ -95,7 +96,8 @@ class ProductDetails extends StatelessWidget {
                               padding: EdgeInsets.only(
                                   left: MediaQueryUtil.screenWidth / 20.6,
                                   right: MediaQueryUtil.screenWidth / 20.6,
-                                  top: MediaQueryUtil.screenHeight / 120),
+                                  top: MediaQueryUtil.screenHeight / 120,
+                                  bottom: MediaQueryUtil.screenHeight / 42.2),
                               child: ListView(
                                   controller: scrollController,
                                   children: [
@@ -211,67 +213,108 @@ class ProductDetails extends StatelessWidget {
                                       if (product == null) {
                                         return const CustomProgressIndicator();
                                       }
+
                                       final hasComments =
-                                          product.comments.isNotEmpty;
+                                          controller.comments.isNotEmpty;
                                       final commentsToShow = hasComments
-                                          ? product.comments.take(2).toList()
+                                          ? controller.comments.take(2).toList()
                                           : <Comment>[];
-                                      return Column(children: [
-                                        if (hasComments)
-                                          ListView.builder(
+
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if (hasComments)
+                                            ListView.builder(
                                               shrinkWrap: true,
                                               physics:
                                                   const NeverScrollableScrollPhysics(),
                                               itemCount: commentsToShow.length,
                                               itemBuilder: (context, index) {
-                                                final comment =
-                                                    commentsToShow[index];
-
-                                                return GestureDetector(
-                                                    onTap: () => Get.toNamed(
-                                                        Routes.productComments),
-                                                    child: CommentWidget(
+                                                return GetBuilder<
+                                                    ProductDetailsController>(
+                                                  id: 'comment_$index',
+                                                  builder: (_) {
+                                                    final comment = controller
+                                                        .comments[index];
+                                                    return GestureDetector(
+                                                      onTap: () => Get.toNamed(
+                                                          Routes
+                                                              .productComments),
+                                                      child: CommentWidget(
+                                                        index: index,
                                                         profilePhoto: comment
                                                             .profilePhoto,
                                                         name: comment.name,
-                                                        rating: comment.rating
-                                                            .toInt(),
+                                                        rating: comment.rating,
                                                         comment:
-                                                            comment.comment));
-                                              }),
-                                        if (!hasComments)
-                                          Center(
-                                              child: Text('No Comments!',
-                                                  style: TextStyle(
-                                                      fontSize: MediaQueryUtil
-                                                              .screenWidth /
-                                                          25.75,
-                                                      color:
-                                                          AppColors.black60))),
-                                        MaterialButton(
+                                                            comment.comment,
+                                                        likes: comment.likes,
+                                                        isLiked:
+                                                            comment.isLiked,
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          if (!hasComments)
+                                            Center(
+                                              child: Text(
+                                                'No Comments!',
+                                                style: TextStyle(
+                                                  fontSize: MediaQueryUtil
+                                                          .screenWidth /
+                                                      25.75,
+                                                  color: AppColors.black60,
+                                                ),
+                                              ),
+                                            ),
+                                          MaterialButton(
                                             onPressed: () => Get.toNamed(
                                                 Routes.productComments),
                                             color: AppColors.backgroundColor,
                                             elevation: 0.0,
-                                            height: MediaQueryUtil.screenHeight /
-                                                32.46,
+                                            height:
+                                                MediaQueryUtil.screenHeight /
+                                                    32.46,
                                             minWidth: double.infinity,
                                             shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
-                                                    MediaQueryUtil.screenWidth /
-                                                        103)),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                MediaQueryUtil.screenWidth /
+                                                    103,
+                                              ),
+                                            ),
                                             child: Text(
-                                                hasComments
-                                                    ? 'Show all'
-                                                    : 'Add Comment',
-                                                style:
-                                                    TextStyle(
-                                                        fontSize: MediaQueryUtil
-                                                                .screenWidth /
-                                                            34.33,
-                                                        color:
-                                                            AppColors.black60)))
-                                      ]);
+                                              hasComments
+                                                  ? 'Show all'
+                                                  : 'Add Comment',
+                                              style: TextStyle(
+                                                fontSize:
+                                                    MediaQueryUtil.screenWidth /
+                                                        34.33,
+                                                color: AppColors.black60,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                              height:
+                                                  MediaQueryUtil.screenHeight /
+                                                      26.375),
+                                          Text('Rate this product!',
+                                              style: TextStyle(
+                                                  fontSize: MediaQueryUtil
+                                                          .screenWidth /
+                                                      17.16,
+                                                  color: AppColors
+                                                      .primaryFontColor,
+                                                  fontFamily:
+                                                      FontFamily.russoOne)),
+                                          RatingWidget(
+                                              userRate: product.userRate)
+                                        ],
+                                      );
                                     })
                                   ]))),
                       Padding(

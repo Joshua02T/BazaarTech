@@ -8,6 +8,7 @@ class Bazaar {
   final String name;
   final String details;
   final String firstDate;
+  final int userRate;
   final String lastDate;
   final String status;
   final List<Product> products;
@@ -20,6 +21,7 @@ class Bazaar {
       required this.name,
       required this.details,
       required this.firstDate,
+      required this.userRate,
       required this.lastDate,
       required this.status,
       required this.products})

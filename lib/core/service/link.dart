@@ -1,36 +1,19 @@
-import '../const_data/const_data.dart';
-
 class AppLink {
-  //remote address
-  static String appRoot = "https://";
+  static String appRoot = "http://10.0.2.2:8000/api";
 
-  static String imageWithRoot = "$appRoot/storagr";
+  static String register = "$appRoot/register";
 
-  static String imageWithoutRoot = "$appRoot";
+  static String signin = "$appRoot/login";
 
-  static String serverApiRoot = "$appRoot/api";
+  static String logout = "$appRoot/logout";
 
-  static String home = "$serverApiRoot/home";
-
-  static String user = "$serverApiRoot/user";
-  static String profile = "$serverApiRoot/profile";
-  static String notification = "$serverApiRoot/notification";
+  static String profile = "$appRoot/me";
 
   Map<String, String> getHeader() {
     Map<String, String> mainHeader = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'X-Requested-With': 'XMLHttpRequest',
-    };
-    return mainHeader;
-  }
-
-  Map<String, String> getHeaderToken() {
-    Map<String, String> mainHeader = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
-      'Authorization': 'Bearer${ConstData.token}'
     };
     return mainHeader;
   }

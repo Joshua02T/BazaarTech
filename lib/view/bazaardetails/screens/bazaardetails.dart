@@ -4,9 +4,10 @@ import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/bazaardetails/controller/bazaardetailscontroller.dart';
+import 'package:bazaartech/view/bazaardetails/widgets/ratingwidget.dart';
+import 'package:bazaartech/view/bazaardetails/widgets/reviewbazaarwidget.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/view/storedetails/widgets/customcategory.dart';
-import 'package:bazaartech/view/storedetails/widgets/reviewwidgte.dart';
 import 'package:bazaartech/view/storedetails/widgets/storeproductcard.dart';
 import 'package:bazaartech/widget/customdetailsfavicon.dart';
 import 'package:bazaartech/widget/customdetailsiconback.dart';
@@ -58,8 +59,9 @@ class BazaarDetails extends StatelessWidget {
               builder:
                   (BuildContext context, ScrollController scrollController) {
                 return Container(
-                  padding:
-                      EdgeInsets.only(top: MediaQueryUtil.screenHeight / 42.2),
+                  padding: EdgeInsets.only(
+                      top: MediaQueryUtil.screenHeight / 42.2,
+                      bottom: MediaQueryUtil.screenHeight / 42.2),
                   decoration: BoxDecoration(
                       color: AppColors.white,
                       borderRadius: BorderRadius.vertical(
@@ -279,6 +281,7 @@ class BazaarDetails extends StatelessWidget {
                               ? bazaar.reviews.take(2).toList()
                               : <Review>[];
                           return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               hasReviews
                                   ? ListView.builder(
@@ -287,16 +290,27 @@ class BazaarDetails extends StatelessWidget {
                                           const NeverScrollableScrollPhysics(),
                                       itemCount: reviewsToShow.length,
                                       itemBuilder: (context, index) {
-                                        final review = reviewsToShow[index];
-                                        return GestureDetector(
-                                            onTap: () => Get.toNamed(
-                                                Routes.storeReviews),
-                                            child: ReviewWidget(
-                                                profilePhoto:
-                                                    review.profilePhoto,
-                                                name: review.name,
-                                                rating: review.rating.toInt(),
-                                                review: review.review));
+                                        return GetBuilder<
+                                                BazaarDetailsController>(
+                                            id: 'reviewbazaar_$index',
+                                            builder: (_) {
+                                              final review =
+                                                  reviewsToShow[index];
+                                              return GestureDetector(
+                                                  onTap: () => Get.toNamed(
+                                                      Routes.storeReviews),
+                                                  child: ReviewBazaarWidget(
+                                                    index: index,
+                                                    profilePhoto:
+                                                        review.profilePhoto,
+                                                    name: review.name,
+                                                    rating:
+                                                        review.rating.toInt(),
+                                                    review: review.review,
+                                                    likes: review.likes,
+                                                    isLiked: review.isLiked,
+                                                  ));
+                                            });
                                       })
                                   : Center(
                                       child: Text('No Reviews!',
@@ -322,7 +336,16 @@ class BazaarDetails extends StatelessWidget {
                                       style: TextStyle(
                                           fontSize: MediaQueryUtil.screenWidth /
                                               34.33,
-                                          color: AppColors.black60)))
+                                          color: AppColors.black60))),
+                              SizedBox(
+                                  height: MediaQueryUtil.screenHeight / 26.375),
+                              Text('Rate this bazaar!',
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQueryUtil.screenWidth / 17.16,
+                                      color: AppColors.primaryFontColor,
+                                      fontFamily: FontFamily.russoOne)),
+                              RatingWidget(userRate: bazaar.userRate)
                             ],
                           );
                         },
