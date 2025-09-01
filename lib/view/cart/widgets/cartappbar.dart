@@ -4,6 +4,7 @@ import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
+import 'package:bazaartech/widget/loadingphotoappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,20 +45,7 @@ class CartAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () => Get.toNamed(Routes.account),
-                child: Obx(() {
-                  AccountController accountController =
-                      Get.find<AccountController>();
-                  return CircleAvatar(
-                    radius: MediaQueryUtil.screenWidth / 21,
-                    backgroundImage: accountController.profileImage.value !=
-                            null
-                        ? FileImage(accountController.profileImage.value!)
-                        : AssetImage(AppImages.profilephoto) as ImageProvider,
-                  );
-                }),
-              ),
+              const LoadingProfilePhoto()
             ],
           ),
         ),

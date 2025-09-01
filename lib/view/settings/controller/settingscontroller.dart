@@ -8,6 +8,7 @@ import 'package:bazaartech/core/service/link.dart';
 import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/core/service/shared_preferences_key.dart';
+import 'package:bazaartech/navbarcontroller.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -98,7 +99,7 @@ class SettingsController extends GetxController {
         if (await tempFile.exists()) {
           await tempFile.delete();
         }
-
+        Get.find<NavBarController>().changeTabIndex(0);
         Get.offAllNamed(Routes.login);
       } else {
         Get.snackbar("Error", data["message"] ?? "Failed to logout");
@@ -139,8 +140,8 @@ class SettingsController extends GetxController {
         textCancel: 'Cancel',
         confirmTextColor: AppColors.white,
         onConfirm: () async {
-          deleteUserInfo();
-          Get.offAllNamed(Routes.login);
+          // deleteUserInfo();
+          // Get.offAllNamed(Routes.login);
         },
         onCancel: () => Get.back());
   }

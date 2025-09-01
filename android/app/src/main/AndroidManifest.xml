@@ -13,6 +13,7 @@
     <application
         android:label="Bazaar"
         android:name="${applicationName}"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyDXeAa8fSpsT8Ne8lIHLjgQg9n9kyBPuiA"/>

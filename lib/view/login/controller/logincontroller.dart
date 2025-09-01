@@ -10,7 +10,6 @@ import 'package:bazaartech/core/service/shared_preferences_key.dart';
 import 'package:bazaartech/model/usermodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 

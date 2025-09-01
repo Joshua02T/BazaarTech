@@ -3,6 +3,8 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
+import 'package:bazaartech/view/account/controller/accountcontroller.dart';
+import 'package:bazaartech/view/account/screen/account.dart';
 import 'package:bazaartech/view/help/controller/helpcentercontroller.dart';
 import 'package:bazaartech/widget/customlisttile.dart';
 import 'package:flutter/material.dart';
@@ -59,7 +61,7 @@ class HelpCenter extends StatelessWidget {
                 ),
                 SizedBox(height: MediaQueryUtil.screenHeight / 42.2),
                 Text(
-                  'Hello Joshua, What\'s wrong!',
+                  'Hello ${Get.find<AccountController>().nameController.text}, What\'s wrong!',
                   style: TextStyle(
                     fontSize: MediaQueryUtil.screenWidth / 25.75,
                     color: const Color.fromRGBO(255, 255, 255, 0.5),

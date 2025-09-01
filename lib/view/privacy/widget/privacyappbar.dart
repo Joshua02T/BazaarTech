@@ -30,7 +30,7 @@ class CustomPrivacyAppBar extends StatelessWidget
                     icon: Image.asset(AppImages.appbarArrowBack,
                         width: MediaQueryUtil.screenWidth / 17.16)),
                 Text(
-                  'BazaarTech',
+                  'Bazaar',
                   style: TextStyle(
                       fontSize: MediaQueryUtil.screenWidth / 12.875,
                       fontFamily: FontFamily.russoOne,

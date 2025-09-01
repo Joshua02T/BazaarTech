@@ -2,6 +2,7 @@ import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
+import 'package:bazaartech/navbarcontroller.dart';
 import 'package:bazaartech/view/cart/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,7 +56,10 @@ class ConfirmationPage extends StatelessWidget {
                             horizontal: MediaQueryUtil.screenWidth / 20.6),
                         child: CustomCartButton(
                             text: 'Continue Shopping',
-                            onPressed: () => Get.offAllNamed(Routes.mainPage))),
+                            onPressed: () {
+                              Get.find<NavBarController>().changeTabIndex(0);
+                              Get.offAllNamed(Routes.mainPage);
+                            })),
                   ],
                 ),
               ),

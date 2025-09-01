@@ -1,5 +1,5 @@
 class AppLink {
-  static String appRoot = "http://10.0.2.2:8000/api";
+  static String appRoot = "http://192.168.1.102:8000/api";
 
   static String register = "$appRoot/register";
 

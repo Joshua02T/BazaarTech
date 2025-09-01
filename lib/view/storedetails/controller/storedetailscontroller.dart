@@ -1,6 +1,7 @@
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
 import 'package:bazaartech/core/service/shared_preferences_key.dart';
+import 'package:bazaartech/view/account/controller/accountcontroller.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
@@ -85,21 +86,14 @@ class StoreDetailsController extends GetxController {
 
     isLoadingAddingReview.value = true;
     try {
-      final prefs = await SharedPreferences.getInstance();
-
-      final String? userName =
-          prefs.getString(SharedPreferencesKey.userNameKey);
-      final String? userImage =
-          prefs.getString(SharedPreferencesKey.userImageKey);
+      AccountController accController = Get.find<AccountController>();
 
       final newReview = Review(
-          profilePhoto: userImage != null && userImage.isNotEmpty
-              ? userImage
+          profilePhoto: accController.profileImageUrl.value.isNotEmpty
+              ? accController.profileImageUrl.value
               : AppImages.profilephoto,
-          name: userName != null && userName.isNotEmpty
-              ? userName
-              : "Current User",
-          rating: 5,
+          name: accController.nameController.text,
+          rating: rating.toDouble(),
           review: review,
           likes: 0);
       await _storeRepository.addReview(store.id, newReview);

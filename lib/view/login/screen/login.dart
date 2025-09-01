@@ -5,7 +5,6 @@ import 'package:bazaartech/core/const_data/text_style.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/login/controller/logincontroller.dart';
-import 'package:bazaartech/widget/custombutton.dart';
 import 'package:bazaartech/widget/emailfield.dart';
 import 'package:bazaartech/widget/passwordfield.dart';
 import 'package:flutter/material.dart';
