@@ -14,7 +14,7 @@ class AddressModel {
     required this.address,
     required this.latitude,
     required this.longitude,
-    required this.isSelected,
+    this.isSelected = false,
   });
 
   AddressModel copyWith({
@@ -49,13 +49,13 @@ class AddressModel {
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
     return AddressModel(
-      id: json['id'],
-      place: json['place'],
-      number: json['number'],
-      address: json['address'],
-      latitude: (json['latitude'] as num).toDouble(),
-      longitude: (json['longitude'] as num).toDouble(),
-      isSelected: json['isSelected'],
+      id: json['id'].toString(),
+      place: json['label'] ?? '',
+      number: json['phone_number'] ?? '',
+      address: json['address'] ?? '',
+      latitude: double.tryParse(json['latitude'].toString()) ?? 0.0,
+      longitude: double.tryParse(json['longitude'].toString()) ?? 0.0,
+      isSelected: json['isSelected'] ?? false,
     );
   }
 }

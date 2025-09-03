@@ -1,7 +1,8 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
-import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
+import 'package:bazaartech/view/cart/controller/checkoutcontroller.dart';
+import 'package:bazaartech/view/cart/controller/locationpicker.dart';
 import 'package:bazaartech/view/cart/widgets/addresscontainer.dart';
 import 'package:bazaartech/view/cart/widgets/cartappbar.dart';
 import 'package:bazaartech/view/cart/widgets/completepaymentbutton.dart';
@@ -15,6 +16,8 @@ class CheckoutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(LocationPickerController());
+    Get.put(CheckoutController());
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       appBar: const CartAppBar(title: 'Checkout'),
@@ -35,7 +38,7 @@ class CheckoutPage extends StatelessWidget {
                         color: AppColors.black,
                       )),
                   SizedBox(height: MediaQueryUtil.screenHeight / 70.3),
-                  GetBuilder<CartController>(builder: (controller) {
+                  GetBuilder<CheckoutController>(builder: (controller) {
                     return Column(
                       children: [
                         ...controller.addressList.map((addr) {
@@ -45,6 +48,7 @@ class CheckoutPage extends StatelessWidget {
                             child: GestureDetector(
                               onTap: () => controller.selectAddress(addr.id),
                               child: AddressContainer(
+                                id: addr.id,
                                 place: addr.place,
                                 number: addr.number,
                                 address: addr.address,

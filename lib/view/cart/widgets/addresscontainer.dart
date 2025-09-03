@@ -2,13 +2,14 @@ import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
-import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
+import 'package:bazaartech/view/cart/controller/checkoutcontroller.dart';
 import 'package:bazaartech/view/cart/widgets/addaddressdialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddressContainer extends StatelessWidget {
+  final String id;
   final String place;
   final String number;
   final String addressValue;
@@ -28,12 +29,30 @@ class AddressContainer extends StatelessWidget {
     required this.onSelect,
     required this.latitude,
     required this.longitude,
+    required this.id,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onSelect,
+      onLongPress: () {
+        Get.defaultDialog(
+            title: 'Delete!',
+            titleStyle: const TextStyle(color: AppColors.red),
+            middleText: 'You sure you want to delete this address?',
+            middleTextStyle: const TextStyle(color: AppColors.red),
+            backgroundColor: AppColors.white,
+            buttonColor: AppColors.red,
+            cancelTextColor: AppColors.primaryFontColor,
+            textConfirm: 'Delete!',
+            textCancel: 'Cancel',
+            confirmTextColor: AppColors.white,
+            onConfirm: () async {
+              await Get.find<CheckoutController>().deleteAddress(id);
+            },
+            onCancel: () {});
+      },
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -96,7 +115,7 @@ class AddressContainer extends StatelessWidget {
                             id: addressValue,
                             isSelected: isSelected,
                           );
-                          Get.find<CartController>().updateAddress(updated);
+                          Get.find<CheckoutController>().updateAddress(updated);
                         },
                       ),
                     );

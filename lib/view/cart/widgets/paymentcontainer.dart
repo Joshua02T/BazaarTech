@@ -1,6 +1,7 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
+import 'package:bazaartech/view/cart/controller/checkoutcontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ class PaymentContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CartController>(
+    return GetBuilder<CheckoutController>(
       builder: (controller) {
         return GestureDetector(
           onTap: () {

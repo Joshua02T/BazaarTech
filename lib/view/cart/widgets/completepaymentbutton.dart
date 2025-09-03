@@ -3,6 +3,7 @@ import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
+import 'package:bazaartech/view/cart/controller/checkoutcontroller.dart';
 import 'package:bazaartech/view/cart/widgets/button.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class CompletePaymentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CartController cartController = Get.find<CartController>();
+    CheckoutController checkoutController = Get.find<CheckoutController>();
     return ClipRRect(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(MediaQueryUtil.screenWidth / 10),
@@ -94,7 +95,7 @@ class CompletePaymentButton extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${cartController.deliveryfee.toInt()}',
+                              text: '${checkoutController.deliveryfee.toInt()}',
                               style: TextStyle(
                                 fontSize: MediaQueryUtil.screenWidth / 25.75,
                                 color: AppColors.primaryFontColor,
@@ -133,7 +134,7 @@ class CompletePaymentButton extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${cartController.taxes.toInt()}',
+                              text: '${checkoutController.taxes.toInt()}',
                               style: TextStyle(
                                 fontSize: MediaQueryUtil.screenWidth / 25.75,
                                 color: AppColors.primaryFontColor,
@@ -158,7 +159,7 @@ class CompletePaymentButton extends StatelessWidget {
                       fontFamily: FontFamily.russoOne,
                     ),
                   ),
-                  GetBuilder<CartController>(
+                  GetBuilder<CheckoutController>(
                     builder: (controller) {
                       double totalPrice = controller.getTotalPrice();
                       return RichText(
@@ -191,7 +192,7 @@ class CompletePaymentButton extends StatelessWidget {
               CustomCartButton(
                   text: 'Complete Payment',
                   onPressed: () {
-                    if (cartController.addressList.isNotEmpty) {
+                    if (checkoutController.addressList.isNotEmpty) {
                       Get.toNamed(Routes.confirmationPage);
                     } else {
                       ToastUtil.showToast('Please add your address first');

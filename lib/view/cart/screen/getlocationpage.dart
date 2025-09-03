@@ -11,7 +11,7 @@ class LocationPickerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LocationPickerController());
+    final controller = Get.find<LocationPickerController>();
 
     return Scaffold(
       appBar: GetLocationAppbar(controller: controller),

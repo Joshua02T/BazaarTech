@@ -18,35 +18,28 @@ class LoadingProfilePhoto extends StatelessWidget {
               radius: MediaQueryUtil.screenWidth / 21,
               backgroundColor: Colors.grey.shade200,
               child: ClipOval(
-                child: controller.profileImage.value != null
-                    ? Image.file(
-                        controller.profileImage.value!,
+                child: controller.profileImageUrl.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: controller.profileImageUrl.value,
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,
+                        placeholder: (context, url) => const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                        errorWidget: (context, url, error) => Image.asset(
+                          AppImages.profilephoto,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
                       )
-                    : controller.profileImageUrl.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: controller.profileImageUrl.value,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                            placeholder: (context, url) => const Center(
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            ),
-                            errorWidget: (context, url, error) => Image.asset(
-                              AppImages.profilephoto,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: double.infinity,
-                            ),
-                          )
-                        : Image.asset(
-                            AppImages.profilephoto,
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
+                    : Image.asset(
+                        AppImages.profilephoto,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                      ),
               ),
             )));
   }

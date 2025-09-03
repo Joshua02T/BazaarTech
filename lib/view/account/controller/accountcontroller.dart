@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/service/link.dart';
@@ -24,7 +23,7 @@ class AccountController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  Rx<File?> profileImage = Rx<File?>(null);
+  // Remove local File reference since we're backend-only
   RxString selectedGender = ''.obs;
   var user = Rx<UserModel?>(null);
   var isLoading = false.obs;
@@ -102,12 +101,59 @@ class AccountController extends GetxController {
           ageController.text != (user.value?.age?.toString() ?? "") ||
           selectedGender.value != (user.value?.gender?.toString() ?? "");
 
-      final hasImageChanged = profileImage.value != null;
-
-      if (!hasTextChanged && !hasImageChanged) {
+      if (!hasTextChanged) {
         ToastUtil.showToast("No changes to update");
         return;
       }
+
+      final response = await http.post(
+        Uri.parse(AppLink.profile),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          '_method': 'PUT',
+          'name': nameController.text,
+          'email': emailController.text,
+          'number': phoneController.text,
+          'age': ageController.text,
+          'gender': selectedGender.value,
+        }),
+      );
+
+      final dynamic data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && data["success"] == true) {
+        user.value = UserModel.fromJson(data["data"]);
+        ToastUtil.showToast('Account information updated');
+      } else {
+        Get.snackbar("Error", data["message"] ?? "Failed to update profile");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> uploadProfileImage(ImageSource source) async {
+    try {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(source: source);
+
+      if (pickedFile == null) return;
+
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+      if (token == null) {
+        Get.snackbar("Error", "No token found, please login again");
+        return;
+      }
+
+      ToastUtil.showToast('Uploading profile picture...');
 
       final request = http.MultipartRequest(
         'POST',
@@ -123,17 +169,29 @@ class AccountController extends GetxController {
       request.fields['age'] = ageController.text;
       request.fields['gender'] = selectedGender.value;
 
-      if (hasImageChanged) {
-        request.files.add(
-          await http.MultipartFile.fromPath('image', profileImage.value!.path),
-        );
-      }
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          pickedFile.path,
+          filename: 'profile_image.jpg',
+        ),
+      );
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
+
+      print('Image upload response: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      final contentType = response.headers['content-type'] ?? '';
+      if (!contentType.contains('application/json')) {
+        throw FormatException('Expected JSON but got: $contentType');
+      }
+
       final dynamic data = jsonDecode(response.body);
 
       if (response.statusCode == 200 && data["success"] == true) {
+        // Update user data with the new image
         user.value = UserModel.fromJson(data["data"]);
 
         if (user.value!.profileImage != null) {
@@ -145,27 +203,18 @@ class AccountController extends GetxController {
           profileImageUrl.value = url;
         }
 
-        ToastUtil.showToast('Account information updated');
+        ToastUtil.showToast('Profile picture updated successfully');
       } else {
-        Get.snackbar("Error", data["message"] ?? "Failed to update profile");
+        Get.snackbar("Error", data["message"] ?? "Failed to upload image");
       }
+    } on FormatException catch (e) {
+      print('JSON parsing failed: $e');
+      Get.snackbar(
+          "Server Error", "Please check if the API endpoint is correct");
     } catch (e) {
-      Get.snackbar("Error", e.toString());
-    } finally {
-      isLoading.value = false;
+      print('Upload error: $e');
+      Get.snackbar("Error", "Failed to upload image");
     }
-  }
-
-  Future<void> pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile == null) return;
-
-    final imageFile = File(pickedFile.path);
-    profileImage.value = imageFile;
-
-    ToastUtil.showToast('Uploading profile picture...');
   }
 
   void selectGender(String gender) {
@@ -174,27 +223,52 @@ class AccountController extends GetxController {
 
   Future<void> removeProfileImage() async {
     Get.defaultDialog(
-        title: 'Remove picture',
-        titleStyle: const TextStyle(color: AppColors.primaryFontColor),
-        middleText: 'You sure you want to remove your picture?',
-        middleTextStyle: const TextStyle(color: AppColors.primaryOrangeColor),
-        backgroundColor: AppColors.white,
-        buttonColor: AppColors.primaryOrangeColor,
-        cancelTextColor: AppColors.primaryFontColor,
-        textConfirm: 'Yes!',
-        textCancel: 'Cancel',
-        confirmTextColor: AppColors.white,
-        onConfirm: () async {
-          profileImageUrl.value = '';
-          ToastUtil.showToast("Profile picture removed!");
-          Get.back();
-        },
-        onCancel: () {});
+      title: 'Remove picture',
+      titleStyle: const TextStyle(color: AppColors.primaryFontColor),
+      middleText: 'You sure you want to remove your picture?',
+      middleTextStyle: const TextStyle(color: AppColors.primaryOrangeColor),
+      backgroundColor: AppColors.white,
+      buttonColor: AppColors.primaryOrangeColor,
+      cancelTextColor: AppColors.primaryFontColor,
+      textConfirm: 'Yes!',
+      textCancel: 'Cancel',
+      confirmTextColor: AppColors.white,
+      onConfirm: () async {
+        Get.back();
+        await deleteProfileImage();
+      },
+      onCancel: () {},
+    );
   }
 
   void imageButtonFunction() => showImageBottomSheet();
 
   void showPictureSourceBottomSheet() => showHelperPictureSourceBottomSheet();
+
+  Future<void> deleteProfileImage() async {
+    try {
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+      final response = await http.delete(
+        Uri.parse(AppLink.deleteProfileImage),
+        headers: {
+          "Accept": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        profileImageUrl.value = '';
+        Get.snackbar("Success", "Profile image deleted successfully");
+      } else {
+        Get.snackbar(
+            "Error", "Failed to delete Profile image (${response.statusCode})");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+    }
+  }
 
   @override
   void onInit() {

@@ -1,6 +1,5 @@
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/repositories/bazaarrepo.dart';
-import 'package:bazaartech/core/service/shared_preferences_key.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';

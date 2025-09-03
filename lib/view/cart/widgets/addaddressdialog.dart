@@ -42,7 +42,7 @@ class _AddAddressDialogState extends State<AddAddressDialog> {
   String locationAddress = '';
 
   final LocationPickerController locationController =
-      Get.put(LocationPickerController());
+      Get.find<LocationPickerController>();
 
   @override
   void initState() {
@@ -72,23 +72,14 @@ class _AddAddressDialogState extends State<AddAddressDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // Place Name
               TextFormField(
-                style: const TextStyle(color: AppColors.black60),
                 controller: placeController,
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(
+                style: const TextStyle(color: AppColors.black60),
+                decoration: const InputDecoration(
                   labelText: "Place Name",
-                  floatingLabelStyle: TextStyle(
-                      color: selectedLocation == null
-                          ? AppColors.primaryOrangeColor
-                          : Colors.green),
-                  hintText: 'Home, Office, etc..',
-                  focusedBorder:
-                      const UnderlineInputBorder(borderSide: BorderSide.none),
-                  errorBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.black60)),
-                  focusedErrorBorder:
-                      const UnderlineInputBorder(borderSide: BorderSide.none),
+                  hintText: "Home, Office, etc..",
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -101,13 +92,19 @@ class _AddAddressDialogState extends State<AddAddressDialog> {
                   return null;
                 },
               ),
+
+              // Phone Number
               TextFormField(
-                style: const TextStyle(color: AppColors.black60),
                 controller: numberController,
-                maxLength: 10,
                 keyboardType: TextInputType.phone,
+                maxLength: 10,
+                style: const TextStyle(color: AppColors.black60),
+                decoration: const InputDecoration(
+                  labelText: "Phone Number",
+                  hintText: "09**",
+                ),
                 validator: (phoneNumber) {
-                  if (phoneNumber!.isEmpty) {
+                  if (phoneNumber == null || phoneNumber.isEmpty) {
                     return 'Phone number cannot be empty';
                   }
                   if (!RegExp(r'^09\d{8}$').hasMatch(phoneNumber)) {
@@ -115,22 +112,10 @@ class _AddAddressDialogState extends State<AddAddressDialog> {
                   }
                   return null;
                 },
-                decoration: InputDecoration(
-                  labelText: "Phone Number",
-                  floatingLabelStyle: TextStyle(
-                      color: selectedLocation == null
-                          ? AppColors.primaryOrangeColor
-                          : Colors.green),
-                  hintText: '09**',
-                  focusedBorder:
-                      const UnderlineInputBorder(borderSide: BorderSide.none),
-                  errorBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.black60)),
-                  focusedErrorBorder:
-                      const UnderlineInputBorder(borderSide: BorderSide.none),
-                ),
               ),
+
               const SizedBox(height: 10),
+
               ElevatedButton.icon(
                 icon: const Icon(Icons.map),
                 label: Text(
@@ -147,9 +132,7 @@ class _AddAddressDialogState extends State<AddAddressDialog> {
                   if (result != null) {
                     final address =
                         await locationController.getAddressFromLatLng(
-                      result.latitude,
-                      result.longitude,
-                    );
+                            result.latitude, result.longitude);
                     setState(() {
                       selectedLocation = result;
                       locationAddress = address;
@@ -163,79 +146,59 @@ class _AddAddressDialogState extends State<AddAddressDialog> {
                   foregroundColor: AppColors.white,
                 ),
               ),
+
               if (selectedLocation != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Clipboard.setData(ClipboardData(text: locationAddress));
-                      ToastUtil.showToast("Copied to clipboard");
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            locationAddress,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: AppColors.black60),
-                          ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          locationAddress,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: AppColors.black60),
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.copy, size: 20),
-                          tooltip: "Copy to clipboard",
-                          onPressed: () {
-                            Clipboard.setData(
-                                ClipboardData(text: locationAddress));
-                            ToastUtil.showToast("Copied to clipboard");
-                          },
-                        ),
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.copy, size: 20),
+                        onPressed: () {
+                          Clipboard.setData(
+                              ClipboardData(text: locationAddress));
+                          ToastUtil.showToast("Copied to clipboard");
+                        },
+                      ),
+                    ],
                   ),
-                )
+                ),
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: Text(
-              "Cancel",
-              style: TextStyle(
-                color: selectedLocation == null
-                    ? AppColors.primaryOrangeColor
-                    : Colors.green,
-              ),
-            ),
+            child: const Text("Cancel"),
           ),
           ElevatedButton(
             onPressed: () {
               if (widget.formKey.currentState!.validate()) {
                 if (selectedLocation == null) {
-                  ToastUtil.showToast(
-                      "Location missing, please pick a location.");
+                  ToastUtil.showToast("Please pick a location.");
                   return;
                 }
                 final newAddress = AddressModel(
+                  id: "",
                   place: placeController.text.trim(),
                   number: numberController.text.trim(),
                   address: locationAddress,
                   latitude: selectedLocation!.latitude,
                   longitude: selectedLocation!.longitude,
-                  id: DateTime.now().millisecondsSinceEpoch.toString(),
                   isSelected: widget.isSelected ?? widget.isFirstAddress,
                 );
+
                 widget.onAdd(newAddress);
                 Get.back();
               }
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: selectedLocation == null
-                  ? AppColors.primaryOrangeColor
-                  : Colors.green,
-              foregroundColor: AppColors.white,
-            ),
             child: const Text("Add"),
           ),
         ],

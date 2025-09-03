@@ -9,6 +9,12 @@ class AppLink {
 
   static String profile = "$appRoot/me";
 
+  static String getAddress = "$appRoot/addresses";
+
+  static String createAddress = "$appRoot/address";
+
+  static String deleteProfileImage = "$appRoot/profileImage";
+
   Map<String, String> getHeader() {
     Map<String, String> mainHeader = {
       'Content-Type': 'application/json',

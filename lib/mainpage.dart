@@ -17,8 +17,8 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NavBarController controller = Get.put(NavBarController(), permanent: true);
     MediaQueryUtil.init(context);
-    NavBarController controller = Get.find<NavBarController>();
     Get.put(AccountController());
     Get.put(CartController());
 

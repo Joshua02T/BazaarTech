@@ -93,7 +93,7 @@ class SettingsController extends GetxController {
         AccountController accountController = Get.find<AccountController>();
 
         accountController.user.value = null;
-        accountController.profileImage.value = null;
+        accountController.profileImageUrl.value = '';
 
         final tempFile = File('${Directory.systemTemp.path}/profile_image.jpg');
         if (await tempFile.exists()) {

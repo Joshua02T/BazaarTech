@@ -95,7 +95,11 @@ class LocationPickerController extends GetxController {
       List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
       if (placemarks.isNotEmpty) {
         final placemark = placemarks.first;
-        return "${placemark.street}, ${placemark.locality}, ${placemark.country}";
+        String city = placemark.locality ?? "";
+
+        city = city.replaceAll(",", "").trim();
+
+        return city.isEmpty ? "Unknown location" : city;
       } else {
         return "Unknown location";
       }

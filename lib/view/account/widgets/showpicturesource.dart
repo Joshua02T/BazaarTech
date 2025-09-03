@@ -37,7 +37,7 @@ void showHelperPictureSourceBottomSheet() {
             title: const Text("Camera"),
             onTap: () {
               Get.back();
-              controller.pickImage(ImageSource.camera);
+              controller.uploadProfileImage(ImageSource.camera);
             },
           ),
           ListTile(
@@ -46,7 +46,7 @@ void showHelperPictureSourceBottomSheet() {
             title: const Text("Gallery"),
             onTap: () {
               Get.back();
-              controller.pickImage(ImageSource.gallery);
+              controller.uploadProfileImage(ImageSource.gallery);
             },
           ),
         ],
