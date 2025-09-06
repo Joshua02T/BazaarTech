@@ -2,7 +2,7 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/repositories/bazaarrepo.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/widgets.dart';
@@ -75,6 +75,7 @@ class BazaarDetailsController extends GetxController {
               ? accController.profileImageUrl.value
               : AppImages.profilephoto,
           name: accController.nameController.text,
+          userId: 4,
           rating: rating,
           comment: review,
           likes: 0);

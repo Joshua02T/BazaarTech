@@ -1,6 +1,6 @@
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 
 List categoryItem = ['All', 'Products', 'Stores', 'Bazaars'];
 
@@ -27,12 +27,14 @@ final List<Bazaar> bazaarCardItems = [
           rating: 4,
           comment: 'Great boots! Very comfortable and lightweight.',
           likes: 0,
+          userId: 2,
           id: 0,
           isLiked: false),
       Comment(
           profilePhoto: AppImages.user2,
           name: 'Jane Smith',
           rating: 5,
+          userId: 2,
           comment: 'Amazing quality and perfect fit. Highly recommend!',
           likes: 0,
           id: 1,

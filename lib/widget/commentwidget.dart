@@ -1,11 +1,9 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
-import 'package:bazaartech/view/productdetails/controller/productdetailscontroller.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CommentWidget extends StatelessWidget {
   final Comment comment;
@@ -17,8 +15,6 @@ class CommentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ProductDetailsController>();
-
     MediaQueryUtil.init(context);
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQueryUtil.screenHeight / 105.5),
@@ -82,24 +78,7 @@ class CommentWidget extends StatelessWidget {
                 fontSize: MediaQueryUtil.screenWidth / 25.75,
                 color: AppColors.black60),
           ),
-          Row(children: [
-            IconButton(
-                onPressed: () {},
-                icon: Image.asset(
-                  comment.isLiked ? AppImages.filledHeart : AppImages.heart,
-                  color: AppColors.primaryOrangeColor,
-                  width: MediaQueryUtil.screenWidth / 25.75,
-                )),
-            if (comment.likes != 0)
-              Text(
-                comment.likes > 1
-                    ? '$comment.likes likes'
-                    : '$comment.likes like',
-                style: TextStyle(
-                    fontSize: MediaQueryUtil.screenWidth / 29.42,
-                    color: AppColors.black60),
-              )
-          ])
+          SizedBox(height: MediaQueryUtil.screenHeight / 140.6),
         ],
       ),
     );

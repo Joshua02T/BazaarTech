@@ -81,13 +81,18 @@ class CustomProductCard extends StatelessWidget {
                         color: AppColors.white),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          '${data.price.toInt()} ',
-                          style: TextStyle(
-                              fontSize: MediaQueryUtil.screenWidth / 25.75,
-                              color: AppColors.black,
-                              fontFamily: FontFamily.russoOne),
+                        Flexible(
+                          child: Text(
+                            '${data.price.toInt()} ',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                                fontSize: MediaQueryUtil.screenWidth / 25.75,
+                                color: AppColors.black,
+                                fontFamily: FontFamily.russoOne),
+                          ),
                         ),
                         Text(
                           '\$',
@@ -109,21 +114,28 @@ class CustomProductCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.name,
-                          style: TextStyle(
-                              fontSize: MediaQueryUtil.screenWidth / 25.75,
-                              color: AppColors.black,
-                              fontFamily: FontFamily.russoOne),
-                        ),
-                        Text(data.markerName,
+                  Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            data.name,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             style: TextStyle(
-                                color: AppColors.obacity60black,
-                                fontSize: MediaQueryUtil.screenWidth / 41.2)),
-                      ]),
+                                fontSize: MediaQueryUtil.screenWidth / 25.75,
+                                color: AppColors.black,
+                                fontFamily: FontFamily.russoOne),
+                          ),
+                          Text(data.markerName,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  color: AppColors.black,
+                                  fontSize: MediaQueryUtil.screenWidth / 41.2)),
+                        ]),
+                  ),
                   GestureDetector(
                       onTap: () => Get.find<CartController>().addToCart(data),
                       child: Container(

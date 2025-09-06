@@ -1,7 +1,6 @@
-import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
-import 'package:bazaartech/view/account/controller/accountcontroller.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
+import 'package:bazaartech/view/home/model/categorymodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
@@ -11,16 +10,15 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class StoreDetailsController extends GetxController {
+  final String id;
+  StoreDetailsController(this.id);
   final StoreRepository _storeRepository = StoreRepository();
-  final Rx<Store?> store = Rx<Store?>(null);
-  final RxString reviewText = ''.obs;
-  TextEditingController reviewController = TextEditingController();
-  final RxBool isLoadingFetching = false.obs;
-  final RxBool isLoadingAddingReview = false.obs;
-  final RxList<String> productCategories = <String>[].obs;
-  RxInt selectedProductCategoryIndex = 0.obs;
+  Store? store;
+  bool isLoadingFetching = false;
+  final List<String> productCategories = <String>[];
+  int selectedProductCategoryIndex = 0;
   PageController pageController = PageController();
-  final reviews = <Comment>[].obs;
+  final List<Comment> comments = <Comment>[];
 
   int rating = 0;
   void setRating(int value) {
@@ -29,90 +27,66 @@ class StoreDetailsController extends GetxController {
   }
 
   void updateSelectedProductCategoryIndex(int index) {
-    selectedProductCategoryIndex.value = index;
+    selectedProductCategoryIndex = index;
+    update();
   }
 
-  // Future<void> fetchStore(String id) async {
-  //   try {
-  //     isLoadingFetching.value = true;
-  //     store.value = await _storeRepository.fetchStoreById(id);
-  //     fetchProductCategories();
-  //     reviews.assignAll(store.value!.reviews);
-  //   } catch (e) {
-  //     ToastUtil.showToast('Failed to load store, ${e.toString()}');
-  //   } finally {
-  //     isLoadingFetching.value = false;
-  //   }
-  // }
+  Future<void> fetchStore(String id) async {
+    try {
+      isLoadingFetching = true;
+      update();
+      final fetchedStore = await _storeRepository.fetchStoreById(id);
+      store = fetchedStore;
+      comments.assignAll(fetchedStore!.comments);
+      fetchProductCategories();
+    } catch (e) {
+      ToastUtil.showToast('Failed to load store, ${e.toString()}');
+      print(e.toString());
+    } finally {
+      isLoadingFetching = false;
+      update();
+    }
+  }
 
   void fetchProductCategories() {
-    if (store.value != null && store.value!.products.isNotEmpty) {
-      final categories = store.value!.products.map((p) => p.category).toSet();
-      productCategories.assignAll(categories);
+    if (store != null) {
+      productCategories.clear();
+
+      for (Category c in store!.categories) {
+        productCategories.add(c.name);
+      }
+
+      selectedProductCategoryIndex = 0;
+      update();
     }
   }
 
   List<Product> get filteredProductsForCurrentCategory {
-    if (store.value == null) return [];
-    final selectedCategory =
-        productCategories[selectedProductCategoryIndex.value];
-    return store.value!.products
-        .where((product) => product.category == selectedCategory)
+    if (store == null) return [];
+
+    final selectedCategory = productCategories[selectedProductCategoryIndex];
+    return store!.products
+        .where((p) => p.category == selectedCategory)
         .toList();
   }
 
   Future<void> callStore() async {
-    String phoneNumber = store.value!.storeNumber.toString();
+    String phoneNumber = store!.storeNumber.toString();
     final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
     if (!await launchUrl(phoneUri, mode: LaunchMode.externalApplication)) {
       ToastUtil.showToast('Could not launch $phoneUri');
     }
   }
 
-  void toggleLike(int index) {
-    final review = reviews[index];
-    if (review.isLiked == true) {
-      review.likes -= 1;
-      review.isLiked = false;
-    } else {
-      review.likes += 1;
-      review.isLiked = true;
-    }
-    reviews[index] = review;
-  }
-
-  Future<void> addReview(Store store, String review) async {
-    // if (review.isEmpty || isLoadingAddingReview.value) return;
-
-    // isLoadingAddingReview.value = true;
-    // try {
-    //   AccountController accController = Get.find<AccountController>();
-
-    //   final newReview = Comment(
-    //     id: 0,
-    //     isLiked: false,
-    //       profilePhoto: accController.profileImageUrl.value.isNotEmpty
-    //           ? accController.profileImageUrl.value
-    //           : AppImages.profilephoto,
-    //       name: accController.nameController.text,
-    //       rating: rating,
-    //       comment: review,
-    //       likes: 0);
-    //   await _storeRepository.addReview(store.id, newReview);
-    //   reviews.insert(0, newReview);
-    //   reviewText.value = '';
-    //   reviewController.clear();
-    //   ToastUtil.showToast('Review added!');
-    // } catch (e) {
-    //   ToastUtil.showToast('Failed to add review!');
-    // } finally {
-    //   isLoadingAddingReview.value = false;
-    // }
-  }
-
   @override
   void onClose() {
     pageController.dispose();
     super.onClose();
+  }
+
+  @override
+  void onInit() {
+    fetchStore(id);
+    super.onInit();
   }
 }

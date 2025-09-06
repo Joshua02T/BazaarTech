@@ -1,6 +1,6 @@
 import 'package:bazaartech/core/const_data/lists.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 
 class BazaarRepository {
   Future<List<Bazaar>> fetchBazaars() async {

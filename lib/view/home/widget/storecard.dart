@@ -3,13 +3,14 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
+import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/view/home/widget/cardfavicon.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomStoreCard extends StatelessWidget {
-  final dynamic data;
+  final Store data;
   const CustomStoreCard({super.key, required this.data});
 
   @override
@@ -50,12 +51,17 @@ class CustomStoreCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(
                             MediaQueryUtil.screenWidth / 103)),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(data.rating.toInt().toString(),
-                            style: TextStyle(
-                                fontSize: MediaQueryUtil.screenWidth / 25.75,
-                                color: AppColors.black)),
+                        Flexible(
+                          child: Text(data.rating.toString(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                  fontSize: MediaQueryUtil.screenWidth / 25.75,
+                                  color: AppColors.black)),
+                        ),
                         Image.asset(
                           AppImages.starIcon,
                           width: MediaQueryUtil.screenWidth / 25.75,
@@ -66,34 +72,43 @@ class CustomStoreCard extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: MediaQueryUtil.screenHeight / 140),
+            SizedBox(height: MediaQueryUtil.screenHeight / 64.92),
             Padding(
               padding: EdgeInsets.symmetric(
                   horizontal: MediaQueryUtil.screenWidth / 25.75),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data.name,
-                          style: TextStyle(
-                              fontSize: MediaQueryUtil.screenWidth / 25.75,
-                              color: AppColors.black,
-                              overflow: TextOverflow.fade,
-                              fontFamily: FontFamily.russoOne),
-                        ),
-                        Row(children: [
-                          Image.asset(AppImages.postionPin,
-                              width: MediaQueryUtil.screenWidth / 41.2),
-                          SizedBox(width: MediaQueryUtil.screenWidth / 103),
-                          Text(data.address,
-                              style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: MediaQueryUtil.screenWidth / 41.2)),
-                        ])
-                      ]),
+                  Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            data.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: MediaQueryUtil.screenWidth / 25.75,
+                                color: AppColors.black,
+                                fontFamily: FontFamily.russoOne),
+                          ),
+                          Row(mainAxisSize: MainAxisSize.min, children: [
+                            Image.asset(AppImages.postionPin,
+                                width: MediaQueryUtil.screenWidth / 41.2),
+                            SizedBox(width: MediaQueryUtil.screenWidth / 103),
+                            Flexible(
+                              child: Text(data.address,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: AppColors.black,
+                                      fontSize:
+                                          MediaQueryUtil.screenWidth / 41.2)),
+                            ),
+                          ])
+                        ]),
+                  ),
                   const CardFavIcon()
                 ],
               ),

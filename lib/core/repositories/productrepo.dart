@@ -4,7 +4,7 @@ import 'package:bazaartech/core/service/link.dart';
 import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/shared_preferences_key.dart';
 import 'package:bazaartech/helper/appconfig.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

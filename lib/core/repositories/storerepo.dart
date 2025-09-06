@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bazaartech/core/const_data/lists.dart';
 import 'package:bazaartech/core/service/link.dart';
 import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/shared_preferences_key.dart';
@@ -46,10 +45,36 @@ class StoreRepository {
     }
   }
 
-  // Future<Store?> fetchStoreById(String id) async {
-  //   await Future.delayed(const Duration(seconds: 2));
-  //   return storeCardItems.firstWhere((store) => store.id == id);
-  // }
+  Future<Store?> fetchStoreById(String id) async {
+    final myService = Get.find<MyService>();
+    final prefs = myService.sharedPreferences;
+    final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+    final url = '${AppLink.getAllStores}/$id';
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if (data['data'] != null) {
+        final store = Store.fromJson(data["data"]);
+
+        return store;
+      } else {
+        return null;
+      }
+    } else {
+      throw Exception("Failed to load store: ${response.statusCode}");
+    }
+  }
 
   // Future<void> addReview(String storeId, Review newReview) async {
   //   await Future.delayed(const Duration(seconds: 1));

@@ -14,172 +14,173 @@ class StoreReviews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<StoreDetailsController>();
+    //final controller = Get.find<StoreDetailsController>();
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: const CustomAppBarWithBack(text: 'Reviews'),
-      body: Column(
-        children: [
-          Obx(() {
-            if (controller.isLoadingFetching.value) {
-              return const Expanded(child: CustomProgressIndicator());
-            }
+        backgroundColor: AppColors.backgroundColor,
+        appBar: const CustomAppBarWithBack(text: 'Reviews'),
+        body: Container()
+        // Column(
+        //   children: [
+        //     Obx(() {
+        //       if (controller.isLoadingFetching) {
+        //         return const Expanded(child: CustomProgressIndicator());
+        //       }
 
-            final reviews = controller.reviews;
+        //       final reviews = controller.reviews;
 
-            return reviews.isNotEmpty
-                ? Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQueryUtil.screenWidth / 20.6,
-                        vertical: MediaQueryUtil.screenHeight / 70,
-                      ),
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          final store = controller.store.value;
-                          if (store != null) {
-                            //await controller.fetchStore(store.id);
-                          }
-                        },
-                        child: ListView.builder(
-                          clipBehavior: Clip.none,
-                          itemCount: reviews.length,
-                          itemBuilder: (context, index) {
-                            return GetBuilder<StoreDetailsController>(
-                              id: 'reviewstore_$index',
-                              builder: (_) {
-                                final review = controller.reviews[index];
-                                return Column(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(
-                                        MediaQueryUtil.screenWidth / 25.75,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.white,
-                                        borderRadius: BorderRadius.circular(
-                                          MediaQueryUtil.screenWidth / 51.5,
-                                        ),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Row(children: [
-                                                buildReviewImage(
-                                                    review.profilePhoto!),
-                                                SizedBox(
-                                                    width: MediaQueryUtil
-                                                            .screenWidth /
-                                                        68.66),
-                                                Text(
-                                                  review.name,
-                                                  style: TextStyle(
-                                                    fontSize: MediaQueryUtil
-                                                            .screenWidth /
-                                                        25.75,
-                                                    color: AppColors
-                                                        .primaryFontColor,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ]),
-                                              Row(children: [
-                                                Text(
-                                                  '${review.rating.toInt()} ',
-                                                  style: TextStyle(
-                                                    fontSize: MediaQueryUtil
-                                                            .screenWidth /
-                                                        25.75,
-                                                    color: AppColors
-                                                        .primaryFontColor,
-                                                  ),
-                                                ),
-                                                Image.asset(
-                                                  AppImages.starIcon,
-                                                  width: 16,
-                                                ),
-                                              ]),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              height:
-                                                  MediaQueryUtil.screenHeight /
-                                                      140.6),
-                                          Text(
-                                            review.comment,
-                                            style: TextStyle(
-                                              fontSize:
-                                                  MediaQueryUtil.screenWidth /
-                                                      25.75,
-                                              color: AppColors.black60,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        IconButton(
-                                          onPressed: () {
-                                            controller.toggleLike(index);
-                                            controller
-                                                .update(['reviewstore_$index']);
-                                          },
-                                          icon: Image.asset(
-                                            review.isLiked
-                                                ? AppImages.filledHeart
-                                                : AppImages.heart,
-                                            width: MediaQueryUtil.screenWidth /
-                                                25.75,
-                                            color: AppColors.primaryOrangeColor,
-                                          ),
-                                        ),
-                                        if (review.likes > 0)
-                                          Text(
-                                            review.likes > 1
-                                                ? '${review.likes} likes'
-                                                : '${review.likes} like',
-                                            style: TextStyle(
-                                              fontSize:
-                                                  MediaQueryUtil.screenWidth /
-                                                      29.42,
-                                              color: AppColors.black60,
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                        height:
-                                            MediaQueryUtil.screenHeight / 70.33)
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  )
-                : const Expanded(
-                    child: Center(
-                      child: Text(
-                        'No reviews yet',
-                        style: TextStyle(color: AppColors.black60),
-                      ),
-                    ),
-                  );
-          }),
-          const AddStoreReview(),
-        ],
-      ),
-    );
+        //       return reviews.isNotEmpty
+        //           ? Expanded(
+        //               child: Padding(
+        //                 padding: EdgeInsets.symmetric(
+        //                   horizontal: MediaQueryUtil.screenWidth / 20.6,
+        //                   vertical: MediaQueryUtil.screenHeight / 70,
+        //                 ),
+        //                 child: RefreshIndicator(
+        //                   onRefresh: () async {
+        //                     final store = controller.store.value;
+        //                     if (store != null) {
+        //                       //await controller.fetchStore(store.id);
+        //                     }
+        //                   },
+        //                   child: ListView.builder(
+        //                     clipBehavior: Clip.none,
+        //                     itemCount: reviews.length,
+        //                     itemBuilder: (context, index) {
+        //                       return GetBuilder<StoreDetailsController>(
+        //                         id: 'reviewstore_$index',
+        //                         builder: (_) {
+        //                           final review = controller.reviews[index];
+        //                           return Column(
+        //                             children: [
+        //                               Container(
+        //                                 padding: EdgeInsets.all(
+        //                                   MediaQueryUtil.screenWidth / 25.75,
+        //                                 ),
+        //                                 decoration: BoxDecoration(
+        //                                   color: AppColors.white,
+        //                                   borderRadius: BorderRadius.circular(
+        //                                     MediaQueryUtil.screenWidth / 51.5,
+        //                                   ),
+        //                                 ),
+        //                                 child: Column(
+        //                                   crossAxisAlignment:
+        //                                       CrossAxisAlignment.start,
+        //                                   children: [
+        //                                     Row(
+        //                                       mainAxisAlignment:
+        //                                           MainAxisAlignment.spaceBetween,
+        //                                       crossAxisAlignment:
+        //                                           CrossAxisAlignment.center,
+        //                                       children: [
+        //                                         Row(children: [
+        //                                           buildReviewImage(
+        //                                               review.profilePhoto!),
+        //                                           SizedBox(
+        //                                               width: MediaQueryUtil
+        //                                                       .screenWidth /
+        //                                                   68.66),
+        //                                           Text(
+        //                                             review.name,
+        //                                             style: TextStyle(
+        //                                               fontSize: MediaQueryUtil
+        //                                                       .screenWidth /
+        //                                                   25.75,
+        //                                               color: AppColors
+        //                                                   .primaryFontColor,
+        //                                               fontWeight: FontWeight.w600,
+        //                                             ),
+        //                                           ),
+        //                                         ]),
+        //                                         Row(children: [
+        //                                           Text(
+        //                                             '${review.rating.toInt()} ',
+        //                                             style: TextStyle(
+        //                                               fontSize: MediaQueryUtil
+        //                                                       .screenWidth /
+        //                                                   25.75,
+        //                                               color: AppColors
+        //                                                   .primaryFontColor,
+        //                                             ),
+        //                                           ),
+        //                                           Image.asset(
+        //                                             AppImages.starIcon,
+        //                                             width: 16,
+        //                                           ),
+        //                                         ]),
+        //                                       ],
+        //                                     ),
+        //                                     SizedBox(
+        //                                         height:
+        //                                             MediaQueryUtil.screenHeight /
+        //                                                 140.6),
+        //                                     Text(
+        //                                       review.comment,
+        //                                       style: TextStyle(
+        //                                         fontSize:
+        //                                             MediaQueryUtil.screenWidth /
+        //                                                 25.75,
+        //                                         color: AppColors.black60,
+        //                                       ),
+        //                                     ),
+        //                                   ],
+        //                                 ),
+        //                               ),
+        //                               Row(
+        //                                 children: [
+        //                                   IconButton(
+        //                                     onPressed: () {
+        //                                       controller.toggleLike(index);
+        //                                       controller
+        //                                           .update(['reviewstore_$index']);
+        //                                     },
+        //                                     icon: Image.asset(
+        //                                       review.isLiked
+        //                                           ? AppImages.filledHeart
+        //                                           : AppImages.heart,
+        //                                       width: MediaQueryUtil.screenWidth /
+        //                                           25.75,
+        //                                       color: AppColors.primaryOrangeColor,
+        //                                     ),
+        //                                   ),
+        //                                   if (review.likes > 0)
+        //                                     Text(
+        //                                       review.likes > 1
+        //                                           ? '${review.likes} likes'
+        //                                           : '${review.likes} like',
+        //                                       style: TextStyle(
+        //                                         fontSize:
+        //                                             MediaQueryUtil.screenWidth /
+        //                                                 29.42,
+        //                                         color: AppColors.black60,
+        //                                       ),
+        //                                     ),
+        //                                 ],
+        //                               ),
+        //                               SizedBox(
+        //                                   height:
+        //                                       MediaQueryUtil.screenHeight / 70.33)
+        //                             ],
+        //                           );
+        //                         },
+        //                       );
+        //                     },
+        //                   ),
+        //                 ),
+        //               ),
+        //             )
+        //           : const Expanded(
+        //               child: Center(
+        //                 child: Text(
+        //                   'No reviews yet',
+        //                   style: TextStyle(color: AppColors.black60),
+        //                 ),
+        //               ),
+        //             );
+        //     }),
+        //     const AddStoreReview(),
+        //   ],
+        // ),
+        );
   }
 }

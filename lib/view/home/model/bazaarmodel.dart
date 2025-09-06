@@ -1,4 +1,4 @@
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:get/get.dart';
 

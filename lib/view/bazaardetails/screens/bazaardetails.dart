@@ -6,7 +6,7 @@ import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/bazaardetails/controller/bazaardetailscontroller.dart';
 import 'package:bazaartech/view/bazaardetails/widgets/ratingwidget.dart';
 import 'package:bazaartech/view/bazaardetails/widgets/reviewbazaarwidget.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/view/storedetails/widgets/customcategory.dart';
 import 'package:bazaartech/view/storedetails/widgets/storeproductcard.dart';

@@ -4,11 +4,9 @@ import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
-import 'package:bazaartech/view/home/model/productmodel.dart';
-import 'package:bazaartech/view/productdetails/controller/commentscontroller.dart';
 import 'package:bazaartech/view/productdetails/controller/productdetailscontroller.dart';
 import 'package:bazaartech/view/productdetails/screens/ratingwidget.dart';
-import 'package:bazaartech/view/productdetails/widgets/commentwidget.dart';
+import 'package:bazaartech/widget/commentwidget.dart';
 import 'package:bazaartech/widget/customdetailsfavicon.dart';
 import 'package:bazaartech/widget/customdetailsiconback.dart';
 import 'package:bazaartech/widget/customprogressindicator.dart';
@@ -48,18 +46,12 @@ class ProductDetails extends StatelessWidget {
                           child: InteractiveViewer(
                             child: CachedNetworkImage(
                               imageUrl: product.image,
-                              // fit: BoxFit.fill,
-                              // height: MediaQueryUtil.screenHeight / 5.41,
-                              // width: double.infinity,
                               placeholder: (context, url) => const Center(
                                 child:
                                     CircularProgressIndicator(strokeWidth: 2),
                               ),
                               errorWidget: (context, url, error) => Image.asset(
                                 AppImages.productPhoto,
-                                // fit: BoxFit.fill,
-                                // height: MediaQueryUtil.screenHeight / 5.41,
-                                // width: double.infinity,
                               ),
                             ),
                           ));
@@ -250,19 +242,16 @@ class ProductDetails extends StatelessWidget {
                                                   const NeverScrollableScrollPhysics(),
                                               itemCount: 2,
                                               itemBuilder: (context, index) {
-                                                return GetBuilder<
-                                                    ProductDetailsController>(
-                                                  builder: (controller) {
-                                                    final comment = controller
-                                                        .comments[index];
-                                                    return GestureDetector(
-                                                      onTap: () => Get.toNamed(
-                                                          Routes
-                                                              .productComments),
-                                                      child: CommentWidget(
-                                                          comment: comment),
-                                                    );
-                                                  },
+                                                return GestureDetector(
+                                                  onTap: () => Get.toNamed(
+                                                      Routes.productComments,
+                                                      arguments: {
+                                                        "id": product.id
+                                                            .toString()
+                                                      }),
+                                                  child: CommentWidget(
+                                                      comment: controller
+                                                          .comments[index]),
                                                 );
                                               },
                                             ),

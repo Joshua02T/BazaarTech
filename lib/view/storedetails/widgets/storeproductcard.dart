@@ -5,6 +5,7 @@ import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,18 +27,25 @@ class CustomStoreProductCard extends StatelessWidget {
           children: [
             Stack(
               children: [
-                Image.asset(
-                  data.image,
+                CachedNetworkImage(
+                  imageUrl: data.image,
+                  fit: BoxFit.fill,
                   height: MediaQueryUtil.screenHeight / 5.41,
                   width: double.infinity,
-                  fit: BoxFit.fill,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    AppImages.productPhoto,
+                    fit: BoxFit.fill,
+                    height: MediaQueryUtil.screenHeight / 5.41,
+                    width: double.infinity,
+                  ),
                 ),
                 if (data.status != 'NONE')
                   Transform.translate(
                     offset: Offset(
-                      data.status == 'NEW'
-                          ? MediaQueryUtil.screenWidth / 2.9
-                          : MediaQueryUtil.screenWidth / 3.7,
+                      MediaQueryUtil.screenWidth / 2.8,
                       MediaQueryUtil.screenHeight / 84.4,
                     ),
                     child: IntrinsicWidth(
@@ -75,7 +83,7 @@ class CustomStoreProductCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${data.price} ',
+                          '${data.price.toInt()} ',
                           style: TextStyle(
                               fontSize: MediaQueryUtil.screenWidth / 25.75,
                               color: AppColors.black,

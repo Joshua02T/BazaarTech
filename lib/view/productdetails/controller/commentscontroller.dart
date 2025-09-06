@@ -1,6 +1,6 @@
 import 'package:bazaartech/core/repositories/commentslikerepo.dart';
 import 'package:bazaartech/core/repositories/productrepo.dart';
-import 'package:bazaartech/view/home/model/commentmodel.dart';
+import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -49,42 +49,50 @@ class CommentsController extends GetxController {
     }
   }
 
-  Future<void> addLike(String id) async {
+  Future<void> addLike(String commentId) async {
     try {
-      await _commentRepo.addLike(id);
+      final updatedComment = await _commentRepo.addLike(commentId);
+
+      int index = allComments.indexWhere((c) => c.id == updatedComment.id);
+      if (index != -1) {
+        allComments[index] = updatedComment;
+      }
+
+      ToastUtil.showToast('You liked the comment!');
+      update();
     } catch (e) {
       ToastUtil.showToast(e.toString());
-    } finally {
-      isLoadingAddingComment = false;
+    }
+  }
+
+  Future<void> deleteLike(String commentId) async {
+    try {
+      final updatedComment = await _commentRepo.deleteLike(commentId);
+
+      int index = allComments.indexWhere((c) => c.id == updatedComment.id);
+      if (index != -1) {
+        allComments[index] = updatedComment;
+      }
+
+      ToastUtil.showToast('You removed the like!');
       update();
+    } catch (e) {
+      ToastUtil.showToast(e.toString());
     }
   }
 
   Future<void> toggleLike(String commentId) async {
-    // try {
-    //   final isLiked =
-    //       allComments.firstWhere((c) => c.id == commentId).isLiked;
-
-    //   if (isLiked) {
-    //     await deleteLike(commentId);
-    //   } else {
-    //     await addLike(commentId);
-    //   }
-
-    //   await fetchCommentsById(id);
-    // } catch (e) {
-    //   ToastUtil.showToast("Failed: $e");
-    // }
-  }
-
-  Future<void> deleteLike(String id) async {
     try {
-      await _commentRepo.deleteLike(id);
+      final comment =
+          allComments.firstWhere((c) => c.id.toString() == commentId);
+
+      if (comment.isLiked == true) {
+        await deleteLike(commentId);
+      } else {
+        await addLike(commentId);
+      }
     } catch (e) {
-      ToastUtil.showToast(e.toString());
-    } finally {
-      isLoadingAddingComment = false;
-      update();
+      ToastUtil.showToast("Failed: $e");
     }
   }
 
