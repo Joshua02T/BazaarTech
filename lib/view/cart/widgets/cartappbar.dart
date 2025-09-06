@@ -2,8 +2,6 @@ import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
-import 'package:bazaartech/core/service/routes.dart';
-import 'package:bazaartech/view/account/controller/accountcontroller.dart';
 import 'package:bazaartech/widget/loadingphotoappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

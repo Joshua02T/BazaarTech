@@ -4,6 +4,7 @@ import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/home/widget/cardfavicon.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,11 +25,20 @@ class CustomStoreCard extends StatelessWidget {
           children: [
             Stack(
               children: [
-                Image.asset(
-                  data.image,
+                CachedNetworkImage(
+                  imageUrl: data.image,
+                  fit: BoxFit.fill,
                   height: MediaQueryUtil.screenHeight / 5.41,
                   width: double.infinity,
-                  fit: BoxFit.fill,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  errorWidget: (context, url, error) => Image.asset(
+                    AppImages.productPhoto,
+                    fit: BoxFit.fill,
+                    height: MediaQueryUtil.screenHeight / 5.41,
+                    width: double.infinity,
+                  ),
                 ),
                 Transform.translate(
                   offset: Offset(MediaQueryUtil.screenWidth / 3.296,
@@ -69,8 +79,9 @@ class CustomStoreCard extends StatelessWidget {
                         Text(
                           data.name,
                           style: TextStyle(
-                              fontSize: MediaQueryUtil.screenWidth / 17.16,
+                              fontSize: MediaQueryUtil.screenWidth / 25.75,
                               color: AppColors.black,
+                              overflow: TextOverflow.fade,
                               fontFamily: FontFamily.russoOne),
                         ),
                         Row(children: [
@@ -83,7 +94,7 @@ class CustomStoreCard extends StatelessWidget {
                                   fontSize: MediaQueryUtil.screenWidth / 41.2)),
                         ])
                       ]),
-                  CardFavIcon(id: data.id)
+                  const CardFavIcon()
                 ],
               ),
             )

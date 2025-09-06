@@ -39,7 +39,7 @@ class StoreReviews extends StatelessWidget {
                         onRefresh: () async {
                           final store = controller.store.value;
                           if (store != null) {
-                            await controller.fetchStore(store.id);
+                            //await controller.fetchStore(store.id);
                           }
                         },
                         child: ListView.builder(
@@ -74,7 +74,7 @@ class StoreReviews extends StatelessWidget {
                                             children: [
                                               Row(children: [
                                                 buildReviewImage(
-                                                    review.profilePhoto),
+                                                    review.profilePhoto!),
                                                 SizedBox(
                                                     width: MediaQueryUtil
                                                             .screenWidth /
@@ -114,7 +114,7 @@ class StoreReviews extends StatelessWidget {
                                                   MediaQueryUtil.screenHeight /
                                                       140.6),
                                           Text(
-                                            review.review,
+                                            review.comment,
                                             style: TextStyle(
                                               fontSize:
                                                   MediaQueryUtil.screenWidth /

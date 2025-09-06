@@ -1,5 +1,5 @@
+import 'package:bazaartech/view/home/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
-import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:get/get.dart';
 
 class Bazaar {
@@ -12,10 +12,10 @@ class Bazaar {
   final String lastDate;
   final String status;
   final List<Product> products;
-  final RxList<Review> reviews;
+  final RxList<Comment> reviews;
 
   Bazaar(
-      {required List<Review> reviews,
+      {required List<Comment> reviews,
       required this.id,
       required this.image,
       required this.name,
@@ -25,5 +25,5 @@ class Bazaar {
       required this.lastDate,
       required this.status,
       required this.products})
-      : reviews = reviews = RxList<Review>(reviews);
+      : reviews = reviews = RxList<Comment>(reviews);
 }

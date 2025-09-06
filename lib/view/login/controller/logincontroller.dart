@@ -91,6 +91,7 @@ class LoginController extends GetxController {
         }
       } catch (e) {
         Get.snackbar("Error", e.toString());
+        print(e.toString());
       } finally {
         isLoading.value = false;
       }

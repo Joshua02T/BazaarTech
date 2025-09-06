@@ -5,6 +5,12 @@ class AppLink {
 
   static String signin = "$appRoot/login";
 
+  static String getAllProducts = "$appRoot/products";
+
+  static String getAllStores = "$appRoot/stores";
+
+  static String comments = "$appRoot/comments";
+
   static String logout = "$appRoot/logout";
 
   static String profile = "$appRoot/me";

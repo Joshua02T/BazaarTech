@@ -23,7 +23,6 @@ class AccountController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  // Remove local File reference since we're backend-only
   RxString selectedGender = ''.obs;
   var user = Rx<UserModel?>(null);
   var isLoading = false.obs;
@@ -70,9 +69,7 @@ class AccountController extends GetxController {
                 url.replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
           }
           profileImageUrl.value = url;
-          print('Profile Image URL:---- ${profileImageUrl.value}');
         }
-        print('outside ------ --------- ${profileImageUrl.value}');
       } else {
         Get.snackbar("Error", data["message"] ?? "Failed to load profile");
       }

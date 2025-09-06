@@ -3,6 +3,7 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
+import 'package:bazaartech/view/home/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/view/storedetails/controller/storedetailscontroller.dart';
 import 'package:bazaartech/view/storedetails/widgets/customcategory.dart';
@@ -23,7 +24,7 @@ class StoreDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StoreDetailsController controller = Get.put(StoreDetailsController());
-    controller.fetchStore(id);
+    // controller.fetchStore(id);
     return Scaffold(
         backgroundColor: AppColors.backgroundColor,
         body: Obx(() {
@@ -382,7 +383,7 @@ class StoreDetails extends StatelessWidget {
                                             ? controller.reviews
                                                 .take(2)
                                                 .toList()
-                                            : <Review>[];
+                                            : <Comment>[];
 
                                         return Column(
                                             crossAxisAlignment:
@@ -416,14 +417,14 @@ class StoreDetails extends StatelessWidget {
                                                                         index,
                                                                     profilePhoto:
                                                                         review
-                                                                            .profilePhoto,
+                                                                            .profilePhoto!,
                                                                     name: review
                                                                         .name,
                                                                     rating: review
                                                                         .rating
                                                                         .toInt(),
                                                                     review: review
-                                                                        .review,
+                                                                        .comment,
                                                                     likes: review
                                                                         .likes,
                                                                     isLiked: review

@@ -1,6 +1,7 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
+import 'package:bazaartech/view/productdetails/controller/commentscontroller.dart';
 import 'package:bazaartech/view/productdetails/controller/productdetailscontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,10 +11,10 @@ class AddComment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProductDetailsController controller = Get.find<ProductDetailsController>();
-    return Obx(() {
-      final isLoading = controller.isLoadingAddingComment.value;
-      final isCommentEmpty = controller.commentText.isEmpty;
+    return GetBuilder<CommentsController>(builder: (controller) {
+      final isLoading = controller.isLoadingAddingComment;
+      final text = controller.commentController.text.trim();
+      final isCommentEmpty = text.isEmpty;
 
       return ClipRRect(
         borderRadius: BorderRadius.only(
@@ -35,31 +36,36 @@ class AddComment extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(
-                          MediaQueryUtil.screenWidth / 31.69),
+                        MediaQueryUtil.screenWidth / 31.69,
+                      ),
                     ),
                     child: TextFormField(
                       controller: controller.commentController,
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
                       maxLines: 3,
+                      onChanged: (_) => controller.update(),
                       enabled: !isLoading,
-                      onChanged: (value) {
-                        controller.commentText.value = value.trim();
-                      },
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 16),
+                          vertical: 10,
+                          horizontal: 16,
+                        ),
                         border: InputBorder.none,
                         hintText: 'Write a comment...',
                         hintStyle: const TextStyle(
-                            color: AppColors.black70, fontSize: 12),
+                          color: AppColors.black70,
+                          fontSize: 12,
+                        ),
                         suffixIcon: isLoading
                             ? Padding(
                                 padding: EdgeInsets.all(
-                                    MediaQueryUtil.screenWidth / 206),
+                                  MediaQueryUtil.screenWidth / 206,
+                                ),
                                 child: const CircularProgressIndicator(
-                                    strokeWidth: 1,
-                                    color: AppColors.primaryFontColor),
+                                  strokeWidth: 1,
+                                  color: AppColors.primaryFontColor,
+                                ),
                               )
                             : null,
                       ),
@@ -72,18 +78,22 @@ class AddComment extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: MediaQueryUtil.screenWidth / 54.92),
+                    horizontal: MediaQueryUtil.screenWidth / 54.92,
+                  ),
                   child: GestureDetector(
                     onTap: isCommentEmpty || isLoading
                         ? null
                         : () async {
                             await controller.addComment(
-                              controller.product.value!,
-                              controller.commentText.value,
+                              Get.find<ProductDetailsController>()
+                                  .product!
+                                  .id
+                                  .toString(),
+                              text,
+                              Get.find<ProductDetailsController>()
+                                  .rating
+                                  .toString(),
                             );
-                            if (!isLoading) {
-                              controller.commentController.clear();
-                            }
                           },
                     child: Image.asset(
                       AppImages.addCommentIcon,

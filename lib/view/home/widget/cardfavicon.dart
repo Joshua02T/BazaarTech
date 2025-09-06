@@ -6,21 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CardFavIcon extends StatelessWidget {
-  final String id;
-  const CardFavIcon({super.key, required this.id});
+  //final String id;
+  const CardFavIcon({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (controller) {
-        bool isHeartFilled = controller.isHeartFilled(id);
-        bool isLoading = controller.isHeartLoading(id);
+        // bool isHeartFilled = controller.isHeartFilled(id);
+        // bool isLoading = controller.isHeartLoading(id);
         return GestureDetector(
-            onTap: () {
-              controller.toggleHeart(id);
-            },
+            onTap: () {},
             child: GestureDetector(
-              onTap: () => controller.toggleHeart(id),
+              onTap: () => {},
               child: Container(
                 width: MediaQueryUtil.screenWidth / 13.73,
                 height: MediaQueryUtil.screenHeight / 28.13,
@@ -30,22 +28,25 @@ class CardFavIcon extends StatelessWidget {
                       BorderRadius.circular(MediaQueryUtil.screenWidth / 103),
                 ),
                 child: Center(
-                  child: isLoading
-                      ? SizedBox(
-                          width: MediaQueryUtil.screenWidth / 25.75,
-                          height: MediaQueryUtil.screenWidth / 25.75,
-                          child: const CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: AppColors.white,
-                            backgroundColor: Colors.transparent,
-                          ),
-                        )
-                      : Image.asset(
-                          isHeartFilled
-                              ? AppImages.filledHeart
-                              : AppImages.heart,
-                          width: MediaQueryUtil.screenWidth / 25.75,
-                        ),
+                  child:
+                      // isLoading
+                      //     ? SizedBox(
+                      //         width: MediaQueryUtil.screenWidth / 25.75,
+                      //         height: MediaQueryUtil.screenWidth / 25.75,
+                      //         child: const CircularProgressIndicator(
+                      //           strokeWidth: 2,
+                      //           color: AppColors.white,
+                      //           backgroundColor: Colors.transparent,
+                      //         ),
+                      //       )
+                      //     :
+                      Image.asset(
+                    // isHeartFilled
+                    //     ? AppImages.filledHeart
+                    // :
+                    AppImages.heart,
+                    width: MediaQueryUtil.screenWidth / 25.75,
+                  ),
                 ),
               ),
             ));

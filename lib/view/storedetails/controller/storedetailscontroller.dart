@@ -1,13 +1,13 @@
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
-import 'package:bazaartech/core/service/shared_preferences_key.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
+import 'package:bazaartech/view/home/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class StoreDetailsController extends GetxController {
@@ -20,7 +20,7 @@ class StoreDetailsController extends GetxController {
   final RxList<String> productCategories = <String>[].obs;
   RxInt selectedProductCategoryIndex = 0.obs;
   PageController pageController = PageController();
-  final reviews = <Review>[].obs;
+  final reviews = <Comment>[].obs;
 
   int rating = 0;
   void setRating(int value) {
@@ -32,18 +32,18 @@ class StoreDetailsController extends GetxController {
     selectedProductCategoryIndex.value = index;
   }
 
-  Future<void> fetchStore(String id) async {
-    try {
-      isLoadingFetching.value = true;
-      store.value = await _storeRepository.fetchStoreById(id);
-      fetchProductCategories();
-      reviews.assignAll(store.value!.reviews);
-    } catch (e) {
-      ToastUtil.showToast('Failed to load store, ${e.toString()}');
-    } finally {
-      isLoadingFetching.value = false;
-    }
-  }
+  // Future<void> fetchStore(String id) async {
+  //   try {
+  //     isLoadingFetching.value = true;
+  //     store.value = await _storeRepository.fetchStoreById(id);
+  //     fetchProductCategories();
+  //     reviews.assignAll(store.value!.reviews);
+  //   } catch (e) {
+  //     ToastUtil.showToast('Failed to load store, ${e.toString()}');
+  //   } finally {
+  //     isLoadingFetching.value = false;
+  //   }
+  // }
 
   void fetchProductCategories() {
     if (store.value != null && store.value!.products.isNotEmpty) {
@@ -82,30 +82,32 @@ class StoreDetailsController extends GetxController {
   }
 
   Future<void> addReview(Store store, String review) async {
-    if (review.isEmpty || isLoadingAddingReview.value) return;
+    // if (review.isEmpty || isLoadingAddingReview.value) return;
 
-    isLoadingAddingReview.value = true;
-    try {
-      AccountController accController = Get.find<AccountController>();
+    // isLoadingAddingReview.value = true;
+    // try {
+    //   AccountController accController = Get.find<AccountController>();
 
-      final newReview = Review(
-          profilePhoto: accController.profileImageUrl.value.isNotEmpty
-              ? accController.profileImageUrl.value
-              : AppImages.profilephoto,
-          name: accController.nameController.text,
-          rating: rating.toDouble(),
-          review: review,
-          likes: 0);
-      await _storeRepository.addReview(store.id, newReview);
-      reviews.insert(0, newReview);
-      reviewText.value = '';
-      reviewController.clear();
-      ToastUtil.showToast('Review added!');
-    } catch (e) {
-      ToastUtil.showToast('Failed to add review!');
-    } finally {
-      isLoadingAddingReview.value = false;
-    }
+    //   final newReview = Comment(
+    //     id: 0,
+    //     isLiked: false,
+    //       profilePhoto: accController.profileImageUrl.value.isNotEmpty
+    //           ? accController.profileImageUrl.value
+    //           : AppImages.profilephoto,
+    //       name: accController.nameController.text,
+    //       rating: rating,
+    //       comment: review,
+    //       likes: 0);
+    //   await _storeRepository.addReview(store.id, newReview);
+    //   reviews.insert(0, newReview);
+    //   reviewText.value = '';
+    //   reviewController.clear();
+    //   ToastUtil.showToast('Review added!');
+    // } catch (e) {
+    //   ToastUtil.showToast('Failed to add review!');
+    // } finally {
+    //   isLoadingAddingReview.value = false;
+    // }
   }
 
   @override

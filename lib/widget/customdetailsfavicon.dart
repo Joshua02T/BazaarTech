@@ -12,31 +12,34 @@ class FavIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder: (controller) {
-      bool isHeartFilled = controller.isHeartFilled(id);
-      bool isLoading = controller.isHeartLoading(id);
+      // bool isHeartFilled = controller.isHeartFilled(id);
+      // bool isLoading = controller.isHeartLoading(id);
       return SizedBox(
           width: MediaQueryUtil.screenWidth / 10.04,
           height: MediaQueryUtil.screenHeight / 20.58,
           child: MaterialButton(
-              onPressed: () => controller.toggleHeart(id),
+              onPressed: () {},
               height: MediaQueryUtil.screenHeight / 20.58,
               padding: EdgeInsets.zero,
               color: AppColors.primaryOrangeColor,
               shape: RoundedRectangleBorder(
                   borderRadius:
                       BorderRadius.circular(MediaQueryUtil.screenWidth / 51.5)),
-              child: isLoading
-                  ? SizedBox(
-                      width: MediaQueryUtil.screenWidth / 20,
-                      height: MediaQueryUtil.screenWidth / 20,
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.white,
-                        backgroundColor: Colors.transparent,
-                      ),
-                    )
-                  : Image.asset(
-                      isHeartFilled ? AppImages.filledHeart : AppImages.heart,
+              child:
+                  // isLoading
+                  //     ? SizedBox(
+                  //         width: MediaQueryUtil.screenWidth / 20,
+                  //         height: MediaQueryUtil.screenWidth / 20,
+                  //         child: const CircularProgressIndicator(
+                  //           strokeWidth: 2,
+                  //           color: AppColors.white,
+                  //           backgroundColor: Colors.transparent,
+                  //         ),
+                  //       )
+                  // :
+                  Image.asset(
+                      // isHeartFilled ? AppImages.filledHeart :
+                      AppImages.heart,
                       width: MediaQueryUtil.screenWidth / 17.16)));
     });
   }

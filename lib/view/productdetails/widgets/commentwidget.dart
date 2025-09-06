@@ -1,29 +1,18 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
+import 'package:bazaartech/view/home/model/commentmodel.dart';
 import 'package:bazaartech/view/productdetails/controller/productdetailscontroller.dart';
-import 'package:bazaartech/view/productdetails/widgets/commentimage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CommentWidget extends StatelessWidget {
-  final int index;
-  final String profilePhoto;
-  final String name;
-  final double rating;
-  final String comment;
-  final int likes;
-  final bool isLiked;
+  final Comment comment;
 
   const CommentWidget({
     super.key,
-    required this.index,
-    required this.profilePhoto,
-    required this.name,
-    required this.rating,
     required this.comment,
-    required this.likes,
-    required this.isLiked,
   });
 
   @override
@@ -41,15 +30,43 @@ class CommentWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(children: [
-                  buildCommentImage(profilePhoto),
+                  CircleAvatar(
+                    radius: MediaQueryUtil.screenWidth / 20.6,
+                    backgroundColor: Colors.grey.shade200,
+                    child: ClipOval(
+                      child: comment.profilePhoto != null
+                          ? CachedNetworkImage(
+                              imageUrl: comment.profilePhoto!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                              placeholder: (context, url) => const Center(
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                AppImages.profilephoto,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              ),
+                            )
+                          : Image.asset(
+                              AppImages.profilephoto,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                    ),
+                  ),
                   SizedBox(width: MediaQueryUtil.screenWidth / 68.66),
-                  Text(name,
+                  Text(comment.name,
                       style: TextStyle(
                           fontSize: MediaQueryUtil.screenWidth / 25.75,
                           color: AppColors.primaryFontColor))
                 ]),
                 Row(children: [
-                  Text('${rating.toInt()} ',
+                  Text('${comment.rating.toString()} ',
                       style: TextStyle(
                           fontSize: MediaQueryUtil.screenWidth / 25.75,
                           color: AppColors.primaryFontColor)),
@@ -58,7 +75,7 @@ class CommentWidget extends StatelessWidget {
               ]),
           SizedBox(height: MediaQueryUtil.screenHeight / 140.6),
           Text(
-            comment,
+            comment.comment,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -67,19 +84,17 @@ class CommentWidget extends StatelessWidget {
           ),
           Row(children: [
             IconButton(
-                onPressed: () {
-                  controller.toggleLike(index);
-
-                  controller.update(['comment_$index']);
-                },
+                onPressed: () {},
                 icon: Image.asset(
-                  isLiked ? AppImages.filledHeart : AppImages.heart,
+                  comment.isLiked ? AppImages.filledHeart : AppImages.heart,
                   color: AppColors.primaryOrangeColor,
                   width: MediaQueryUtil.screenWidth / 25.75,
                 )),
-            if (likes != 0)
+            if (comment.likes != 0)
               Text(
-                likes > 1 ? '$likes likes' : '$likes like',
+                comment.likes > 1
+                    ? '$comment.likes likes'
+                    : '$comment.likes like',
                 style: TextStyle(
                     fontSize: MediaQueryUtil.screenWidth / 29.42,
                     color: AppColors.black60),

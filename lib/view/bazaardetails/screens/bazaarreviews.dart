@@ -74,7 +74,7 @@ class BazaarReviews extends StatelessWidget {
                                             children: [
                                               Row(children: [
                                                 buildReviewImage(
-                                                    review.profilePhoto),
+                                                    review.profilePhoto!),
                                                 SizedBox(
                                                     width: MediaQueryUtil
                                                             .screenWidth /
@@ -114,7 +114,7 @@ class BazaarReviews extends StatelessWidget {
                                                   MediaQueryUtil.screenHeight /
                                                       140.6),
                                           Text(
-                                            review.review,
+                                            review.comment,
                                             style: TextStyle(
                                               fontSize:
                                                   MediaQueryUtil.screenWidth /

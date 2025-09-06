@@ -12,18 +12,18 @@ class FavoriteController extends GetxController {
   bool isLoading = false;
 
   Future<void> loadFavorites() async {
-    try {
-      isLoading = true;
-      update();
-      final favorites =
-          await favoriteRepo.fetchFavorites(homeController.favoriteItems);
-      homeController.favoriteItems.assignAll(favorites);
-    } catch (e) {
-      ToastUtil.showToast('Failed to load favorites');
-    } finally {
-      isLoading = false;
-      update();
-    }
+    // try {
+    //   isLoading = true;
+    //   update();
+    //   final favorites =
+    //       await favoriteRepo.fetchFavorites(homeController.favoriteItems);
+    //   homeController.favoriteItems.assignAll(favorites);
+    // } catch (e) {
+    //   ToastUtil.showToast('Failed to load favorites');
+    // } finally {
+    //   isLoading = false;
+    //   update();
+    // }
   }
 
   void updateSelectedIndex(int index) {

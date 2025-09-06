@@ -95,7 +95,7 @@ class CustomBazaarCard extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                     vertical: MediaQueryUtil.screenHeight / 46.88,
                     horizontal: MediaQueryUtil.screenWidth / 41.2),
-                child: CardFavIcon(id: data.id))
+                child: const CardFavIcon())
           ],
         ),
       ),

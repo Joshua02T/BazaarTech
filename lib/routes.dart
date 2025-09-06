@@ -75,7 +75,10 @@ List<GetPage<dynamic>>? routes = [
       transition: Transition.rightToLeftWithFade),
   GetPage(
       name: "/productcomments",
-      page: () => const ProductComments(),
+      page: () {
+        final args = Get.arguments as Map<String, dynamic>;
+        return ProductComments(id: args["id"]);
+      },
       transition: Transition.rightToLeftWithFade),
   GetPage(
       name: "/storereviews",
@@ -105,7 +108,7 @@ List<GetPage<dynamic>>? routes = [
     name: "/productdetails",
     page: () {
       final args = Get.arguments as Map<String, dynamic>;
-      return ProductDetails(id: args["id"]);
+      return ProductDetails(id: args["id"].toString());
     },
     transition: Transition.rightToLeftWithFade,
   ),

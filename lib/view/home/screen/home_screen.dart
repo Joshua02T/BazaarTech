@@ -30,112 +30,84 @@ class HomeScreen extends StatelessWidget {
               left: MediaQueryUtil.screenWidth / 20.6,
               right: MediaQueryUtil.screenWidth / 20.6,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
+            child: GetBuilder<HomeController>(
+              builder: (controller) {
+                final tabs = ["All", "Products", "Stores"];
+                return SizedBox(
                   height: MediaQueryUtil.screenHeight / 22.81,
-                  child: GetBuilder<HomeController>(
-                    builder: (controller) {
-                      return ListView.builder(
-                        clipBehavior: Clip.none,
-                        itemCount: categoryItem.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          final isSelected = controller.selectedIndex == index;
-                          return GestureDetector(
-                            onTap: () {
-                              controller.updateSelectedIndex(index);
-                              controller.pageController.animateToPage(
-                                index,
-                                duration: const Duration(milliseconds: 1),
-                                curve: Curves.fastOutSlowIn,
-                              );
-                            },
-                            child: CustomCategory(
-                              title: categoryItem[index],
-                              isSelected: isSelected,
-                            ),
+                  child: ListView.builder(
+                    clipBehavior: Clip.none,
+                    itemCount: tabs.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final isSelected = controller.selectedIndex == index;
+                      return GestureDetector(
+                        onTap: () {
+                          controller.updateSelectedIndex(index);
+                          controller.pageController.animateToPage(
+                            index,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.fastOutSlowIn,
                           );
                         },
+                        child: CustomCategory(
+                          title: tabs[index],
+                          isSelected: isSelected,
+                        ),
                       );
                     },
                   ),
-                ),
-                SizedBox(height: MediaQueryUtil.screenHeight / 40),
-              ],
+                );
+              },
             ),
           ),
-          Expanded(child: GetBuilder<HomeController>(
-            builder: (controller) {
-              if (controller.isLoading) {
-                return const CustomProgressIndicator();
-              }
-              return PageView(
-                controller: controller.pageController,
-                onPageChanged: (index) {
-                  controller.updateSelectedIndex(index);
-                },
-                children: [
-                  _buildAllItemsView(controller),
-                  _buildProductsView(controller),
-                  _buildStoresView(controller),
-                  _buildBazaarView(controller),
-                ],
-              );
-            },
-          ))
+          SizedBox(height: MediaQueryUtil.screenHeight / 40),
+          Expanded(
+            child: GetBuilder<HomeController>(
+              builder: (controller) {
+                if (controller.isLoading) {
+                  return const CustomProgressIndicator();
+                }
+                return PageView(
+                  controller: controller.pageController,
+                  onPageChanged: (index) {
+                    controller.updateSelectedIndex(index);
+                  },
+                  children: [
+                    _buildAllView(controller),
+                    _buildProductsView(controller),
+                    _buildStoresView(controller),
+                  ],
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildAllItemsView(HomeController controller) {
+  Widget _buildAllView(HomeController controller) {
     return RefreshIndicator(
       onRefresh: () => controller.refreshData(),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQueryUtil.screenWidth / 20.6,
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisExtent: MediaQueryUtil.screenHeight / 3.8,
-                crossAxisSpacing: MediaQueryUtil.screenWidth / 27.46,
-                mainAxisSpacing: MediaQueryUtil.screenHeight / 49.64,
-              ),
-              itemCount: controller.allItems.length,
-              itemBuilder: (context, index) {
-                final item = controller.allItems[index];
-                if (item['type'] == 'store') {
-                  return CustomStoreCard(data: item['data'] as Store);
-                } else if (item['type'] == 'product') {
-                  return CustomProductCard(data: item['data'] as Product);
-                }
-                return Container();
-              },
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(
-                  horizontal: MediaQueryUtil.screenWidth / 20.6),
-              itemCount: controller.bazaarCardItem.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding:
-                      EdgeInsets.only(top: MediaQueryUtil.screenHeight / 49.64),
-                  child:
-                      CustomBazaarCard(data: controller.bazaarCardItem[index]),
-                );
-              },
-            ),
-          ],
+      child: GridView.builder(
+        padding:
+            EdgeInsets.symmetric(horizontal: MediaQueryUtil.screenWidth / 20.6),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisExtent: MediaQueryUtil.screenHeight / 3.8,
+          crossAxisSpacing: MediaQueryUtil.screenWidth / 27.46,
+          mainAxisSpacing: MediaQueryUtil.screenHeight / 49.64,
         ),
+        itemCount: controller.allItems.length,
+        itemBuilder: (context, index) {
+          final item = controller.allItems[index];
+          if (item['type'] == 'product') {
+            return CustomProductCard(data: item['data']);
+          } else {
+            return CustomStoreCard(data: item['data']);
+          }
+        },
       ),
     );
   }
@@ -164,9 +136,8 @@ class HomeScreen extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () => controller.refreshData(),
       child: GridView.builder(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQueryUtil.screenWidth / 20.6,
-        ),
+        padding:
+            EdgeInsets.symmetric(horizontal: MediaQueryUtil.screenWidth / 20.6),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisExtent: MediaQueryUtil.screenHeight / 3.8,
@@ -176,26 +147,6 @@ class HomeScreen extends StatelessWidget {
         itemCount: controller.storeCardItem.length,
         itemBuilder: (context, index) {
           return CustomStoreCard(data: controller.storeCardItem[index]);
-        },
-      ),
-    );
-  }
-
-  Widget _buildBazaarView(HomeController controller) {
-    return RefreshIndicator(
-      onRefresh: () => controller.refreshData(),
-      child: ListView.builder(
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQueryUtil.screenWidth / 20.6,
-        ),
-        itemCount: controller.bazaarCardItem.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.only(
-              bottom: MediaQueryUtil.screenHeight / 49.64,
-            ),
-            child: CustomBazaarCard(data: controller.bazaarCardItem[index]),
-          );
         },
       ),
     );

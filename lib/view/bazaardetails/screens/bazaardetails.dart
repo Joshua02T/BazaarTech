@@ -6,6 +6,7 @@ import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/view/bazaardetails/controller/bazaardetailscontroller.dart';
 import 'package:bazaartech/view/bazaardetails/widgets/ratingwidget.dart';
 import 'package:bazaartech/view/bazaardetails/widgets/reviewbazaarwidget.dart';
+import 'package:bazaartech/view/home/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/view/storedetails/widgets/customcategory.dart';
 import 'package:bazaartech/view/storedetails/widgets/storeproductcard.dart';
@@ -279,7 +280,7 @@ class BazaarDetails extends StatelessWidget {
                           final hasReviews = bazaar.reviews.isNotEmpty;
                           final reviewsToShow = hasReviews
                               ? bazaar.reviews.take(2).toList()
-                              : <Review>[];
+                              : <Comment>[];
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -302,11 +303,11 @@ class BazaarDetails extends StatelessWidget {
                                                   child: ReviewBazaarWidget(
                                                     index: index,
                                                     profilePhoto:
-                                                        review.profilePhoto,
+                                                        review.profilePhoto!,
                                                     name: review.name,
                                                     rating:
                                                         review.rating.toInt(),
-                                                    review: review.review,
+                                                    review: review.comment,
                                                     likes: review.likes,
                                                     isLiked: review.isLiked,
                                                   ));
