@@ -3,6 +3,7 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
+import 'package:bazaartech/helper/appconfig.dart';
 import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,6 +16,10 @@ class CustomStoreProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (data.image.contains("127.0.0.1")) {
+      data.image = data.image
+          .replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+    }
     return GestureDetector(
       onTap: () =>
           Get.toNamed(Routes.productDetails, arguments: {"id": data.id}),

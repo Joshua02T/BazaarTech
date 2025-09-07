@@ -65,6 +65,7 @@ class StoreDetailsController extends GetxController {
     if (store == null) return [];
 
     final selectedCategory = productCategories[selectedProductCategoryIndex];
+
     return store!.products
         .where((p) => p.category == selectedCategory)
         .toList();

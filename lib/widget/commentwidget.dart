@@ -1,6 +1,7 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
+import 'package:bazaartech/helper/appconfig.dart';
 import 'package:bazaartech/model/commentmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,12 @@ class CommentWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (comment.profilePhoto != null) {
+      if (comment.profilePhoto!.contains("127.0.0.1")) {
+        comment.profilePhoto = comment.profilePhoto!
+            .replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+      }
+    }
     MediaQueryUtil.init(context);
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQueryUtil.screenHeight / 105.5),

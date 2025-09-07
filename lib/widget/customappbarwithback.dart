@@ -26,16 +26,21 @@ class CustomAppBarWithBack extends StatelessWidget
           child: Transform.translate(
             offset: Offset(-MediaQueryUtil.screenWidth / 41.2, 0),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                     onPressed: () => Get.back(),
                     icon: Image.asset(AppImages.appbarArrowBack,
                         width: MediaQueryUtil.screenWidth / 17.16)),
-                Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: MediaQueryUtil.screenWidth / 12.875,
-                    fontFamily: FontFamily.russoOne,
+                Flexible(
+                  child: Text(
+                    text,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: MediaQueryUtil.screenWidth / 12.875,
+                      fontFamily: FontFamily.russoOne,
+                    ),
                   ),
                 ),
               ],

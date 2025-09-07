@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bazaartech/core/service/link.dart';
 import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/shared_preferences_key.dart';
+import 'package:bazaartech/helper/appconfig.dart';
 import 'package:bazaartech/model/commentmodel.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +24,12 @@ class CommentsLikeRepo {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body)["data"];
-      return Comment.fromJson(data);
+      Comment newComment = Comment.fromJson(data);
+      if (newComment.profilePhoto!.contains("127.0.0.1")) {
+        newComment.profilePhoto = newComment.profilePhoto!
+            .replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+      }
+      return newComment;
     } else {
       throw Exception("Something went wrong (${response.statusCode})");
     }
@@ -44,7 +50,12 @@ class CommentsLikeRepo {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final data = jsonDecode(response.body)["data"];
-      return Comment.fromJson(data);
+      Comment newComment = Comment.fromJson(data);
+      if (newComment.profilePhoto!.contains("127.0.0.1")) {
+        newComment.profilePhoto = newComment.profilePhoto!
+            .replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+      }
+      return newComment;
     } else {
       throw Exception("Something went wrong (${response.statusCode})");
     }

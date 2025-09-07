@@ -138,6 +138,10 @@ class ProductRepository {
 
         if (data["success"] == true) {
           final Comment createdComment = Comment.fromJson(data["data"]);
+          if (createdComment.profilePhoto!.contains("127.0.0.1")) {
+            createdComment.profilePhoto = createdComment.profilePhoto!
+                .replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
+          }
           return createdComment;
         } else {
           throw Exception(data["message"] ?? "Failed to create comment");

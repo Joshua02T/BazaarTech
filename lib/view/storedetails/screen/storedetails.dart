@@ -426,9 +426,15 @@ class StoreDetails extends StatelessWidget {
                                                       itemBuilder:
                                                           (context, index) {
                                                         return GestureDetector(
-                                                            onTap: () => Get
-                                                                .toNamed(Routes
-                                                                    .storeReviews),
+                                                            onTap: () =>
+                                                                Get.toNamed(
+                                                                    Routes
+                                                                        .storeReviews,
+                                                                    arguments: {
+                                                                      "id": store
+                                                                          .id
+                                                                          .toString()
+                                                                    }),
                                                             child: CommentWidget(
                                                                 comment: controller
                                                                         .comments[
@@ -445,7 +451,11 @@ class StoreDetails extends StatelessWidget {
                                                                   .black60))),
                                               MaterialButton(
                                                   onPressed: () => Get.toNamed(
-                                                      Routes.storeReviews),
+                                                          Routes.storeReviews,
+                                                          arguments: {
+                                                            "id": store.id
+                                                                .toString()
+                                                          }),
                                                   color:
                                                       AppColors.backgroundColor,
                                                   elevation: 0.0,
@@ -462,16 +472,14 @@ class StoreDetails extends StatelessWidget {
                                                     ),
                                                   ),
                                                   child: Text(
-                                                      controller.comments
-                                                              .isNotEmpty
+                                                      controller.comments.isNotEmpty
                                                           ? 'Show all'
                                                           : 'Add Review',
                                                       style: TextStyle(
                                                           fontSize: MediaQueryUtil
                                                                   .screenWidth /
                                                               34.33,
-                                                          color: AppColors
-                                                              .black60))),
+                                                          color: AppColors.black60))),
                                               SizedBox(
                                                   height: MediaQueryUtil
                                                           .screenHeight /
