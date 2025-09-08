@@ -287,8 +287,9 @@ class StoreDetails extends StatelessWidget {
                                                               },
                                                               child: CustomProductCategory(
                                                                   title: controller
-                                                                          .productCategories[
-                                                                      index],
+                                                                      .productCategories[
+                                                                          index]
+                                                                      .name,
                                                                   isSelected:
                                                                       controller
                                                                               .selectedProductCategoryIndex ==
@@ -322,7 +323,8 @@ class StoreDetails extends StatelessWidget {
                                                                   .where((product) =>
                                                                       product
                                                                           .category ==
-                                                                      selectedCategory)
+                                                                      selectedCategory
+                                                                          .name)
                                                                   .toList() ??
                                                               [];
 

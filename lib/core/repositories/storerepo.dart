@@ -116,42 +116,4 @@ class StoreRepository {
       throw Exception("Failed to load comments: ${response.statusCode}");
     }
   }
-
-  Future<Comment> addComment(String storeId, String body, String rating) async {
-    try {
-      final myService = Get.find<MyService>();
-      final prefs = myService.sharedPreferences;
-      final token = prefs.getString(SharedPreferencesKey.tokenKey);
-
-      final response = await http.post(
-        Uri.parse('${AppLink.getAllStores}/$storeId/comment'),
-        headers: {
-          "Accept": "application/json",
-          "Authorization": "Bearer $token",
-        },
-        body: {"body": body, "rating": rating},
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = jsonDecode(response.body);
-
-        if (data["success"] == true) {
-          final Comment createdComment = Comment.fromJson(data["data"]);
-          if (createdComment.profilePhoto!.contains("127.0.0.1")) {
-            createdComment.profilePhoto = createdComment.profilePhoto!
-                .replaceAll("http://127.0.0.1:8000", AppConfig.getBaseUrl());
-          }
-          return createdComment;
-        } else {
-          throw Exception(data["message"] ?? "Failed to create comment");
-        }
-      } else {
-        Get.snackbar('Error', response.statusCode.toString());
-        throw Exception("Something went wrong (${response.statusCode})");
-      }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-      throw Exception("Error: $e");
-    }
-  }
 }

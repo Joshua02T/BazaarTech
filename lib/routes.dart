@@ -8,6 +8,7 @@ import 'package:bazaartech/view/cart/screen/cartpage.dart';
 import 'package:bazaartech/view/cart/screen/checkoutpage.dart';
 import 'package:bazaartech/view/cart/screen/confirmationpage.dart';
 import 'package:bazaartech/view/help/screen/helpcenter.dart';
+import 'package:bazaartech/view/home/model/categorymodel.dart';
 import 'package:bazaartech/view/login/screen/login.dart';
 import 'package:bazaartech/view/privacy/screen/privacy.dart';
 import 'package:bazaartech/view/productdetails/screens/productdetails.dart';
@@ -101,7 +102,10 @@ List<GetPage<dynamic>>? routes = [
       transition: Transition.rightToLeftWithFade),
   GetPage(
       name: "/storeproducts",
-      page: () => const StoreProducts(),
+      page: () {
+        final category = Get.arguments as Category;
+        return StoreProducts(category: category);
+      },
       transition: Transition.rightToLeftWithFade),
   GetPage(
       name: "/mainpage",

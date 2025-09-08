@@ -15,7 +15,7 @@ class StoreDetailsController extends GetxController {
   final StoreRepository _storeRepository = StoreRepository();
   Store? store;
   bool isLoadingFetching = false;
-  final List<String> productCategories = <String>[];
+  final List<Category> productCategories = <Category>[];
   int selectedProductCategoryIndex = 0;
   PageController pageController = PageController();
   final List<Comment> comments = <Comment>[];
@@ -53,7 +53,7 @@ class StoreDetailsController extends GetxController {
       productCategories.clear();
 
       for (Category c in store!.categories) {
-        productCategories.add(c.name);
+        productCategories.add(c);
       }
 
       selectedProductCategoryIndex = 0;
@@ -64,7 +64,8 @@ class StoreDetailsController extends GetxController {
   List<Product> get filteredProductsForCurrentCategory {
     if (store == null) return [];
 
-    final selectedCategory = productCategories[selectedProductCategoryIndex];
+    final selectedCategory =
+        productCategories[selectedProductCategoryIndex].name;
 
     return store!.products
         .where((p) => p.category == selectedCategory)

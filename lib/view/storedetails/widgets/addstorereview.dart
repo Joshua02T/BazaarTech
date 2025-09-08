@@ -44,6 +44,7 @@ class AddStoreReview extends StatelessWidget {
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
                       maxLines: 3,
+                      focusNode: controller.commentFocusNode,
                       onChanged: (_) => controller.update(),
                       enabled: !isLoading,
                       decoration: InputDecoration(
@@ -84,16 +85,27 @@ class AddStoreReview extends StatelessWidget {
                     onTap: isCommentEmpty || isLoading
                         ? null
                         : () async {
-                            await controller.addComment(
-                              Get.find<StoreDetailsController>()
-                                  .store!
-                                  .id
-                                  .toString(),
-                              text,
-                              Get.find<StoreDetailsController>()
-                                  .rating
-                                  .toString(),
-                            );
+                            if (controller.isEditing &&
+                                controller.editingCommentId != null) {
+                              await controller.editComment(
+                                controller.editingCommentId.toString(),
+                                text,
+                                Get.find<StoreDetailsController>()
+                                    .rating
+                                    .toString(),
+                              );
+                            } else {
+                              await controller.addComment(
+                                Get.find<StoreDetailsController>()
+                                    .store!
+                                    .id
+                                    .toString(),
+                                text,
+                                Get.find<StoreDetailsController>()
+                                    .rating
+                                    .toString(),
+                              );
+                            }
                           },
                     child: Image.asset(
                       AppImages.addCommentIcon,

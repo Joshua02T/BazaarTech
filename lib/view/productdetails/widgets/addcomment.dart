@@ -42,6 +42,7 @@ class AddComment extends StatelessWidget {
                     child: TextFormField(
                       controller: controller.commentController,
                       keyboardType: TextInputType.multiline,
+                      focusNode: controller.commentFocusNode,
                       minLines: 1,
                       maxLines: 3,
                       onChanged: (_) => controller.update(),
@@ -84,16 +85,27 @@ class AddComment extends StatelessWidget {
                     onTap: isCommentEmpty || isLoading
                         ? null
                         : () async {
-                            await controller.addComment(
-                              Get.find<ProductDetailsController>()
-                                  .product!
-                                  .id
-                                  .toString(),
-                              text,
-                              Get.find<ProductDetailsController>()
-                                  .rating
-                                  .toString(),
-                            );
+                            if (controller.isEditing &&
+                                controller.editingCommentId != null) {
+                              await controller.editComment(
+                                controller.editingCommentId.toString(),
+                                text,
+                                Get.find<ProductDetailsController>()
+                                    .rating
+                                    .toString(),
+                              );
+                            } else {
+                              await controller.addComment(
+                                Get.find<ProductDetailsController>()
+                                    .product!
+                                    .id
+                                    .toString(),
+                                text,
+                                Get.find<ProductDetailsController>()
+                                    .rating
+                                    .toString(),
+                              );
+                            }
                           },
                     child: Image.asset(
                       AppImages.addCommentIcon,

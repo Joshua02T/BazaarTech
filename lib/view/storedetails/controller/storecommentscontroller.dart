@@ -1,4 +1,4 @@
-import 'package:bazaartech/core/repositories/commentslikerepo.dart';
+import 'package:bazaartech/core/repositories/commentsrepo.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
 import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
@@ -10,10 +10,13 @@ class StoreCommentsController extends GetxController {
   StoreCommentsController(this.id);
   TextEditingController commentController = TextEditingController();
   final StoreRepository _storeRepository = StoreRepository();
-  final CommentsLikeRepo _commentRepo = CommentsLikeRepo();
+  final CommentsRepo _commentRepo = CommentsRepo();
   List<Comment> allComments = <Comment>[];
   bool isLoadingFetchingComments = false;
   bool isLoadingAddingComment = false;
+  bool isEditing = false;
+  int? editingCommentId;
+  FocusNode commentFocusNode = FocusNode();
   Future<void> fetchCommentsById(String id) async {
     try {
       isLoadingFetchingComments = true;
@@ -34,8 +37,7 @@ class StoreCommentsController extends GetxController {
       isLoadingAddingComment = true;
       update();
 
-      final newComment =
-          await _storeRepository.addComment(storeId, body, rating);
+      final newComment = await _commentRepo.addComment(storeId, body, rating);
 
       allComments.insert(0, newComment);
 
@@ -94,6 +96,56 @@ class StoreCommentsController extends GetxController {
       }
     } catch (e) {
       ToastUtil.showToast("Failed: $e");
+    }
+  }
+
+  Future<void> editComment(String id, String body, String rating) async {
+    try {
+      isLoadingAddingComment = true;
+      update();
+      final updatedComment = await _commentRepo.editComment(id, body, rating);
+
+      int index = allComments.indexWhere((c) => c.id.toString() == id);
+      if (index != -1) {
+        allComments[index] = updatedComment;
+      }
+
+      isEditing = false;
+      editingCommentId = null;
+      commentController.clear();
+
+      ToastUtil.showToast("Comment updated successfully");
+      update();
+    } catch (e) {
+      ToastUtil.showToast("Failed to update: $e");
+    } finally {
+      isLoadingAddingComment = false;
+      update();
+    }
+  }
+
+  void startEditing(Comment comment) {
+    isEditing = true;
+    editingCommentId = comment.id;
+    commentController.text = comment.comment;
+    update();
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      commentFocusNode.requestFocus();
+    });
+  }
+
+  Future<void> deleteComment(String commentId) async {
+    try {
+      final success = await _commentRepo.deleteComment(commentId);
+
+      if (success) {
+        allComments.removeWhere((c) => c.id.toString() == commentId);
+        ToastUtil.showToast("Comment deleted successfully");
+        update();
+      }
+    } catch (e) {
+      ToastUtil.showToast("Failed to delete comment: $e");
     }
   }
 
