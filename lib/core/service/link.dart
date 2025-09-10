@@ -1,5 +1,5 @@
 class AppLink {
-  static String appRoot = "http://192.168.1.102:8000/api";
+  static String appRoot = "http://192.168.1.103:8000/api";
 
   static String register = "$appRoot/register";
 
@@ -8,6 +8,8 @@ class AppLink {
   static String getAllProducts = "$appRoot/products";
 
   static String getAllStores = "$appRoot/stores";
+
+  static String getAllBazaars = "$appRoot/bazaars";
 
   static String comments = "$appRoot/comments";
 

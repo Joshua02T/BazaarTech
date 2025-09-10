@@ -9,14 +9,19 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class CommentsRepo {
-  Future<Comment> addComment(String id, String body, String rating) async {
+  Future<Comment> addComment(
+      String item, String id, String body, String rating) async {
     try {
       final myService = Get.find<MyService>();
       final prefs = myService.sharedPreferences;
       final token = prefs.getString(SharedPreferencesKey.tokenKey);
-
+      String url = item == 'product'
+          ? '${AppLink.getAllProducts}/$id/comment'
+          : item == 'store'
+              ? '${AppLink.getAllStores}/$id/comment'
+              : '${AppLink.getAllBazaars}/$id/comment';
       final response = await http.post(
-        Uri.parse('${AppLink.getAllProducts}/$id/comment'),
+        Uri.parse(url),
         headers: {
           "Accept": "application/json",
           "Authorization": "Bearer $token",

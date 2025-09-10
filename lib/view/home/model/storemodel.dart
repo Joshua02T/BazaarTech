@@ -59,7 +59,7 @@
 //     );
 //   }
 // }
-import 'package:bazaartech/view/home/model/categorymodel.dart';
+import 'package:bazaartech/model/categorymodel.dart';
 import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:get/get.dart';

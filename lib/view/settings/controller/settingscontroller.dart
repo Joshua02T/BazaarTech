@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/const_data.dart';
@@ -95,10 +94,6 @@ class SettingsController extends GetxController {
         accountController.user.value = null;
         accountController.profileImageUrl.value = '';
 
-        final tempFile = File('${Directory.systemTemp.path}/profile_image.jpg');
-        if (await tempFile.exists()) {
-          await tempFile.delete();
-        }
         Get.find<NavBarController>().changeTabIndex(0);
         Get.offAllNamed(Routes.login);
       } else {

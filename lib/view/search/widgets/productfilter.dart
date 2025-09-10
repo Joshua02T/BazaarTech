@@ -44,18 +44,18 @@ class ProductSearchFilter extends StatelessWidget {
                         itemCount: ratingNumbers.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () =>
-                                controller.updateSelectedProductRating(index),
-                            child: Obx(() {
-                              final isSelected =
-                                  controller.selectedProductRating.value ==
-                                      index;
-                              return CustomRatingContainer(
-                                ratingNumber: ratingNumbers[index],
-                                isSelected: isSelected,
-                              );
-                            }),
-                          );
+                              onTap: () =>
+                                  controller.updateSelectedProductRating(index),
+                              child: GetBuilder<FilterSearchController>(
+                                builder: (controller) {
+                                  final isSelected =
+                                      controller.selectedProductRating == index;
+                                  return CustomRatingContainer(
+                                    ratingNumber: ratingNumbers[index],
+                                    isSelected: isSelected,
+                                  );
+                                },
+                              ));
                         },
                       ),
                     ),
@@ -105,38 +105,38 @@ class ProductSearchFilter extends StatelessWidget {
                         ),
                         SizedBox(width: MediaQueryUtil.screenWidth / 20.6),
                         Expanded(
-                          child: Obx(() => TextFormField(
-                                style: const TextStyle(color: AppColors.black),
-                                validator: (value) =>
-                                    controller.validateMaxPrice(value),
-                                controller: controller.maxPrice,
-                                keyboardType: TextInputType.number,
-                                enabled: !controller.isMinPriceEmpty.value,
-                                decoration: InputDecoration(
-                                  labelText: 'max',
-                                  contentPadding: EdgeInsets.all(
-                                      MediaQueryUtil.screenWidth / 34.33),
-                                  fillColor: AppColors.white,
-                                  filled: true,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(
-                                      MediaQueryUtil.screenWidth / 51.5,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(
-                                      MediaQueryUtil.screenWidth / 51.5,
-                                    ),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      MediaQueryUtil.screenWidth / 51.5,
-                                    ),
-                                  ),
+                          child: TextFormField(
+                            style: const TextStyle(color: AppColors.black),
+                            validator: (value) =>
+                                controller.validateMaxPrice(value),
+                            controller: controller.maxPrice,
+                            keyboardType: TextInputType.number,
+                            enabled: !controller.isMinPriceEmpty.value,
+                            decoration: InputDecoration(
+                              labelText: 'max',
+                              contentPadding: EdgeInsets.all(
+                                  MediaQueryUtil.screenWidth / 34.33),
+                              fillColor: AppColors.white,
+                              filled: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(
+                                  MediaQueryUtil.screenWidth / 51.5,
                                 ),
-                              )),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(
+                                  MediaQueryUtil.screenWidth / 51.5,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                  MediaQueryUtil.screenWidth / 51.5,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -150,13 +150,13 @@ class ProductSearchFilter extends StatelessWidget {
                     ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                     CustomCategoryField(
-                        categories: controller.productCategories,
+                        onFieldChanged: (value) =>
+                            controller.fetchCategories('product', value),
+                        categories: controller.selectedProductCategories,
                         categoryController:
                             controller.categoriesFieldController,
-                        onDeleted: (value) =>
-                            controller.removeProductCategory(value),
-                        onFieldSubmitted: (value) =>
-                            controller.addProductCategory(value)),
+                        onDeleted: (value) {},
+                        onFieldSubmitted: (value) {}),
                     SizedBox(height: MediaQueryUtil.screenHeight / 26.875),
                     Text(
                       'Store Location',
@@ -167,12 +167,10 @@ class ProductSearchFilter extends StatelessWidget {
                     ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                     CustomLocationField(
-                        stores: controller.productStores,
+                        stores: controller.productStoreLocation,
                         locationController: controller.storesFieldController,
-                        onDeleted: (value) =>
-                            controller.removeProductStore(value),
-                        onFieldSubmitted: (value) =>
-                            controller.addProductStore(value))
+                        onDeleted: (value) {},
+                        onFieldSubmitted: (value) {})
                   ],
                 ),
               ),

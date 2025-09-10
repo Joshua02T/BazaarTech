@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomCategoryField extends StatelessWidget {
-  final RxList<String> categories;
+  final List<String> categories;
   final void Function(String) onDeleted;
   final TextEditingController categoryController;
   final void Function(String) onFieldSubmitted;
+  final void Function(String) onFieldChanged;
   const CustomCategoryField(
       {super.key,
       required this.categories,
       required this.categoryController,
       required this.onFieldSubmitted,
-      required this.onDeleted});
+      required this.onDeleted,
+      required this.onFieldChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class CustomCategoryField extends StatelessWidget {
                   children: categories.map((category) {
                     return Chip(
                       side: BorderSide.none,
-                      color: const MaterialStatePropertyAll(
+                      color: const WidgetStatePropertyAll(
                           AppColors.secondaryOrangeColor),
                       label: Text(
                         category,
@@ -54,6 +56,7 @@ class CustomCategoryField extends StatelessWidget {
               },
               controller: categoryController,
               keyboardType: TextInputType.text,
+              onChanged: (value) => onFieldChanged(value.trim()),
               onFieldSubmitted: (value) {
                 onFieldSubmitted(value.trim());
               },

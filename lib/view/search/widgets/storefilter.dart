@@ -44,17 +44,18 @@ class StoreSearchFilter extends StatelessWidget {
                         itemCount: ratingNumbers.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () =>
-                                controller.updateSelectedStoreRating(index),
-                            child: Obx(() {
-                              final isSelected =
-                                  controller.selectedStoreRating.value == index;
-                              return CustomRatingContainer(
-                                ratingNumber: ratingNumbers[index],
-                                isSelected: isSelected,
-                              );
-                            }),
-                          );
+                              onTap: () =>
+                                  controller.updateSelectedStoreRating(index),
+                              child: GetBuilder<FilterSearchController>(
+                                builder: (controller) {
+                                  final isSelected =
+                                      controller.selectedStoreRating == index;
+                                  return CustomRatingContainer(
+                                    ratingNumber: ratingNumbers[index],
+                                    isSelected: isSelected,
+                                  );
+                                },
+                              ));
                         },
                       ),
                     ),
@@ -68,13 +69,13 @@ class StoreSearchFilter extends StatelessWidget {
                     ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                     CustomCategoryField(
-                        categories: controller.storeCategories,
+                        onFieldChanged: (value) =>
+                            controller.fetchCategories('store', 'value'),
+                        categories: controller.selectedStoreCategories,
                         categoryController:
                             controller.categoriesFieldController,
-                        onFieldSubmitted: (value) =>
-                            controller.addStoreCategory(value),
-                        onDeleted: (value) =>
-                            controller.removeStoreCategory(value)),
+                        onFieldSubmitted: (value) {},
+                        onDeleted: (value) {}),
                     SizedBox(height: MediaQueryUtil.screenHeight / 26.875),
                     Text(
                       'Location',
@@ -85,12 +86,10 @@ class StoreSearchFilter extends StatelessWidget {
                     ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                     CustomLocationField(
-                        stores: controller.storeStores,
+                        stores: controller.storeStoreLocation,
                         locationController: controller.storesFieldController,
-                        onFieldSubmitted: (value) =>
-                            controller.addStoreStore(value),
-                        onDeleted: (value) =>
-                            controller.removeStoreStore(value))
+                        onFieldSubmitted: (value) {},
+                        onDeleted: (value) {})
                   ],
                 ),
               ),

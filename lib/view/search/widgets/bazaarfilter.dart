@@ -43,79 +43,84 @@ class BazaarSearchFilter extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: List.generate(bazaarStatus.length, (index) {
                           return GestureDetector(
-                            onTap: () => controller
-                                .updateSelectedIndexBazaarStatus(index),
-                            child: Obx(() {
-                              final isSelected =
-                                  controller.selectedIndexBazaarStatus.value ==
-                                      index;
-                              return CustomBazaarStatusContainer(
-                                  bazaarStatus: bazaarStatus[index],
-                                  isSelected: isSelected);
-                            }),
-                          );
+                              onTap: () => controller
+                                  .updateSelectedIndexBazaarStatus(index),
+                              child: GetBuilder<FilterSearchController>(
+                                builder: (controller) {
+                                  final isSelected =
+                                      controller.selectedIndexBazaarStatus ==
+                                          index;
+                                  return CustomBazaarStatusContainer(
+                                      bazaarStatus: bazaarStatus[index],
+                                      isSelected: isSelected);
+                                },
+                              ));
                         }),
                       ),
                     ),
-                    Obx(() {
-                      final selectedIndex =
-                          controller.selectedIndexBazaarStatus.value;
-                      if (selectedIndex != 1) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                                height: MediaQueryUtil.screenHeight / 26.375),
-                            Text(
-                              'Time',
-                              style: TextStyle(
-                                fontSize: MediaQueryUtil.screenWidth / 25.75,
-                                color: AppColors.primaryFontColor,
-                              ),
-                            ),
-                            SizedBox(
-                                height: MediaQueryUtil.screenHeight / 52.75),
-                            TextFormField(
-                              style: const TextStyle(color: AppColors.black),
-                              controller: selectedIndex == 0
-                                  ? controller.bazaarPastDate
-                                  : controller.bazaarUpComingDate,
-                              keyboardType: TextInputType.datetime,
-                              validator: (value) =>
-                                  controller.validateDate(value),
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                suffixIcon: Image.asset(AppImages.calendarIcon,
-                                    scale: MediaQueryUtil.screenWidth / 228.9),
-                                contentPadding: EdgeInsets.all(
-                                    MediaQueryUtil.screenWidth / 34.33),
-                                fillColor: AppColors.white,
-                                filled: true,
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(
-                                      MediaQueryUtil.screenWidth / 51.5),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(
-                                      MediaQueryUtil.screenWidth / 51.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      MediaQueryUtil.screenWidth / 51.5),
+                    GetBuilder<FilterSearchController>(
+                      builder: (controller) {
+                        final selectedIndex =
+                            controller.selectedIndexBazaarStatus;
+                        if (selectedIndex != 1) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                  height: MediaQueryUtil.screenHeight / 26.375),
+                              Text(
+                                'Time',
+                                style: TextStyle(
+                                  fontSize: MediaQueryUtil.screenWidth / 25.75,
+                                  color: AppColors.primaryFontColor,
                                 ),
                               ),
-                              onTap: () => selectedIndex == 0
-                                  ? controller.pickPastDate(context)
-                                  : controller.pickUpComingDate(context),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    }),
+                              SizedBox(
+                                  height: MediaQueryUtil.screenHeight / 52.75),
+                              TextFormField(
+                                style: const TextStyle(color: AppColors.black),
+                                controller: selectedIndex == 0
+                                    ? controller.bazaarPastDate
+                                    : controller.bazaarUpComingDate,
+                                keyboardType: TextInputType.datetime,
+                                validator: (value) =>
+                                    controller.validateDate(value),
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  suffixIcon: Image.asset(
+                                      AppImages.calendarIcon,
+                                      scale:
+                                          MediaQueryUtil.screenWidth / 228.9),
+                                  contentPadding: EdgeInsets.all(
+                                      MediaQueryUtil.screenWidth / 34.33),
+                                  fillColor: AppColors.white,
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(
+                                        MediaQueryUtil.screenWidth / 51.5),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(
+                                        MediaQueryUtil.screenWidth / 51.5),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        MediaQueryUtil.screenWidth / 51.5),
+                                  ),
+                                ),
+                                onTap: () => selectedIndex == 0
+                                    ? controller.pickPastDate(context)
+                                    : controller.pickUpComingDate(context),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 26.375),
                     Text(
                       'Categories',
@@ -126,13 +131,12 @@ class BazaarSearchFilter extends StatelessWidget {
                     ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                     CustomCategoryField(
-                        categories: controller.bazaarCategories,
-                        categoryController:
-                            controller.categoriesFieldController,
-                        onFieldSubmitted: (value) =>
-                            controller.addBazaarCategory(value),
-                        onDeleted: (value) =>
-                            controller.removeBazaarCategory(value)),
+                      categories: controller.selectedBazaarCategories,
+                      categoryController: controller.categoriesFieldController,
+                      onFieldSubmitted: (value) {},
+                      onDeleted: (value) {},
+                      onFieldChanged: (value) {},
+                    ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 26.375),
                     Text(
                       'Location',
@@ -143,12 +147,10 @@ class BazaarSearchFilter extends StatelessWidget {
                     ),
                     SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                     CustomLocationField(
-                        stores: controller.bazaarStores,
+                        stores: controller.bazaarStoreLocation,
                         locationController: controller.storesFieldController,
-                        onFieldSubmitted: (value) =>
-                            controller.addBazaarStore(value),
-                        onDeleted: (value) =>
-                            controller.removeBazaarStore(value))
+                        onFieldSubmitted: (value) {},
+                        onDeleted: (value) {})
                   ],
                 ),
               ),

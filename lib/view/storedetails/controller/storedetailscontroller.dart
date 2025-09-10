@@ -1,6 +1,6 @@
 import 'package:bazaartech/core/repositories/storerepo.dart';
 import 'package:bazaartech/model/commentmodel.dart';
-import 'package:bazaartech/view/home/model/categorymodel.dart';
+import 'package:bazaartech/model/categorymodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
@@ -41,7 +41,6 @@ class StoreDetailsController extends GetxController {
       fetchProductCategories();
     } catch (e) {
       ToastUtil.showToast('Failed to load store, ${e.toString()}');
-      print(e.toString());
     } finally {
       isLoadingFetching = false;
       update();

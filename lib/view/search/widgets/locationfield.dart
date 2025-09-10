@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomLocationField extends StatelessWidget {
-  final RxList<String> stores;
+  final List<String> stores;
   final void Function(String) onDeleted;
   final TextEditingController locationController;
   final void Function(String) onFieldSubmitted;

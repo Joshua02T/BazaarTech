@@ -8,7 +8,7 @@ import 'package:bazaartech/view/cart/screen/cartpage.dart';
 import 'package:bazaartech/view/cart/screen/checkoutpage.dart';
 import 'package:bazaartech/view/cart/screen/confirmationpage.dart';
 import 'package:bazaartech/view/help/screen/helpcenter.dart';
-import 'package:bazaartech/view/home/model/categorymodel.dart';
+import 'package:bazaartech/model/categorymodel.dart';
 import 'package:bazaartech/view/login/screen/login.dart';
 import 'package:bazaartech/view/privacy/screen/privacy.dart';
 import 'package:bazaartech/view/productdetails/screens/productdetails.dart';
@@ -131,16 +131,22 @@ List<GetPage<dynamic>>? routes = [
     name: "/bazaardetails",
     page: () {
       final args = Get.arguments as Map<String, dynamic>;
-      return BazaarDetails(id: args["id"]);
+      return BazaarDetails(id: args["id"].toString());
     },
     transition: Transition.rightToLeftWithFade,
   ),
   GetPage(
       name: "/bazaarproducts",
-      page: () => const BazaarProducts(),
+      page: () {
+        final category = Get.arguments as Category;
+        return BazaarProducts(category: category);
+      },
       transition: Transition.rightToLeftWithFade),
   GetPage(
       name: "/bazaarreviews",
-      page: () => const BazaarReviews(),
+      page: () {
+        final args = Get.arguments as Map<String, dynamic>;
+        return BazaarReviews(id: args["id"].toString());
+      },
       transition: Transition.rightToLeftWithFade),
 ];

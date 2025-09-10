@@ -1,15 +1,15 @@
+import 'package:bazaartech/core/repositories/bazaarrepo.dart';
 import 'package:bazaartech/core/repositories/commentsrepo.dart';
-import 'package:bazaartech/core/repositories/productrepo.dart';
 import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-class CommentsController extends GetxController {
+class BazaarCommentsController extends GetxController {
   final String id;
-  CommentsController(this.id);
+  BazaarCommentsController(this.id);
   TextEditingController commentController = TextEditingController();
-  final ProductRepository _productRepo = ProductRepository();
+  final BazaarRepository _bazaarRepository = BazaarRepository();
   final CommentsRepo _commentRepo = CommentsRepo();
   List<Comment> allComments = <Comment>[];
   bool isLoadingFetchingComments = false;
@@ -17,12 +17,11 @@ class CommentsController extends GetxController {
   bool isEditing = false;
   int? editingCommentId;
   FocusNode commentFocusNode = FocusNode();
-
   Future<void> fetchCommentsById(String id) async {
     try {
       isLoadingFetchingComments = true;
       update();
-      final fetchedComments = await _productRepo.fetchCommentsById(id);
+      final fetchedComments = await _bazaarRepository.fetchCommentsById(id);
       allComments.clear();
       allComments.assignAll(fetchedComments);
     } catch (e) {
@@ -33,13 +32,13 @@ class CommentsController extends GetxController {
     }
   }
 
-  Future<void> addComment(String productId, String body, String rating) async {
+  Future<void> addComment(String bazaarId, String body, String rating) async {
     try {
       isLoadingAddingComment = true;
       update();
 
       final newComment =
-          await _commentRepo.addComment('product', productId, body, rating);
+          await _commentRepo.addComment('bazaar', bazaarId, body, rating);
 
       allComments.insert(0, newComment);
 

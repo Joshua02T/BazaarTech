@@ -1,6 +1,7 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
+import 'package:bazaartech/view/bazaardetails/controller/bazaarcommentscontroller.dart';
 import 'package:bazaartech/view/bazaardetails/controller/bazaardetailscontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,10 +11,10 @@ class AddBazaarReview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BazaarDetailsController controller = Get.find<BazaarDetailsController>();
-    return Obx(() {
-      final isLoading = controller.isLoadingAddingReview.value;
-      final isReviewEmpty = controller.reviewText.isEmpty;
+    return GetBuilder<BazaarCommentsController>(builder: (controller) {
+      final isLoading = controller.isLoadingAddingComment;
+      final text = controller.commentController.text.trim();
+      final isCommentEmpty = text.isEmpty;
 
       return ClipRRect(
         borderRadius: BorderRadius.only(
@@ -35,31 +36,37 @@ class AddBazaarReview extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: AppColors.backgroundColor,
                       borderRadius: BorderRadius.circular(
-                          MediaQueryUtil.screenWidth / 31.69),
+                        MediaQueryUtil.screenWidth / 31.69,
+                      ),
                     ),
                     child: TextFormField(
-                      controller: controller.reviewController,
+                      controller: controller.commentController,
                       keyboardType: TextInputType.multiline,
                       minLines: 1,
                       maxLines: 3,
+                      focusNode: controller.commentFocusNode,
+                      onChanged: (_) => controller.update(),
                       enabled: !isLoading,
-                      onChanged: (value) {
-                        controller.reviewText.value = value.trim();
-                      },
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 16),
+                          vertical: 10,
+                          horizontal: 16,
+                        ),
                         border: InputBorder.none,
                         hintText: 'Write a review...',
                         hintStyle: const TextStyle(
-                            color: AppColors.black70, fontSize: 12),
+                          color: AppColors.black70,
+                          fontSize: 12,
+                        ),
                         suffixIcon: isLoading
                             ? Padding(
                                 padding: EdgeInsets.all(
-                                    MediaQueryUtil.screenWidth / 206),
+                                  MediaQueryUtil.screenWidth / 206,
+                                ),
                                 child: const CircularProgressIndicator(
-                                    strokeWidth: 1,
-                                    color: AppColors.primaryFontColor),
+                                  strokeWidth: 1,
+                                  color: AppColors.primaryFontColor,
+                                ),
                               )
                             : null,
                       ),
@@ -72,23 +79,38 @@ class AddBazaarReview extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: MediaQueryUtil.screenWidth / 54.92),
+                    horizontal: MediaQueryUtil.screenWidth / 54.92,
+                  ),
                   child: GestureDetector(
-                    onTap: isReviewEmpty || isLoading
+                    onTap: isCommentEmpty || isLoading
                         ? null
                         : () async {
-                            await controller.addReview(
-                              controller.bazaar.value!,
-                              controller.reviewText.value,
-                            );
-                            if (!isLoading) {
-                              controller.reviewController.clear();
+                            if (controller.isEditing &&
+                                controller.editingCommentId != null) {
+                              await controller.editComment(
+                                controller.editingCommentId.toString(),
+                                text,
+                                Get.find<BazaarDetailsController>()
+                                    .rating
+                                    .toString(),
+                              );
+                            } else {
+                              await controller.addComment(
+                                Get.find<BazaarDetailsController>()
+                                    .bazaar!
+                                    .id
+                                    .toString(),
+                                text,
+                                Get.find<BazaarDetailsController>()
+                                    .rating
+                                    .toString(),
+                              );
                             }
                           },
                     child: Image.asset(
                       AppImages.addCommentIcon,
                       width: MediaQueryUtil.screenWidth / 17.16,
-                      color: isReviewEmpty || isLoading
+                      color: isCommentEmpty || isLoading
                           ? Colors.grey
                           : AppColors.primaryFontColor,
                     ),

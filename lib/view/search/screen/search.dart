@@ -171,13 +171,7 @@ class Search extends StatelessWidget {
                       right: MediaQueryUtil.screenWidth / 20.6),
                   child: const SingleChildScrollView(
                     child: Column(
-                      children: [
-                        SearchHistoryReco(title: 'Sneakers'),
-                        SearchHistoryReco(title: 'T shirt'),
-                        SearchHistoryReco(title: 'Skin Care'),
-                        SearchHistoryReco(title: 'Hamburger'),
-                        SearchHistoryReco(title: 'Boss'),
-                      ],
+                      children: [],
                     ),
                   ),
                 ),

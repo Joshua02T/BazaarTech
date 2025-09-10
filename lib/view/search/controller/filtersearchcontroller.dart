@@ -1,11 +1,29 @@
+import 'package:bazaartech/core/repositories/searchrepo.dart';
+import 'package:bazaartech/model/categorymodel.dart';
+import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FilterSearchController extends GetxController {
-  RxInt selectedProductRating = 0.obs;
-  RxInt selectedStoreRating = 0.obs;
+  List<Category> searchCategories = <Category>[];
+  final SearchRepo _searchRepo = SearchRepo();
+  Future<void> fetchCategories(String item, String body) async {
+    try {
+      final fetchedCategories =
+          await _searchRepo.fetchSearchCategories(item, body);
+      searchCategories.clear();
+      searchCategories.assignAll(fetchedCategories);
+    } catch (e) {
+      ToastUtil.showToast('Failed to load categories, ${e.toString()}');
+    } finally {
+      update();
+    }
+  }
 
-  RxInt selectedIndexBazaarStatus = 1.obs;
+  int selectedProductRating = 0;
+  int selectedStoreRating = 0;
+
+  int selectedIndexBazaarStatus = 1;
   final TextEditingController minPrice = TextEditingController();
   final TextEditingController maxPrice = TextEditingController();
   final TextEditingController bazaarPastDate = TextEditingController();
@@ -13,116 +31,53 @@ class FilterSearchController extends GetxController {
 
   GlobalKey<FormState> filterKey = GlobalKey<FormState>();
 
-  RxList<String> productCategories = <String>[].obs;
-  RxList<String> storeCategories = <String>[].obs;
-  RxList<String> bazaarCategories = <String>[].obs;
+  List<String> selectedProductCategories = <String>[];
+  List<String> selectedStoreCategories = <String>[];
+  List<String> selectedBazaarCategories = <String>[];
 
   final TextEditingController categoriesFieldController =
       TextEditingController();
-  RxList<String> productStores = <String>[].obs;
-  RxList<String> storeStores = <String>[].obs;
-  RxList<String> bazaarStores = <String>[].obs;
+  List<String> productStoreLocation = <String>[];
+  List<String> storeStoreLocation = <String>[];
+  List<String> bazaarStoreLocation = <String>[];
 
   final TextEditingController storesFieldController = TextEditingController();
   RxBool isMinPriceEmpty = true.obs;
 
-  void addProductCategory(String category) {
-    if (category.isNotEmpty && !productCategories.contains(category)) {
-      productCategories.add(category);
-      categoriesFieldController.clear();
-    }
-  }
-
-  void removeProductCategory(String category) {
-    productCategories.remove(category);
-  }
-
-  void addStoreCategory(String category) {
-    if (category.isNotEmpty && !storeCategories.contains(category)) {
-      storeCategories.add(category);
-      categoriesFieldController.clear();
-    }
-  }
-
-  void removeStoreCategory(String category) {
-    storeCategories.remove(category);
-  }
-
-  void addBazaarCategory(String category) {
-    if (category.isNotEmpty && !bazaarCategories.contains(category)) {
-      bazaarCategories.add(category);
-      categoriesFieldController.clear();
-    }
-  }
-
-  void removeBazaarCategory(String category) {
-    bazaarCategories.remove(category);
-  }
-
-  void addProductStore(String store) {
-    if (store.isNotEmpty && !productStores.contains(store)) {
-      productStores.add(store);
-      storesFieldController.clear();
-    }
-  }
-
-  void removeProductStore(String store) {
-    productStores.remove(store);
-  }
-
-  void addStoreStore(String store) {
-    if (store.isNotEmpty && !storeStores.contains(store)) {
-      storeStores.add(store);
-      storesFieldController.clear();
-    }
-  }
-
-  void removeStoreStore(String store) {
-    storeStores.remove(store);
-  }
-
-  void addBazaarStore(String store) {
-    if (store.isNotEmpty && !bazaarStores.contains(store)) {
-      bazaarStores.add(store);
-      storesFieldController.clear();
-    }
-  }
-
-  void removeBazaarStore(String store) {
-    bazaarStores.remove(store);
-  }
-
   void updateSelectedProductRating(int index) {
-    selectedProductRating.value = index;
+    selectedProductRating = index;
+    update();
   }
 
   void updateSelectedStoreRating(int index) {
-    selectedStoreRating.value = index;
+    selectedStoreRating = index;
+    update();
   }
 
   void updateSelectedIndexBazaarStatus(int index) {
-    selectedIndexBazaarStatus.value = index;
+    selectedIndexBazaarStatus = index;
+    update();
   }
 
   void resetDefaultsProductFilter() {
     minPrice.clear();
     maxPrice.clear();
-    productCategories.clear();
-    productStores.clear();
+    selectedProductCategories.clear();
+    productStoreLocation.clear();
     updateSelectedProductRating(0);
   }
 
   void resetDefaultsStoreFilter() {
-    storeCategories.clear();
-    storeStores.clear();
+    selectedStoreCategories.clear();
+    storeStoreLocation.clear();
     updateSelectedStoreRating(0);
   }
 
   void resetDefaultsBazaarFilter() {
     bazaarPastDate.clear();
     bazaarUpComingDate.clear();
-    bazaarCategories.clear();
-    bazaarStores.clear();
+    selectedBazaarCategories.clear();
+    bazaarStoreLocation.clear();
     updateSelectedIndexBazaarStatus(1);
   }
 
@@ -195,36 +150,32 @@ class FilterSearchController extends GetxController {
 
   String? validateMaxPrice(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Enter Maximum Price';
+      return 'Please enter a price';
     }
+
+    if (value.trim().startsWith('.') || value.trim().endsWith('.')) {
+      return 'Invalid price format';
+    }
+
     if (value.trim().startsWith('0') && value.trim().length > 1) {
       return 'Price cannot start with zero';
     }
 
     try {
-      double maxPriceValue = double.parse(value.trim());
-      if (maxPriceValue < 0) {
-        return 'Enter Valid Price';
+      double price = double.parse(value.trim());
+
+      if (price < 0) {
+        return 'Price cannot be negative';
       }
-    } catch (e) {
-      return 'Invalid Price Format';
-    }
 
-    if (minPrice.text.trim().isEmpty) {
-      return '';
-    }
-
-    try {
-      double minPriceValue = double.parse(minPrice.text.trim());
-      double maxPriceValue = double.parse(value.trim());
-
-      if (maxPriceValue < minPriceValue) {
-        return 'Enter Bigger Max Price';
+      if (price == 0) {
+        return 'Price cannot be zero';
       }
+
+      return null;
     } catch (e) {
-      return 'Invalid Price Format';
+      return 'Invalid price format';
     }
-    return null;
   }
 
   @override
@@ -232,6 +183,9 @@ class FilterSearchController extends GetxController {
     minPrice.addListener(() {
       isMinPriceEmpty.value = minPrice.text.trim().isEmpty;
     });
+    //   debounce(searchText, (val) {
+    //   fetchCategories(val, body);
+    // }, time: const Duration(milliseconds: 500));
 
     super.onInit();
   }

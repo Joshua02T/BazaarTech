@@ -17,8 +17,11 @@ class SplashController extends GetxController {
     final bool isLoggedIn =
         myService.sharedPreferences.getBool(SharedPreferencesKey.isLogInKey) ??
             false;
+    final String hasValidToken =
+        myService.sharedPreferences.getString(SharedPreferencesKey.tokenKey) ??
+            '';
 
-    isLoggedIn
+    isLoggedIn && hasValidToken.isNotEmpty
         ? Get.offAllNamed(Routes.mainPage)
         : Get.offAllNamed(Routes.login);
   }

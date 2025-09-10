@@ -1,8 +1,8 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/service/media_query.dart';
-import 'package:bazaartech/view/home/model/categorymodel.dart';
+import 'package:bazaartech/model/categorymodel.dart';
 import 'package:bazaartech/view/home/widget/productcard.dart';
-import 'package:bazaartech/view/storedetails/controller/storeproducts.dart';
+import 'package:bazaartech/view/storedetails/controller/storeproductscontroller.dart';
 import 'package:bazaartech/widget/customappbarwithback.dart';
 import 'package:bazaartech/widget/customprogressindicator.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +46,8 @@ class StoreProducts extends StatelessWidget {
 
           return RefreshIndicator(
             onRefresh: () async {
-              await controller.loadProductsBasedOnCategoryId(
-                  category.id.toString()); // refresh API call
+              await controller
+                  .loadProductsBasedOnCategoryId(category.id.toString());
             },
             child: Padding(
               padding: EdgeInsets.only(

@@ -1,29 +1,62 @@
+import 'package:bazaartech/model/categorymodel.dart';
 import 'package:bazaartech/model/commentmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:get/get.dart';
 
 class Bazaar {
-  final String id;
-  final String image;
+  final int id;
+  String image;
   final String name;
   final String details;
   final String firstDate;
-  final int userRate;
+  int userRate;
   final String lastDate;
+  final String address;
   final String status;
   final List<Product> products;
-  final RxList<Comment> reviews;
+  final RxList<Comment> comments;
+  final List<Category> categories;
 
   Bazaar(
-      {required List<Comment> reviews,
-      required this.id,
+      {required this.id,
+      required this.address,
       required this.image,
       required this.name,
       required this.details,
       required this.firstDate,
-      required this.userRate,
+      this.userRate = 0,
       required this.lastDate,
       required this.status,
-      required this.products})
-      : reviews = reviews = RxList<Comment>(reviews);
+      required this.comments,
+      required this.categories,
+      required this.products});
+
+  factory Bazaar.fromJson(Map<String, dynamic> json) {
+    return Bazaar(
+        comments: RxList<Comment>(
+          json['reviews'] != null
+              ? (json['reviews'] as List)
+                  .map((e) => Comment.fromJson(e))
+                  .toList()
+              : [],
+        ),
+        id: json['id'],
+        address: json['address'] ?? '',
+        image: json['image'] ?? '',
+        name: json['name'] ?? '',
+        details: json['details'] ?? '',
+        firstDate: json['firstDate'] ?? '',
+        lastDate: json['lastDate'] ?? '',
+        status: json['status'] ?? '',
+        categories: json['categories'] != null
+            ? (json['categories'] as List)
+                .map((e) => Category.fromJson(e))
+                .toList()
+            : [],
+        products: json['products'] != null
+            ? (json['products'] as List)
+                .map((e) => Product.fromJson(e))
+                .toList()
+            : []);
+  }
 }

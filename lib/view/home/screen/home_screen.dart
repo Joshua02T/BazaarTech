@@ -1,6 +1,3 @@
-import 'package:bazaartech/core/const_data/lists.dart';
-import 'package:bazaartech/view/home/model/productmodel.dart';
-import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/widget/customprogressindicator.dart';
 import 'package:bazaartech/widget/defaultappbar.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +29,7 @@ class HomeScreen extends StatelessWidget {
             ),
             child: GetBuilder<HomeController>(
               builder: (controller) {
-                final tabs = ["All", "Products", "Stores"];
+                final tabs = ["All", "Products", "Stores", "Bazaars"];
                 return SizedBox(
                   height: MediaQueryUtil.screenHeight / 22.81,
                   child: ListView.builder(
@@ -77,6 +74,7 @@ class HomeScreen extends StatelessWidget {
                     _buildAllView(controller),
                     _buildProductsView(controller),
                     _buildStoresView(controller),
+                    _buildBazaarView(controller)
                   ],
                 );
               },
@@ -147,6 +145,24 @@ class HomeScreen extends StatelessWidget {
         itemCount: controller.storeCardItem.length,
         itemBuilder: (context, index) {
           return CustomStoreCard(data: controller.storeCardItem[index]);
+        },
+      ),
+    );
+  }
+
+  Widget _buildBazaarView(HomeController controller) {
+    return RefreshIndicator(
+      onRefresh: () => controller.refreshData(),
+      child: ListView.builder(
+        padding:
+            EdgeInsets.symmetric(horizontal: MediaQueryUtil.screenWidth / 20.6),
+        itemCount: controller.bazaarCardItem.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding:
+                EdgeInsets.only(bottom: MediaQueryUtil.screenHeight / 49.64),
+            child: CustomBazaarCard(data: controller.bazaarCardItem[index]),
+          );
         },
       ),
     );

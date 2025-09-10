@@ -12,9 +12,11 @@ import 'package:flutter/material.dart';
 class HomeController extends GetxController {
   final ProductRepository productRepo = ProductRepository();
   final StoreRepository storeRepo = StoreRepository();
+  final BazaarRepository bazaarRepo = BazaarRepository();
 
   final List<Product> productCardItem = <Product>[];
   final List<Store> storeCardItem = <Store>[];
+  final List<Bazaar> bazaarCardItem = <Bazaar>[];
 
   bool isLoading = false;
 
@@ -33,6 +35,9 @@ class HomeController extends GetxController {
 
       final stores = await storeRepo.fetchStores();
       storeCardItem.assignAll(stores);
+
+      final bazaars = await bazaarRepo.fetchBazaars();
+      bazaarCardItem.assignAll(bazaars);
 
       final tempItems = [
         ...productCardItem

@@ -37,7 +37,8 @@ class StoreCommentsController extends GetxController {
       isLoadingAddingComment = true;
       update();
 
-      final newComment = await _commentRepo.addComment(storeId, body, rating);
+      final newComment =
+          await _commentRepo.addComment('store', storeId, body, rating);
 
       allComments.insert(0, newComment);
 
