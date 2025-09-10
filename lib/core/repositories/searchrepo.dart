@@ -9,26 +9,32 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class SearchRepo {
-  Future<List<Category>> fetchSearchCategories(String item, String body) async {
+  Future<List<Category>> fetchSearchCategories(String item, String name) async {
     final myService = Get.find<MyService>();
     final prefs = myService.sharedPreferences;
     final token = prefs.getString(SharedPreferencesKey.tokenKey);
 
+    final uri = Uri.parse('${AppLink.appRoot}/$item-categories').replace(
+      queryParameters: {
+        'name': name,
+      },
+    );
+
     final response = await http.get(
-      Uri.parse('${AppLink.appRoot}/$item-categories?name=$body'),
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
       if (data['data'] != null) {
         return (data['data'] as List).map((json) {
-          final category = Category.fromJson(json);
-          return category;
+          return Category.fromJson(json);
         }).toList();
       } else {
         return [];

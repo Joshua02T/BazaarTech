@@ -1,5 +1,4 @@
 import 'package:bazaartech/core/repositories/bazaarrepo.dart';
-import 'package:bazaartech/core/repositories/favoriterepo.dart';
 import 'package:bazaartech/core/repositories/productrepo.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';

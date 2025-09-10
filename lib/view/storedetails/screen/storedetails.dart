@@ -3,8 +3,6 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/routes.dart';
-import 'package:bazaartech/model/commentmodel.dart';
-import 'package:bazaartech/view/home/model/storemodel.dart';
 import 'package:bazaartech/view/storedetails/controller/storedetailscontroller.dart';
 import 'package:bazaartech/view/storedetails/widgets/customcategory.dart';
 import 'package:bazaartech/view/storedetails/widgets/ratingwidget.dart';

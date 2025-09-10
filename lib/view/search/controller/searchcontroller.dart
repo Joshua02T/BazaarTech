@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchCController extends GetxController {
-  RxInt selectedIndex = 0.obs;
+  int selectedIndex = 0;
   TextEditingController? searchText;
-  RxString categoryTitle = 'Products'.obs;
+  String categoryTitle = 'Products';
   final PageController pageController = PageController();
 
   @override
@@ -14,7 +14,8 @@ class SearchCController extends GetxController {
   }
 
   void updateSelectedIndex(int index) {
-    selectedIndex.value = index;
+    selectedIndex = index;
+    update();
   }
 
   @override

@@ -2,13 +2,11 @@ import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/lists.dart';
 import 'package:bazaartech/core/service/media_query.dart';
-import 'package:bazaartech/view/search/controller/filtersearchcontroller.dart';
 import 'package:bazaartech/view/search/controller/searchcontroller.dart';
-import 'package:bazaartech/view/search/widgets/bazaarfilter.dart';
+import 'package:bazaartech/view/search/screen/bazaarfilter.dart';
 import 'package:bazaartech/view/search/widgets/customsearchcategory.dart';
-import 'package:bazaartech/view/search/widgets/productfilter.dart';
-import 'package:bazaartech/view/search/widgets/searchhistory.dart';
-import 'package:bazaartech/view/search/widgets/storefilter.dart';
+import 'package:bazaartech/view/search/screen/productfilter.dart';
+import 'package:bazaartech/view/search/screen/storefilter.dart';
 import 'package:bazaartech/widget/defaultappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +17,7 @@ class Search extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SearchCController controller = Get.find<SearchCController>();
-    Get.lazyPut(() => FilterSearchController(), fenix: false);
+
     MediaQueryUtil.init(context);
     return Scaffold(
       appBar: const DefaultAppBar(title: 'Search'),
@@ -41,34 +39,31 @@ class Search extends StatelessWidget {
                     itemCount: searchCategoryItem.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          controller.updateSelectedIndex(index);
-                          controller.categoryTitle.value =
-                              searchCategoryItem[index];
-                          controller.pageController.animateToPage(
-                            index,
-                            duration: const Duration(milliseconds: 1),
-                            curve: Curves.fastOutSlowIn,
-                          );
-                        },
-                        child: Obx(() {
-                          final isSelected =
-                              controller.selectedIndex.value == index;
+                      return GestureDetector(onTap: () {
+                        controller.updateSelectedIndex(index);
+                        controller.categoryTitle = searchCategoryItem[index];
+                        controller.pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 1),
+                          curve: Curves.fastOutSlowIn,
+                        );
+                      }, child: GetBuilder<SearchCController>(
+                        builder: (controller) {
+                          final isSelected = controller.selectedIndex == index;
                           return CustomSearchCategory(
                             title: searchCategoryItem[index],
                             isSelected: isSelected,
                           );
-                        }),
-                      );
+                        },
+                      ));
                     },
                   ),
                 ),
                 SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                 Row(
                   children: [
-                    Expanded(
-                      child: Obx(() {
+                    Expanded(child: GetBuilder<SearchCController>(
+                      builder: (controller) {
                         return SizedBox(
                           height: MediaQueryUtil.screenHeight / 19.18,
                           child: TextField(
@@ -108,7 +103,7 @@ class Search extends StatelessWidget {
                                   minHeight:
                                       MediaQueryUtil.screenHeight / 42.2),
                               hintText:
-                                  '${controller.categoryTitle.value.substring(0, controller.categoryTitle.value.length - 1)} Name',
+                                  '${controller.categoryTitle.substring(0, controller.categoryTitle.length - 1)} Name',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     MediaQueryUtil.screenWidth / 51.5),
@@ -116,8 +111,8 @@ class Search extends StatelessWidget {
                             ),
                           ),
                         );
-                      }),
-                    ),
+                      },
+                    )),
                     SizedBox(width: MediaQueryUtil.screenWidth / 25.75),
                     GestureDetector(
                       onTap: () {
@@ -129,9 +124,9 @@ class Search extends StatelessWidget {
                           builder: (context) {
                             return FractionallySizedBox(
                               heightFactor: 0.73,
-                              child: controller.selectedIndex.value == 0
+                              child: controller.selectedIndex == 0
                                   ? const ProductSearchFilter()
-                                  : controller.selectedIndex.value == 1
+                                  : controller.selectedIndex == 1
                                       ? const StoreSearchFilter()
                                       : const BazaarSearchFilter(),
                             );
@@ -161,7 +156,7 @@ class Search extends StatelessWidget {
               controller: controller.pageController,
               onPageChanged: (index) {
                 controller.updateSelectedIndex(index);
-                controller.categoryTitle.value = searchCategoryItem[index];
+                controller.categoryTitle = searchCategoryItem[index];
               },
               children: List.generate(
                 searchCategoryItem.length,

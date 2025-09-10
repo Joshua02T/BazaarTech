@@ -6,7 +6,6 @@ import 'package:bazaartech/core/service/shared_preferences_key.dart';
 import 'package:bazaartech/helper/appconfig.dart';
 import 'package:bazaartech/view/bazaardetails/controller/bazaardetailscontroller.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
-import 'package:bazaartech/view/storedetails/controller/storedetailscontroller.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

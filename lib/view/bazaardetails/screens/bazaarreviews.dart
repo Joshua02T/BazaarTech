@@ -5,7 +5,6 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
 import 'package:bazaartech/view/bazaardetails/controller/bazaarcommentscontroller.dart';
-import 'package:bazaartech/view/bazaardetails/controller/bazaardetailscontroller.dart';
 import 'package:bazaartech/view/bazaardetails/widgets/addbazaarreview.dart';
 import 'package:bazaartech/widget/customappbarwithback.dart';
 import 'package:bazaartech/widget/customprogressindicator.dart';
