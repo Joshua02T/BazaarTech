@@ -7,18 +7,21 @@ import 'package:get/get.dart';
 class ProductFilterController extends GetxController {
   int selectedProductRating = 0;
   List<String> productStoreLocation = <String>[];
-  List<String> selectedCategories = <String>[];
+  List<Category> selectedCategories = <Category>[];
   final TextEditingController minPrice = TextEditingController();
   final TextEditingController maxPrice = TextEditingController();
   final TextEditingController storesFieldController = TextEditingController();
   final TextEditingController categoriesFieldController =
       TextEditingController();
-  GlobalKey<FormState> filterProductKey = GlobalKey<FormState>();
   final SearchRepo _searchRepo = SearchRepo();
   List<Category> searchCategories = <Category>[];
   void updateSelectedProductRating(int index) {
     selectedProductRating = index;
     update();
+  }
+
+  List<int> getSelectedCategoryIds() {
+    return selectedCategories.map((c) => c.id).toList();
   }
 
   Future<void> fetchProductCategories(String item, String body) async {

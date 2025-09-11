@@ -28,7 +28,7 @@ class CategoryProductField extends StatelessWidget {
                         AppColors.secondaryOrangeColor,
                       ),
                       label: Text(
-                        category,
+                        category.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(color: AppColors.black),
                       ),
@@ -44,25 +44,12 @@ class CategoryProductField extends StatelessWidget {
                   }).toList(),
                 ),
               ),
-
             TextFormField(
               style: const TextStyle(color: AppColors.black),
-              validator: (value) {
-                return controller.selectedCategories.isEmpty
-                    ? 'Select one category at least!'
-                    : null;
-              },
               controller: controller.categoriesFieldController,
               keyboardType: TextInputType.text,
               onChanged: (value) =>
                   controller.fetchProductCategories('product', value.trim()),
-              onFieldSubmitted: (value) {
-                if (value.trim().isNotEmpty) {
-                  controller.selectedCategories.add(value.trim());
-                  controller.categoriesFieldController.clear();
-                  controller.update();
-                }
-              },
               decoration: InputDecoration(
                 contentPadding:
                     EdgeInsets.all(MediaQueryUtil.screenWidth / 34.33),
@@ -87,8 +74,6 @@ class CategoryProductField extends StatelessWidget {
                 ),
               ),
             ),
-
-            /// Suggestions list
             if (controller.searchCategories.isNotEmpty)
               Container(
                 margin: const EdgeInsets.only(top: 8),
@@ -111,7 +96,7 @@ class CategoryProductField extends StatelessWidget {
                     return ListTile(
                       title: Text(category.name),
                       onTap: () {
-                        controller.selectedCategories.add(category.name);
+                        controller.selectedCategories.add(category);
                         controller.categoriesFieldController.clear();
                         controller.searchCategories.clear();
                         controller.update();

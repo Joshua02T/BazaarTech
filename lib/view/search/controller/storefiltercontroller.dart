@@ -8,7 +8,6 @@ class StoreFilterController extends GetxController {
   int selectedStoreRating = 0;
   List<String> selectedCategories = <String>[];
   List<String> storeStoreLocation = <String>[];
-  GlobalKey<FormState> filterStoreKey = GlobalKey<FormState>();
   final TextEditingController categoriesFieldController =
       TextEditingController();
   final SearchRepo _searchRepo = SearchRepo();

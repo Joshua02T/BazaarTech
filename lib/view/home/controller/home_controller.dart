@@ -29,7 +29,7 @@ class HomeController extends GetxController {
       isLoading = true;
       update();
 
-      final products = await productRepo.fetchProducts('', '');
+      final products = await productRepo.fetchProducts('', '', '', '', []);
       productCardItem.assignAll(products);
 
       final stores = await storeRepo.fetchStores('');

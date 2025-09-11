@@ -13,7 +13,6 @@ class BazaarFilterController extends GetxController {
   final TextEditingController storesFieldController = TextEditingController();
   final TextEditingController bazaarPastDate = TextEditingController();
   final TextEditingController bazaarUpComingDate = TextEditingController();
-  GlobalKey<FormState> filterBazaarKey = GlobalKey<FormState>();
   final SearchRepo _searchRepo = SearchRepo();
   List<Category> searchCategories = <Category>[];
 
@@ -42,13 +41,6 @@ class BazaarFilterController extends GetxController {
     bazaarStoreLocation.clear();
     updateSelectedIndexBazaarStatus(1);
     update();
-  }
-
-  String? validateDate(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Select a date';
-    }
-    return null;
   }
 
   void pickUpComingDate(BuildContext context) async {

@@ -11,9 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchCController extends GetxController {
-  ProductFilterController productFilterController =
-      Get.find<ProductFilterController>();
   int selectedIndex = 0;
+  final ProductFilterController productFilterController =
+      Get.find<ProductFilterController>();
   TextEditingController? searchText;
   String categoryTitle = 'Products';
   final PageController pageController = PageController();
@@ -25,11 +25,13 @@ class SearchCController extends GetxController {
   final BazaarRepository _bazaarRepo = BazaarRepository();
   bool isLoading = false;
 
-  Future<void> searchForProducts(String name, String minRating) async {
+  Future<void> searchForProducts(String name, String minRating, String minPrice,
+      String maxPrice, List<int> categoryIds) async {
     try {
       isLoading = true;
       update();
-      final products = await _productRepo.fetchProducts(name, minRating);
+      final products = await _productRepo.fetchProducts(
+          name, minRating, minPrice, maxPrice, categoryIds);
       resultSearchProducts.assignAll(products);
     } catch (e) {
       ToastUtil.showToast('Failed to load products, ${e.toString()}');
@@ -74,7 +76,12 @@ class SearchCController extends GetxController {
         update();
       } else {
         searchForProducts(
-            value, productFilterController.selectedProductRating.toString());
+          value,
+          (productFilterController.selectedProductRating + 1).toString(),
+          productFilterController.minPrice.text,
+          productFilterController.maxPrice.text,
+          productFilterController.getSelectedCategoryIds(),
+        );
       }
     } else if (selectedIndex == 1) {
       if (value.isEmpty) {
