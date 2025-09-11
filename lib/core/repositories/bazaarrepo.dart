@@ -10,13 +10,19 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class BazaarRepository {
-  Future<List<Bazaar>> fetchBazaars() async {
+  Future<List<Bazaar>> fetchBazaars(String name) async {
     final myService = Get.find<MyService>();
     final prefs = myService.sharedPreferences;
     final token = prefs.getString(SharedPreferencesKey.tokenKey);
 
+    final uri = Uri.parse(AppLink.getAllBazaars).replace(
+      queryParameters: {
+        'name': name,
+      },
+    );
+
     final response = await http.get(
-      Uri.parse(AppLink.getAllBazaars),
+      uri,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

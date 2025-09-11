@@ -15,7 +15,7 @@ class StoreSearchFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StoreFilterController controller = Get.put(StoreFilterController());
+    StoreFilterController controller = Get.find<StoreFilterController>();
 
     return Form(
       key: controller.filterStoreKey,

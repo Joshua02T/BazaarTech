@@ -3,11 +3,8 @@ import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/lists.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/view/search/controller/bazaarfiltercontroller.dart';
-
 import 'package:bazaartech/view/search/widgets/bazaarsavebutton.dart';
 import 'package:bazaartech/view/search/widgets/categorybazaarfiled.dart';
-import 'package:bazaartech/view/search/widgets/productsavebutton.dart';
-import 'package:bazaartech/view/search/widgets/categoryproductfield.dart';
 import 'package:bazaartech/view/search/widgets/custombazaarstatus.dart';
 import 'package:bazaartech/view/search/widgets/locationfield.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +15,7 @@ class BazaarSearchFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BazaarFilterController controller = Get.put(BazaarFilterController());
+    BazaarFilterController controller = Get.find<BazaarFilterController>();
     return Form(
       key: controller.filterBazaarKey,
       child: Column(

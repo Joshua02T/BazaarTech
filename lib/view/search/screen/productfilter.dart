@@ -14,7 +14,7 @@ class ProductSearchFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProductFilterController controller = Get.put(ProductFilterController());
+    ProductFilterController controller = Get.find<ProductFilterController>();
     return Form(
       key: controller.filterProductKey,
       child: Column(
@@ -22,8 +22,10 @@ class ProductSearchFilter extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: MediaQueryUtil.screenWidth / 20.6,
+                padding: EdgeInsets.only(
+                  right: MediaQueryUtil.screenWidth / 20.6,
+                  left: MediaQueryUtil.screenWidth / 20.6,
+                  bottom: 200,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

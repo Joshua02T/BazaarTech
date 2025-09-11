@@ -2,11 +2,15 @@ import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/lists.dart';
 import 'package:bazaartech/core/service/media_query.dart';
+import 'package:bazaartech/view/home/widget/bazaarcard.dart';
+import 'package:bazaartech/view/home/widget/productcard.dart';
+import 'package:bazaartech/view/home/widget/storecard.dart';
 import 'package:bazaartech/view/search/controller/searchcontroller.dart';
 import 'package:bazaartech/view/search/screen/bazaarfilter.dart';
 import 'package:bazaartech/view/search/widgets/customsearchcategory.dart';
 import 'package:bazaartech/view/search/screen/productfilter.dart';
 import 'package:bazaartech/view/search/screen/storefilter.dart';
+import 'package:bazaartech/widget/customprogressindicator.dart';
 import 'package:bazaartech/widget/defaultappbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,6 +74,8 @@ class Search extends StatelessWidget {
                             style: const TextStyle(color: AppColors.black),
                             controller: controller.searchText,
                             keyboardType: TextInputType.text,
+                            onChanged: (value) =>
+                                controller.onSearchChanged(value),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(
                                   MediaQueryUtil.screenWidth / 34.33),
@@ -158,19 +164,113 @@ class Search extends StatelessWidget {
                 controller.updateSelectedIndex(index);
                 controller.categoryTitle = searchCategoryItem[index];
               },
-              children: List.generate(
-                searchCategoryItem.length,
-                (index) => Padding(
+              children: [
+                // Products Tab
+                Padding(
                   padding: EdgeInsets.only(
-                      left: MediaQueryUtil.screenWidth / 20.6,
-                      right: MediaQueryUtil.screenWidth / 20.6),
-                  child: const SingleChildScrollView(
-                    child: Column(
-                      children: [],
-                    ),
+                    left: MediaQueryUtil.screenWidth / 20.6,
+                    right: MediaQueryUtil.screenWidth / 20.6,
+                  ),
+                  child: GetBuilder<SearchCController>(
+                    builder: (controller) {
+                      if (controller.isLoading) {
+                        return const Center(
+                          child: CustomProgressIndicator(),
+                        );
+                      }
+                      if (controller.resultSearchProducts.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return GridView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        clipBehavior: Clip.none,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: MediaQueryUtil.screenHeight / 3.8,
+                          crossAxisSpacing: MediaQueryUtil.screenWidth / 27.46,
+                          mainAxisSpacing: MediaQueryUtil.screenHeight / 49.64,
+                        ),
+                        itemCount: controller.resultSearchProducts.length,
+                        itemBuilder: (context, productIndex) {
+                          return CustomProductCard(
+                            data: controller.resultSearchProducts[productIndex],
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
-              ),
+
+                // Store tab
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: MediaQueryUtil.screenWidth / 20.6,
+                    right: MediaQueryUtil.screenWidth / 20.6,
+                  ),
+                  child: GetBuilder<SearchCController>(
+                    builder: (controller) {
+                      if (controller.isLoading) {
+                        return const Center(
+                          child: CustomProgressIndicator(),
+                        );
+                      }
+                      if (controller.resultSearchStores.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return GridView.builder(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        clipBehavior: Clip.none,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisExtent: MediaQueryUtil.screenHeight / 3.8,
+                          crossAxisSpacing: MediaQueryUtil.screenWidth / 27.46,
+                          mainAxisSpacing: MediaQueryUtil.screenHeight / 49.64,
+                        ),
+                        itemCount: controller.resultSearchStores.length,
+                        itemBuilder: (context, storeIndex) {
+                          return CustomStoreCard(
+                            data: controller.resultSearchStores[storeIndex],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+
+                // Bazaar tab
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: MediaQueryUtil.screenWidth / 20.6,
+                    right: MediaQueryUtil.screenWidth / 20.6,
+                  ),
+                  child: GetBuilder<SearchCController>(
+                    builder: (controller) {
+                      if (controller.isLoading) {
+                        return const Center(
+                          child: CustomProgressIndicator(),
+                        );
+                      }
+                      if (controller.resultSearchBazaars.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return ListView.builder(
+                        itemCount: controller.resultSearchBazaars.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                bottom: MediaQueryUtil.screenHeight / 49.64),
+                            child: CustomBazaarCard(
+                                data: controller.resultSearchBazaars[index]),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         ],
