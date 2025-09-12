@@ -10,16 +10,23 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class StoreRepository {
-  Future<List<Store>> fetchStores(String name) async {
+  Future<List<Store>> fetchStores(
+      String name, String rating, List<int> categoryIds) async {
     final myService = Get.find<MyService>();
     final prefs = myService.sharedPreferences;
     final token = prefs.getString(SharedPreferencesKey.tokenKey);
 
-    final uri = Uri.parse(AppLink.getAllStores).replace(
-      queryParameters: {
-        'name': name,
-      },
+    final queryParams = {'name': name, 'rating': rating};
+
+    Uri uri = Uri.parse(AppLink.getAllStores).replace(
+      queryParameters: queryParams,
     );
+
+    if (categoryIds.isNotEmpty) {
+      final extra = categoryIds.map((id) => 'category_ids[]=$id').join('&');
+      final url = "$uri&$extra";
+      uri = Uri.parse(url);
+    }
 
     final response = await http.get(
       uri,

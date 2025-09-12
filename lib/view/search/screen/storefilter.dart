@@ -68,6 +68,7 @@ class StoreSearchFilter extends StatelessWidget {
                   ),
                   SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                   const CategoryStoreField(),
+                  SizedBox(height: MediaQueryUtil.screenHeight / 26.875),
                   Text(
                     'Location',
                     style: TextStyle(

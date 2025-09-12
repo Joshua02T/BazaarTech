@@ -28,7 +28,7 @@ class CategoryStoreField extends StatelessWidget {
                         AppColors.secondaryOrangeColor,
                       ),
                       label: Text(
-                        category,
+                        category.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(color: AppColors.black),
                       ),
@@ -55,13 +55,6 @@ class CategoryStoreField extends StatelessWidget {
               keyboardType: TextInputType.text,
               onChanged: (value) =>
                   controller.fetchStoreCategories('store', value.trim()),
-              onFieldSubmitted: (value) {
-                if (value.trim().isNotEmpty) {
-                  controller.selectedCategories.add(value.trim());
-                  controller.categoriesFieldController.clear();
-                  controller.update();
-                }
-              },
               decoration: InputDecoration(
                 contentPadding:
                     EdgeInsets.all(MediaQueryUtil.screenWidth / 34.33),
@@ -108,7 +101,7 @@ class CategoryStoreField extends StatelessWidget {
                     return ListTile(
                       title: Text(category.name),
                       onTap: () {
-                        controller.selectedCategories.add(category.name);
+                        controller.selectedCategories.add(category);
                         controller.categoriesFieldController.clear();
                         controller.searchCategories.clear();
                         controller.update();

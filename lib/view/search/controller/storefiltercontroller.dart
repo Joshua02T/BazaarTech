@@ -6,12 +6,16 @@ import 'package:get/get.dart';
 
 class StoreFilterController extends GetxController {
   int selectedStoreRating = 0;
-  List<String> selectedCategories = <String>[];
+  List<Category> selectedCategories = <Category>[];
   List<String> storeStoreLocation = <String>[];
   final TextEditingController categoriesFieldController =
       TextEditingController();
   final SearchRepo _searchRepo = SearchRepo();
   List<Category> searchCategories = <Category>[];
+
+  List<int> getSelectedCategoryIds() {
+    return selectedCategories.map((c) => c.id).toList();
+  }
 
   Future<void> fetchStoreCategories(String item, String body) async {
     try {

@@ -3,11 +3,12 @@ import 'package:bazaartech/model/categorymodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class BazaarFilterController extends GetxController {
-  int selectedIndexBazaarStatus = 1;
+  int? selectedIndexBazaarStatus;
   List<String> bazaarStoreLocation = <String>[];
-  List<String> selectedCategories = <String>[];
+  List<Category> selectedCategories = <Category>[];
   final TextEditingController categoriesFieldController =
       TextEditingController();
   final TextEditingController storesFieldController = TextEditingController();
@@ -15,6 +16,20 @@ class BazaarFilterController extends GetxController {
   final TextEditingController bazaarUpComingDate = TextEditingController();
   final SearchRepo _searchRepo = SearchRepo();
   List<Category> searchCategories = <Category>[];
+
+  List<int> getSelectedCategoryIds() {
+    return selectedCategories.map((c) => c.id).toList();
+  }
+
+  String getStatus() {
+    return selectedIndexBazaarStatus == 0
+        ? 'past'
+        : selectedIndexBazaarStatus == 1
+            ? 'ongoing'
+            : selectedIndexBazaarStatus == 2
+                ? 'upcoming'
+                : '';
+  }
 
   Future<void> fetchBazaarCategories(String item, String body) async {
     try {
@@ -39,37 +54,74 @@ class BazaarFilterController extends GetxController {
     bazaarUpComingDate.clear();
     selectedCategories.clear();
     bazaarStoreLocation.clear();
-    updateSelectedIndexBazaarStatus(1);
+    updateSelectedIndexBazaarStatus(4);
     update();
   }
 
   void pickUpComingDate(BuildContext context) async {
     final DateTime now = DateTime.now();
     final DateTime tomorrow = now.add(const Duration(days: 1));
-    final DateTime? picked = await showDatePicker(
+
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: tomorrow,
       firstDate: tomorrow,
       lastDate: DateTime(2100),
     );
-    if (picked != null) {
-      bazaarUpComingDate.text = "${picked.day}/${picked.month}/${picked.year}";
+
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        final DateTime fullDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        String formattedDate =
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(fullDateTime);
+
+        bazaarUpComingDate.text = formattedDate;
+      }
     }
   }
 
   void pickPastDate(BuildContext context) async {
     final DateTime now = DateTime.now();
-    final DateTime yesterday = now.subtract(const Duration(days: 1));
 
-    final DateTime? picked = await showDatePicker(
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: yesterday,
+      initialDate: now,
       firstDate: DateTime(1900),
-      lastDate: yesterday,
+      lastDate: now,
     );
 
-    if (picked != null) {
-      bazaarPastDate.text = "${picked.day}/${picked.month}/${picked.year}";
+    if (pickedDate != null) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        final DateTime fullDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        String formattedDate =
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(fullDateTime);
+
+        bazaarPastDate.text = formattedDate;
+      }
     }
   }
 }

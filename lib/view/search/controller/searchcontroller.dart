@@ -5,7 +5,9 @@ import 'package:bazaartech/core/repositories/storerepo.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
+import 'package:bazaartech/view/search/controller/bazaarfiltercontroller.dart';
 import 'package:bazaartech/view/search/controller/productfilercontroller.dart';
+import 'package:bazaartech/view/search/controller/storefiltercontroller.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,10 @@ class SearchCController extends GetxController {
   int selectedIndex = 0;
   final ProductFilterController productFilterController =
       Get.find<ProductFilterController>();
+  final StoreFilterController storeFilterController =
+      Get.find<StoreFilterController>();
+  final BazaarFilterController bazaarFilterController =
+      Get.find<BazaarFilterController>();
   TextEditingController? searchText;
   String categoryTitle = 'Products';
   final PageController pageController = PageController();
@@ -41,11 +47,12 @@ class SearchCController extends GetxController {
     }
   }
 
-  Future<void> searchForStores(String name) async {
+  Future<void> searchForStores(
+      String name, String rating, List<int> categoryIds) async {
     try {
       isLoading = true;
       update();
-      final stores = await _storeRepo.fetchStores(name);
+      final stores = await _storeRepo.fetchStores(name, rating, categoryIds);
       resultSearchStores.assignAll(stores);
     } catch (e) {
       ToastUtil.showToast('Failed to load stores, ${e.toString()}');
@@ -55,11 +62,13 @@ class SearchCController extends GetxController {
     }
   }
 
-  Future<void> searchForBazaars(String name) async {
+  Future<void> searchForBazaars(String name, String status, String startDate,
+      String lastDate, List<int> categoryIds) async {
     try {
       isLoading = true;
       update();
-      final bazaars = await _bazaarRepo.fetchBazaars(name);
+      final bazaars = await _bazaarRepo.fetchBazaars(
+          name, status, startDate, lastDate, categoryIds);
       resultSearchBazaars.assignAll(bazaars);
     } catch (e) {
       ToastUtil.showToast('Failed to load bazaars, ${e.toString()}');
@@ -88,14 +97,26 @@ class SearchCController extends GetxController {
         resultSearchStores.clear();
         update();
       } else {
-        searchForStores(value);
+        searchForStores(
+            value,
+            (storeFilterController.selectedStoreRating + 1).toString(),
+            storeFilterController.getSelectedCategoryIds());
       }
     } else {
       if (value.isEmpty) {
         resultSearchBazaars.clear();
         update();
       } else {
-        searchForBazaars(value);
+        searchForBazaars(
+            value,
+            bazaarFilterController.getStatus(),
+            bazaarFilterController.getStatus() == 'upcoming'
+                ? bazaarFilterController.bazaarUpComingDate.text
+                : '',
+            bazaarFilterController.getStatus() == 'past'
+                ? bazaarFilterController.bazaarPastDate.text
+                : '',
+            bazaarFilterController.getSelectedCategoryIds());
       }
     }
   }

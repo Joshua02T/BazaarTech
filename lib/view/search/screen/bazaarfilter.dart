@@ -60,7 +60,7 @@ class BazaarSearchFilter extends StatelessWidget {
                     builder: (controller) {
                       final selectedIndex =
                           controller.selectedIndexBazaarStatus;
-                      if (selectedIndex != 1) {
+                      if (selectedIndex == 0 || selectedIndex == 2) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -79,7 +79,9 @@ class BazaarSearchFilter extends StatelessWidget {
                               style: const TextStyle(color: AppColors.black),
                               controller: selectedIndex == 0
                                   ? controller.bazaarPastDate
-                                  : controller.bazaarUpComingDate,
+                                  : selectedIndex == 2
+                                      ? controller.bazaarUpComingDate
+                                      : null,
                               keyboardType: TextInputType.datetime,
                               readOnly: true,
                               decoration: InputDecoration(

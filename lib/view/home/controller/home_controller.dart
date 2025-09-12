@@ -32,10 +32,10 @@ class HomeController extends GetxController {
       final products = await productRepo.fetchProducts('', '', '', '', []);
       productCardItem.assignAll(products);
 
-      final stores = await storeRepo.fetchStores('');
+      final stores = await storeRepo.fetchStores('', '', []);
       storeCardItem.assignAll(stores);
 
-      final bazaars = await bazaarRepo.fetchBazaars('');
+      final bazaars = await bazaarRepo.fetchBazaars('', '', '', '', []);
       bazaarCardItem.assignAll(bazaars);
 
       final tempItems = [

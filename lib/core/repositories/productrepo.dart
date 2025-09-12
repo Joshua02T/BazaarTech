@@ -21,7 +21,6 @@ class ProductRepository {
     final prefs = myService.sharedPreferences;
     final token = prefs.getString(SharedPreferencesKey.tokenKey);
 
-    // Base query
     final queryParams = {
       'name': name,
       'min_rating': minRating,
@@ -29,15 +28,13 @@ class ProductRepository {
       'price_max': maxPrice,
     };
 
-    // Start building uri
-    var uri = Uri.parse(AppLink.getAllProducts).replace(
+    Uri uri = Uri.parse(AppLink.getAllProducts).replace(
       queryParameters: queryParams,
     );
 
-    // If categoryIds is not empty, append them manually
     if (categoryIds.isNotEmpty) {
       final extra = categoryIds.map((id) => 'category_ids[]=$id').join('&');
-      final url = uri.toString() + "&$extra";
+      final url = "$uri&$extra";
       uri = Uri.parse(url);
     }
 

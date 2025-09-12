@@ -28,7 +28,7 @@ class CategoryBazaarField extends StatelessWidget {
                         AppColors.secondaryOrangeColor,
                       ),
                       label: Text(
-                        category,
+                        category.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(color: AppColors.black),
                       ),
@@ -47,22 +47,10 @@ class CategoryBazaarField extends StatelessWidget {
 
             TextFormField(
               style: const TextStyle(color: AppColors.black),
-              validator: (value) {
-                return controller.selectedCategories.isEmpty
-                    ? 'Select one category at least!'
-                    : null;
-              },
               controller: controller.categoriesFieldController,
               keyboardType: TextInputType.text,
               onChanged: (value) =>
                   controller.fetchBazaarCategories('bazaar', value.trim()),
-              onFieldSubmitted: (value) {
-                if (value.trim().isNotEmpty) {
-                  controller.selectedCategories.add(value.trim());
-                  controller.categoriesFieldController.clear();
-                  controller.update();
-                }
-              },
               decoration: InputDecoration(
                 contentPadding:
                     EdgeInsets.all(MediaQueryUtil.screenWidth / 34.33),
@@ -111,7 +99,7 @@ class CategoryBazaarField extends StatelessWidget {
                     return ListTile(
                       title: Text(category.name),
                       onTap: () {
-                        controller.selectedCategories.add(category.name);
+                        controller.selectedCategories.add(category);
                         controller.categoriesFieldController.clear();
                         controller.searchCategories.clear();
                         controller.update();
