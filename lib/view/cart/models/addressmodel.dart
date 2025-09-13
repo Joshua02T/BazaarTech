@@ -5,17 +5,14 @@ class AddressModel {
   final String address;
   final double latitude;
   final double longitude;
-  bool isSelected;
 
-  AddressModel({
-    required this.id,
-    required this.place,
-    required this.number,
-    required this.address,
-    required this.latitude,
-    required this.longitude,
-    this.isSelected = false,
-  });
+  AddressModel(
+      {required this.id,
+      required this.place,
+      required this.number,
+      required this.address,
+      required this.latitude,
+      required this.longitude});
 
   AddressModel copyWith({
     String? id,
@@ -27,14 +24,12 @@ class AddressModel {
     bool? isSelected,
   }) {
     return AddressModel(
-      id: id ?? this.id,
-      place: place ?? this.place,
-      number: number ?? this.number,
-      address: address ?? this.address,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-      isSelected: isSelected ?? this.isSelected,
-    );
+        id: id ?? this.id,
+        place: place ?? this.place,
+        number: number ?? this.number,
+        address: address ?? this.address,
+        latitude: latitude ?? this.latitude,
+        longitude: longitude ?? this.longitude);
   }
 
   Map<String, dynamic> toJson() => {
@@ -43,8 +38,7 @@ class AddressModel {
         'number': number,
         'address': address,
         'latitude': latitude,
-        'longitude': longitude,
-        'isSelected': isSelected,
+        'longitude': longitude
       };
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {
@@ -55,7 +49,6 @@ class AddressModel {
       address: json['address'] ?? '',
       latitude: double.tryParse(json['latitude'].toString()) ?? 0.0,
       longitude: double.tryParse(json['longitude'].toString()) ?? 0.0,
-      isSelected: json['isSelected'] ?? false,
     );
   }
 }

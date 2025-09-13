@@ -2,9 +2,11 @@ import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/const_data/app_image.dart';
 import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
+import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/routes.dart';
 import 'package:bazaartech/helper/appconfig.dart';
 import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
+import 'package:bazaartech/view/home/controller/home_controller.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +132,8 @@ class CustomStoreProductCard extends StatelessWidget {
                                 fontSize: MediaQueryUtil.screenWidth / 41.2)),
                       ]),
                   GestureDetector(
-                      onTap: () => Get.find<CartController>().addToCart(data),
+                      onTap: () => Get.find<HomeController>().addToCart(data.id,
+                          isFromBazaar: Get.find<MyService>().isFromBazaar),
                       child: Container(
                         width: MediaQueryUtil.screenWidth / 13.73,
                         height: MediaQueryUtil.screenHeight / 28.13,

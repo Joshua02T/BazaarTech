@@ -5,11 +5,12 @@ import 'package:bazaartech/view/cart/models/cartitemmodel.dart';
 import 'package:bazaartech/view/cart/widgets/slidable.dart';
 import 'package:flutter/material.dart';
 
-class CartItem extends StatelessWidget {
+class CartItemContainer extends StatelessWidget {
   final String markerName;
-  final List<CartItemModel> products;
+  final List<CartItem> products;
 
-  const CartItem({super.key, required this.markerName, required this.products});
+  const CartItemContainer(
+      {super.key, required this.markerName, required this.products});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class CartItem extends StatelessWidget {
           shrinkWrap: true,
           itemCount: products.length,
           itemBuilder: (context, index) {
-            return SlidableCartCard(cartItemModel: products[index]);
+            return SlidableCartCard(cartItem: products[index]);
           },
         ),
         SizedBox(height: MediaQueryUtil.screenHeight / 26.375),

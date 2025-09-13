@@ -1,6 +1,8 @@
 import 'package:bazaartech/core/repositories/bazaarrepo.dart';
+import 'package:bazaartech/core/repositories/cartrepo.dart';
 import 'package:bazaartech/core/repositories/productrepo.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
+import 'package:bazaartech/view/cart/models/cartitemmodel.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
 import 'package:bazaartech/view/home/model/storemodel.dart';
@@ -12,17 +14,38 @@ class HomeController extends GetxController {
   final ProductRepository productRepo = ProductRepository();
   final StoreRepository storeRepo = StoreRepository();
   final BazaarRepository bazaarRepo = BazaarRepository();
+  final CartRepo cartRepo = CartRepo();
 
   final List<Product> productCardItem = <Product>[];
   final List<Store> storeCardItem = <Store>[];
   final List<Bazaar> bazaarCardItem = <Bazaar>[];
 
   bool isLoading = false;
+  bool isLoadingAddingToCart = false;
 
   int selectedIndex = 0;
   final PageController pageController = PageController();
 
   final List<dynamic> allItems = <dynamic>[];
+
+  Future<CartItem> addToCart(int productId, {String? isFromBazaar}) async {
+    try {
+      isLoadingAddingToCart = true;
+      update();
+
+      CartItem addedCartItem =
+          await cartRepo.addToCart(productId, isFromBazaar: isFromBazaar);
+
+      ToastUtil.showToast('Item added to cart');
+      return addedCartItem;
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+      throw Exception("Failed to add to cart: $e");
+    } finally {
+      isLoadingAddingToCart = false;
+      update();
+    }
+  }
 
   Future<void> loadInitialData() async {
     try {

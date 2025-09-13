@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MyService extends GetxService {
   late SharedPreferences sharedPreferences;
+  String? isFromBazaar;
 
   Future<MyService> init() async {
     sharedPreferences = await SharedPreferences.getInstance();

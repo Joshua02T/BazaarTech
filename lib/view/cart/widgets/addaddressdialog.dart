@@ -186,14 +186,12 @@ class _AddAddressDialogState extends State<AddAddressDialog> {
                   return;
                 }
                 final newAddress = AddressModel(
-                  id: "",
-                  place: placeController.text.trim(),
-                  number: numberController.text.trim(),
-                  address: locationAddress,
-                  latitude: selectedLocation!.latitude,
-                  longitude: selectedLocation!.longitude,
-                  isSelected: widget.isSelected ?? widget.isFirstAddress,
-                );
+                    id: "",
+                    place: placeController.text.trim(),
+                    number: numberController.text.trim(),
+                    address: locationAddress,
+                    latitude: selectedLocation!.latitude,
+                    longitude: selectedLocation!.longitude);
 
                 widget.onAdd(newAddress);
                 Get.back();

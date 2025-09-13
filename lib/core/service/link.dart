@@ -3,6 +3,14 @@ class AppLink {
 
   static String register = "$appRoot/register";
 
+  static String addToCart = "$appRoot/add";
+
+  static String getCartItmes = "$appRoot/";
+
+  static String decreseCartItemQuantity = "$appRoot/remove";
+
+  static String completePayment = "$appRoot/checkout";
+
   static String signin = "$appRoot/login";
 
   static String getAllProducts = "$appRoot/products";

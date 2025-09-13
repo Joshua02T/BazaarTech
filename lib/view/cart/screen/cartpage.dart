@@ -5,6 +5,7 @@ import 'package:bazaartech/view/cart/models/cartitemmodel.dart';
 import 'package:bazaartech/view/cart/widgets/cartappbar.dart';
 import 'package:bazaartech/view/cart/widgets/cartitem.dart';
 import 'package:bazaartech/view/cart/widgets/checkoutbutton.dart';
+import 'package:bazaartech/widget/customprogressindicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,7 +14,7 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CartController cartController = Get.find<CartController>();
+    final CartController cartController = Get.put(CartController());
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -21,30 +22,44 @@ class CartPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Obx(() {
+            child: GetBuilder<CartController>(builder: (controller) {
+              if (controller.isLoading) {
+                return const Center(child: CustomProgressIndicator());
+              }
               return cartController.uniqueMarkerNames.isEmpty
                   ? Center(
-                      child: Text('Empty!',
-                          style: TextStyle(
-                              fontSize: MediaQueryUtil.screenWidth / 25.75,
-                              color: AppColors.black60)))
+                      child: Text(
+                        'Empty!',
+                        style: TextStyle(
+                          fontSize: MediaQueryUtil.screenWidth / 25.75,
+                          color: AppColors.black60,
+                        ),
+                      ),
+                    )
                   : Padding(
                       padding: EdgeInsets.symmetric(
-                          vertical: MediaQueryUtil.screenHeight / 26.375,
-                          horizontal: MediaQueryUtil.screenWidth / 20.6),
-                      child: ListView.builder(
-                        clipBehavior: Clip.none,
-                        itemCount: cartController.uniqueMarkerNames.length,
-                        itemBuilder: (context, index) {
-                          String markerName =
-                              cartController.uniqueMarkerNames[index];
-                          List<CartItemModel> products =
-                              cartController.getProductsByMarker(markerName);
-                          return CartItem(
-                            markerName: markerName,
-                            products: products,
-                          );
+                        vertical: MediaQueryUtil.screenHeight / 26.375,
+                        horizontal: MediaQueryUtil.screenWidth / 20.6,
+                      ),
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await cartController.getCartItems();
                         },
+                        child: ListView.builder(
+                          clipBehavior: Clip.none,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: cartController.uniqueMarkerNames.length,
+                          itemBuilder: (context, index) {
+                            String markerName =
+                                cartController.uniqueMarkerNames[index];
+                            List<CartItem> products =
+                                cartController.getProductsByMarker(markerName);
+                            return CartItemContainer(
+                              markerName: markerName,
+                              products: products,
+                            );
+                          },
+                        ),
                       ),
                     );
             }),

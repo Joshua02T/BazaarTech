@@ -1,60 +1,99 @@
+import 'package:bazaartech/core/repositories/cartrepo.dart';
 import 'package:bazaartech/view/cart/models/cartitemmodel.dart';
 import 'package:bazaartech/widget/customtoast.dart';
 import 'package:get/get.dart';
-import 'package:bazaartech/view/home/model/productmodel.dart';
 
 class CartController extends GetxController {
-  final RxList<CartItemModel> cartItems = <CartItemModel>[].obs;
-  final RxList<String> uniqueMarkerNames = <String>[].obs;
+  final List<CartItem> cartItems = <CartItem>[];
+  final List<String> uniqueMarkerNames = <String>[];
+  final CartRepo cartRepo = CartRepo();
+  bool isLoading = false;
 
-  void addToCart(Product product) {
-    var existingItem =
-        cartItems.firstWhereOrNull((item) => item.product.id == product.id);
-    if (existingItem != null) {
-      existingItem.quantity++;
-    } else {
-      cartItems.add(CartItemModel(product: product));
-      _updateUniqueMarkers();
-    }
-    cartItems.refresh();
-    ToastUtil.showToast('Item added to cart!');
-  }
-
-  void removeFromCart(CartItemModel item) {
-    cartItems.remove(item);
-    _updateUniqueMarkers();
-    update();
-    ToastUtil.showToast('Item removed from cart!');
-  }
-
-  void increaseQuantity(CartItemModel item) {
-    item.quantity++;
-    update();
-    cartItems.refresh();
-  }
-
-  void decreaseQuantity(CartItemModel item) {
-    if (item.quantity > 1) {
-      item.quantity--;
+  Future<void> getCartItems() async {
+    try {
+      isLoading = true;
       update();
-      cartItems.refresh();
+      final cartItemsFetched = await cartRepo.fetchCartItems();
+      cartItems.assignAll(cartItemsFetched);
+      _updateUniqueMarkers();
+    } catch (e) {
+      ToastUtil.showToast('Failed to load cart items, ${e.toString()}');
+    } finally {
+      isLoading = false;
+      update();
+    }
+  }
+
+  Future<void> increaseQuantity(CartItem item) async {
+    try {
+      final CartItem updatedCartItem = await cartRepo.addToCart(item.product.id,
+          isFromBazaar: item.bazaarId?.toString());
+      int index =
+          cartItems.indexWhere((c) => c.id.toString() == item.id.toString());
+      if (index != -1) {
+        cartItems[index] = updatedCartItem;
+        ToastUtil.showToast('Quantity increased');
+      }
+      update();
+    } catch (e) {
+      ToastUtil.showToast(e.toString());
+    }
+  }
+
+  Future<void> decreaseQuantity(CartItem item) async {
+    try {
+      if (item.quantity > 1) {
+        final CartItem updatedCartItem =
+            await cartRepo.decreaseCartQuantity(item.product.id.toString());
+        int index =
+            cartItems.indexWhere((c) => c.id.toString() == item.id.toString());
+        if (index != -1) {
+          cartItems[index] = updatedCartItem;
+          ToastUtil.showToast('Removed quantity');
+        }
+        update();
+      }
+    } catch (e) {
+      ToastUtil.showToast(e.toString());
     }
   }
 
   void _updateUniqueMarkers() {
     uniqueMarkerNames.assignAll(
         cartItems.map((item) => item.product.markerName).toSet().toList());
+    update();
   }
 
-  List<CartItemModel> getProductsByMarker(String markerName) {
+  List<CartItem> getProductsByMarker(String markerName) {
     return cartItems.where((e) => e.product.markerName == markerName).toList();
+  }
+
+  Future<void> removeFromCart(String id) async {
+    try {
+      final success = await cartRepo.deleteCartItem(id);
+
+      if (success) {
+        cartItems.removeWhere((c) => c.product.id.toString() == id);
+        _updateUniqueMarkers();
+        ToastUtil.showToast("Cart deleted successfully");
+        update();
+      }
+    } catch (e) {
+      ToastUtil.showToast("Failed to delete cart: $e");
+    }
   }
 
   double getSubTotalPrice() {
     double subtotal = 0;
-    for (CartItemModel item in cartItems) {
+    for (CartItem item in cartItems) {
       subtotal += item.product.price * item.quantity;
     }
     return subtotal;
+  }
+
+  @override
+  void onInit() {
+    getCartItems();
+    super.onInit();
   }
 }

@@ -104,7 +104,8 @@ class BazaarCommentsController extends GetxController {
     try {
       isLoadingAddingComment = true;
       update();
-      final updatedComment = await _commentRepo.editComment(id, body, rating);
+      final Comment updatedComment =
+          await _commentRepo.editComment(id, body, rating);
 
       int index = allComments.indexWhere((c) => c.id.toString() == id);
       if (index != -1) {

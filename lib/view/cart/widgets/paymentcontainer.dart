@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 class PaymentContainer extends StatelessWidget {
   final String image;
   final String title;
-  final String paymentMethodValue;
+  final int paymentMethodValue;
 
   const PaymentContainer({
     super.key,

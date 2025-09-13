@@ -1,7 +1,6 @@
 import 'package:bazaartech/core/const_data/app_colors.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/view/account/controller/accountcontroller.dart';
-import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
 import 'package:bazaartech/view/favorite/screen/favorite.dart';
 import 'package:bazaartech/view/home/screen/home_screen.dart';
 import 'package:bazaartech/view/notifications/screen/notifications.dart';
@@ -20,7 +19,6 @@ class MainPage extends StatelessWidget {
     NavBarController controller = Get.put(NavBarController(), permanent: true);
     MediaQueryUtil.init(context);
     Get.put(AccountController());
-    Get.put(CartController());
 
     return Obx(() => Scaffold(
           backgroundColor: AppColors.backgroundColor,

@@ -55,7 +55,7 @@ class CheckoutButton extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${totalPrice.toInt()}',
+                              text: '$totalPrice',
                               style: TextStyle(
                                 fontSize: MediaQueryUtil.screenWidth / 25.75,
                                 color: AppColors.primaryFontColor,
@@ -72,7 +72,7 @@ class CheckoutButton extends StatelessWidget {
               const Divider(),
               CustomCartButton(
                   text: 'Checkout',
-                  onPressed: () {
+                  onPressed: () async {
                     if (cartController.uniqueMarkerNames.isNotEmpty) {
                       Get.toNamed(Routes.checkoutPage);
                     } else {

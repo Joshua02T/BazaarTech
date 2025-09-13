@@ -7,6 +7,7 @@ import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
 import 'package:bazaartech/view/cart/controller/locationpicker.dart';
 import 'package:bazaartech/view/cart/models/addressmodel.dart';
 import 'package:bazaartech/view/cart/widgets/addaddressdialog.dart';
+import 'package:bazaartech/widget/customtoast.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -18,19 +19,48 @@ class CheckoutController extends GetxController {
   double deliveryfee = 40;
   double taxes = 4;
   String addressToDeliver = '';
-  String paymentMethod = 'Syriatel Cash';
+  int paymentMethod = 2;
 
   void selectAddress(String addressId) {
-    for (var addr in addressList) {
-      addr.isSelected = addr.id == addressId;
-    }
     addressToDeliver = addressId;
     update();
   }
 
-  void changePaymentMethod(String newPaymentMethod) {
+  void changePaymentMethod(int newPaymentMethod) {
     paymentMethod = newPaymentMethod;
     update();
+  }
+
+  Future<bool> completePaymentLink(
+      String addressId, String paymentMethodId) async {
+    try {
+      final myService = Get.find<MyService>();
+      final prefs = myService.sharedPreferences;
+      final token = prefs.getString(SharedPreferencesKey.tokenKey);
+
+      final response =
+          await http.post(Uri.parse(AppLink.completePayment), headers: {
+        "Accept": "application/json",
+        "Authorization": "Bearer $token",
+      }, body: {
+        'address_id': addressId,
+        'payment_method_id': paymentMethodId
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        if (data["success"] == true) {
+          return true;
+        } else {
+          throw Exception(data["message"] ?? "Failed to complete payment");
+        }
+      } else {
+        throw Exception("Something went wrong (${response.statusCode})");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
+      return false;
+    }
   }
 
   Future<void> deleteAddress(String id) async {
@@ -49,9 +79,10 @@ class CheckoutController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         addressList.removeWhere((addr) => addr.id == id);
+
         update();
         Get.back();
-        Get.snackbar("Success", "Address deleted successfully");
+        ToastUtil.showToast("Address deleted successfully");
       } else {
         Get.snackbar(
             "Error", "Failed to delete address (${response.statusCode})");
@@ -88,12 +119,8 @@ class CheckoutController extends GetxController {
           final AddressModel createdAddress =
               AddressModel.fromJson(data["data"]);
 
-          if (addressList.isEmpty) {
-            createdAddress.isSelected = true;
-            addressToDeliver = createdAddress.id;
-          }
-
           addressList.add(createdAddress);
+
           update();
         } else {
           Get.snackbar("Error", data["message"] ?? "Failed to create address");
@@ -183,6 +210,7 @@ class CheckoutController extends GetxController {
           final List list = data['data'];
           addressList
               .assignAll(list.map((e) => AddressModel.fromJson(e)).toList());
+
           update();
         } else {
           Get.snackbar("Error", data['message'] ?? "Something went wrong");

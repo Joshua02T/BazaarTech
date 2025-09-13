@@ -56,7 +56,7 @@ class CompletePaymentButton extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${totalPrice.toInt()}',
+                              text: '$totalPrice',
                               style: TextStyle(
                                 fontSize: MediaQueryUtil.screenWidth / 25.75,
                                 color: AppColors.primaryFontColor,
@@ -95,7 +95,7 @@ class CompletePaymentButton extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${checkoutController.deliveryfee.toInt()}',
+                              text: '${checkoutController.deliveryfee}',
                               style: TextStyle(
                                 fontSize: MediaQueryUtil.screenWidth / 25.75,
                                 color: AppColors.primaryFontColor,
@@ -191,11 +191,18 @@ class CompletePaymentButton extends StatelessWidget {
               const Divider(),
               CustomCartButton(
                   text: 'Complete Payment',
-                  onPressed: () {
-                    if (checkoutController.addressList.isNotEmpty) {
-                      Get.toNamed(Routes.confirmationPage);
+                  onPressed: () async {
+                    if (checkoutController.addressList.isNotEmpty &&
+                        checkoutController.addressToDeliver != '') {
+                      if (await checkoutController.completePaymentLink(
+                          checkoutController.addressToDeliver,
+                          checkoutController.paymentMethod.toString())) {
+                        print(checkoutController.addressToDeliver);
+                        print(checkoutController.paymentMethod.toString());
+                        Get.toNamed(Routes.confirmationPage);
+                      }
                     } else {
-                      ToastUtil.showToast('Please add your address first');
+                      ToastUtil.showToast('Please select address first');
                     }
                   })
             ],

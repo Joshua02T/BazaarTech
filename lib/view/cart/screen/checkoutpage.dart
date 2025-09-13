@@ -54,7 +54,8 @@ class CheckoutPage extends StatelessWidget {
                                 address: addr.address,
                                 latitude: addr.latitude,
                                 longitude: addr.longitude,
-                                isSelected: addr.isSelected,
+                                isSelected:
+                                    addr.id == controller.addressToDeliver,
                                 addressValue: addr.id,
                                 onSelect: () =>
                                     controller.selectAddress(addr.id),
@@ -106,11 +107,11 @@ class CheckoutPage extends StatelessWidget {
                   PaymentContainer(
                     image: AppImages.syriatelIcon,
                     title: 'Syriatel Cash',
-                    paymentMethodValue: 'Syriatel Cash',
+                    paymentMethodValue: 2,
                   ),
                   SizedBox(height: MediaQueryUtil.screenHeight / 105.5),
                   PaymentContainer(
-                    paymentMethodValue: 'Mtn Mobile Money',
+                    paymentMethodValue: 1,
                     image: AppImages.mtnIcon,
                     title: 'Mtn Mobile Money',
                   ),
