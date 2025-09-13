@@ -78,10 +78,14 @@ class StoreSearchFilter extends StatelessWidget {
                   ),
                   SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                   CustomLocationField(
-                      stores: controller.storeStoreLocation,
-                      locationController: controller.storesFieldController,
-                      onFieldSubmitted: (value) {},
-                      onDeleted: (value) {})
+                      controllerKind: 'store',
+                      locations: controller.itemLocation,
+                      locationController: controller.locationsFieldController,
+                      onFieldSubmitted: (value) {
+                        controller.itemLocation.add(value.trim());
+                        controller.locationsFieldController.clear();
+                        controller.update();
+                      })
                 ],
               ),
             ),

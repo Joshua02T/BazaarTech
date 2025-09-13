@@ -73,8 +73,6 @@ class ProductSearchFilter extends StatelessWidget {
                       Expanded(
                         child: TextFormField(
                           style: const TextStyle(color: AppColors.black),
-                          validator: (value) =>
-                              controller.validateMinPrice(value),
                           controller: controller.minPrice,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -107,8 +105,6 @@ class ProductSearchFilter extends StatelessWidget {
                       Expanded(
                         child: TextFormField(
                           style: const TextStyle(color: AppColors.black),
-                          validator: (value) =>
-                              controller.validateMaxPrice(value),
                           controller: controller.maxPrice,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
@@ -151,7 +147,7 @@ class ProductSearchFilter extends StatelessWidget {
                   const CategoryProductField(),
                   SizedBox(height: MediaQueryUtil.screenHeight / 26.875),
                   Text(
-                    'Store Location',
+                    'Locations',
                     style: TextStyle(
                       fontSize: MediaQueryUtil.screenWidth / 25.75,
                       color: AppColors.black,
@@ -159,10 +155,14 @@ class ProductSearchFilter extends StatelessWidget {
                   ),
                   SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                   CustomLocationField(
-                      stores: controller.productStoreLocation,
-                      locationController: controller.storesFieldController,
-                      onDeleted: (value) {},
-                      onFieldSubmitted: (value) {})
+                      controllerKind: 'product',
+                      locations: controller.itemLocation,
+                      locationController: controller.locationsFieldController,
+                      onFieldSubmitted: (value) {
+                        controller.itemLocation.add(value.trim());
+                        controller.locationsFieldController.clear();
+                        controller.update();
+                      })
                 ],
               ),
             ),

@@ -109,7 +109,7 @@ class Search extends StatelessWidget {
                                   minHeight:
                                       MediaQueryUtil.screenHeight / 42.2),
                               hintText:
-                                  '${controller.categoryTitle.substring(0, controller.categoryTitle.length - 1)} Name',
+                                  '${controller.categoryTitle.substring(0, controller.categoryTitle.length - 1)} name',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     MediaQueryUtil.screenWidth / 51.5),

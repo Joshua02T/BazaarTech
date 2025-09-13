@@ -10,8 +10,13 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class BazaarRepository {
-  Future<List<Bazaar>> fetchBazaars(String name, String status,
-      String startDate, String lastDate, List<int> categoryIds) async {
+  Future<List<Bazaar>> fetchBazaars(
+      String name,
+      String status,
+      String startDate,
+      String lastDate,
+      List<int> categoryIds,
+      List<String> locations) async {
     final myService = Get.find<MyService>();
     final prefs = myService.sharedPreferences;
     final token = prefs.getString(SharedPreferencesKey.tokenKey);
@@ -28,6 +33,12 @@ class BazaarRepository {
 
     if (categoryIds.isNotEmpty) {
       final extra = categoryIds.map((id) => 'category_ids[]=$id').join('&');
+      final url = "$uri&$extra";
+      uri = Uri.parse(url);
+    }
+
+    if (locations.isNotEmpty) {
+      final extra = locations.map((location) => 'cities[]=$location').join('&');
       final url = "$uri&$extra";
       uri = Uri.parse(url);
     }

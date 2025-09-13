@@ -7,11 +7,12 @@ import 'package:intl/intl.dart';
 
 class BazaarFilterController extends GetxController {
   int? selectedIndexBazaarStatus;
-  List<String> bazaarStoreLocation = <String>[];
+  List<String> itemLocation = <String>[];
   List<Category> selectedCategories = <Category>[];
   final TextEditingController categoriesFieldController =
       TextEditingController();
-  final TextEditingController storesFieldController = TextEditingController();
+  final TextEditingController locationsFieldController =
+      TextEditingController();
   final TextEditingController bazaarPastDate = TextEditingController();
   final TextEditingController bazaarUpComingDate = TextEditingController();
   final SearchRepo _searchRepo = SearchRepo();
@@ -53,7 +54,7 @@ class BazaarFilterController extends GetxController {
     bazaarPastDate.clear();
     bazaarUpComingDate.clear();
     selectedCategories.clear();
-    bazaarStoreLocation.clear();
+    itemLocation.clear();
     updateSelectedIndexBazaarStatus(4);
     update();
   }

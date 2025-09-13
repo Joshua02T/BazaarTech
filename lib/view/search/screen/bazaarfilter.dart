@@ -137,10 +137,14 @@ class BazaarSearchFilter extends StatelessWidget {
                   ),
                   SizedBox(height: MediaQueryUtil.screenHeight / 52.75),
                   CustomLocationField(
-                      stores: controller.bazaarStoreLocation,
-                      locationController: controller.storesFieldController,
-                      onFieldSubmitted: (value) {},
-                      onDeleted: (value) {})
+                      controllerKind: 'bazaar',
+                      locations: controller.itemLocation,
+                      locationController: controller.locationsFieldController,
+                      onFieldSubmitted: (value) {
+                        controller.itemLocation.add(value.trim());
+                        controller.locationsFieldController.clear();
+                        controller.update();
+                      })
                 ],
               ),
             ),

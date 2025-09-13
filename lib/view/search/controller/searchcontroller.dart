@@ -1,6 +1,5 @@
 import 'package:bazaartech/core/repositories/bazaarrepo.dart';
 import 'package:bazaartech/core/repositories/productrepo.dart';
-import 'package:bazaartech/core/repositories/searchrepo.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
 import 'package:bazaartech/view/home/model/bazaarmodel.dart';
 import 'package:bazaartech/view/home/model/productmodel.dart';
@@ -32,12 +31,12 @@ class SearchCController extends GetxController {
   bool isLoading = false;
 
   Future<void> searchForProducts(String name, String minRating, String minPrice,
-      String maxPrice, List<int> categoryIds) async {
+      String maxPrice, List<int> categoryIds, List<String> locations) async {
     try {
       isLoading = true;
       update();
       final products = await _productRepo.fetchProducts(
-          name, minRating, minPrice, maxPrice, categoryIds);
+          name, minRating, minPrice, maxPrice, categoryIds, locations);
       resultSearchProducts.assignAll(products);
     } catch (e) {
       ToastUtil.showToast('Failed to load products, ${e.toString()}');
@@ -47,12 +46,13 @@ class SearchCController extends GetxController {
     }
   }
 
-  Future<void> searchForStores(
-      String name, String rating, List<int> categoryIds) async {
+  Future<void> searchForStores(String name, String rating,
+      List<int> categoryIds, List<String> locations) async {
     try {
       isLoading = true;
       update();
-      final stores = await _storeRepo.fetchStores(name, rating, categoryIds);
+      final stores =
+          await _storeRepo.fetchStores(name, rating, categoryIds, locations);
       resultSearchStores.assignAll(stores);
     } catch (e) {
       ToastUtil.showToast('Failed to load stores, ${e.toString()}');
@@ -63,12 +63,12 @@ class SearchCController extends GetxController {
   }
 
   Future<void> searchForBazaars(String name, String status, String startDate,
-      String lastDate, List<int> categoryIds) async {
+      String lastDate, List<int> categoryIds, List<String> locations) async {
     try {
       isLoading = true;
       update();
       final bazaars = await _bazaarRepo.fetchBazaars(
-          name, status, startDate, lastDate, categoryIds);
+          name, status, startDate, lastDate, categoryIds, locations);
       resultSearchBazaars.assignAll(bazaars);
     } catch (e) {
       ToastUtil.showToast('Failed to load bazaars, ${e.toString()}');
@@ -85,12 +85,12 @@ class SearchCController extends GetxController {
         update();
       } else {
         searchForProducts(
-          value,
-          (productFilterController.selectedProductRating + 1).toString(),
-          productFilterController.minPrice.text,
-          productFilterController.maxPrice.text,
-          productFilterController.getSelectedCategoryIds(),
-        );
+            value,
+            (productFilterController.selectedProductRating + 1).toString(),
+            productFilterController.minPrice.text,
+            productFilterController.maxPrice.text,
+            productFilterController.getSelectedCategoryIds(),
+            productFilterController.itemLocation);
       }
     } else if (selectedIndex == 1) {
       if (value.isEmpty) {
@@ -100,7 +100,8 @@ class SearchCController extends GetxController {
         searchForStores(
             value,
             (storeFilterController.selectedStoreRating + 1).toString(),
-            storeFilterController.getSelectedCategoryIds());
+            storeFilterController.getSelectedCategoryIds(),
+            storeFilterController.itemLocation);
       }
     } else {
       if (value.isEmpty) {
@@ -116,20 +117,21 @@ class SearchCController extends GetxController {
             bazaarFilterController.getStatus() == 'past'
                 ? bazaarFilterController.bazaarPastDate.text
                 : '',
-            bazaarFilterController.getSelectedCategoryIds());
+            bazaarFilterController.getSelectedCategoryIds(),
+            storeFilterController.itemLocation);
       }
     }
+  }
+
+  void updateSelectedIndex(int index) {
+    selectedIndex = index;
+    update();
   }
 
   @override
   void onInit() {
     searchText = TextEditingController();
     super.onInit();
-  }
-
-  void updateSelectedIndex(int index) {
-    selectedIndex = index;
-    update();
   }
 
   @override

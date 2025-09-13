@@ -7,8 +7,10 @@ import 'package:get/get.dart';
 class StoreFilterController extends GetxController {
   int selectedStoreRating = 0;
   List<Category> selectedCategories = <Category>[];
-  List<String> storeStoreLocation = <String>[];
+  List<String> itemLocation = <String>[];
   final TextEditingController categoriesFieldController =
+      TextEditingController();
+  final TextEditingController locationsFieldController =
       TextEditingController();
   final SearchRepo _searchRepo = SearchRepo();
   List<Category> searchCategories = <Category>[];
@@ -38,7 +40,8 @@ class StoreFilterController extends GetxController {
 
   void resetDefaultsStoreFilter() {
     selectedCategories.clear();
-    storeStoreLocation.clear();
+    itemLocation.clear();
+    locationsFieldController.clear();
     updateSelectedStoreRating(0);
     update();
   }
