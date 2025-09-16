@@ -13,6 +13,7 @@ class AppImages {
   static String productCart = "assets/images/productCart.png";
 //icons
   static String appIcon = "assets/icons/appIcon.png";
+  static String orderIcon = "assets/icons/ordericon.png";
   static String deleteIAccountIcon = "assets/icons/deleteIAccountIcon.png";
   static String logoutIcon = "assets/icons/logoutIcon.png";
   static String confirmedIcon = "assets/icons/confirmedIcon.png";

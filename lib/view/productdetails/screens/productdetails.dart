@@ -351,13 +351,7 @@ class ProductDetails extends StatelessWidget {
                                               color: AppColors.white)))),
                               SizedBox(
                                   width: MediaQueryUtil.screenWidth / 25.75),
-                              FavIcon(
-                                  isAddedTofavorite:
-                                      Get.find<ProductDetailsController>()
-                                          .product!
-                                          .isFavorite,
-                                  kind: 'product',
-                                  id: id),
+                              FavIcon(kind: 'product', id: id),
                             ]))
                       ]));
                 },

@@ -112,13 +112,7 @@ class BazaarDetails extends StatelessWidget {
                                 fontFamily: FontFamily.russoOne,
                               ),
                             ),
-                            FavIcon(
-                                isAddedTofavorite:
-                                    Get.find<BazaarDetailsController>()
-                                        .bazaar!
-                                        .isFavorite,
-                                kind: 'bazaar',
-                                id: id),
+                            FavIcon(kind: 'bazaar', id: id),
                           ],
                         ),
                         Text(

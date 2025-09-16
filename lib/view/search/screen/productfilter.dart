@@ -23,7 +23,7 @@ class ProductSearchFilter extends StatelessWidget {
               padding: EdgeInsets.only(
                 right: MediaQueryUtil.screenWidth / 20.6,
                 left: MediaQueryUtil.screenWidth / 20.6,
-                bottom: 200,
+                bottom: MediaQueryUtil.screenHeight / 2.81,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

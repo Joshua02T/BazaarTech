@@ -36,6 +36,12 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
               Row(
                 children: [
                   GestureDetector(
+                    onTap: () => Get.toNamed(Routes.orderscreen),
+                    child: Image.asset(AppImages.orderIcon,
+                        width: MediaQueryUtil.screenWidth / 12),
+                  ),
+                  SizedBox(width: MediaQueryUtil.screenWidth / 28.41),
+                  GestureDetector(
                     onTap: () => Get.toNamed(Routes.cartPage),
                     child: Image.asset(AppImages.bagIcon,
                         width: MediaQueryUtil.screenWidth / 18.72),

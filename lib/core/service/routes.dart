@@ -7,6 +7,7 @@ class Routes {
   static String settings = "/settings";
   static String helpCenter = "/helpcenter";
   static String recoverpass = "/recoverpass";
+  static String orderscreen = "/orderscreen";
   static String aboutApp = "/aboutapp";
   static String reportAProblem = "/reportaproblem";
   static String privacy = "/privacy";

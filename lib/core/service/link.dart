@@ -7,6 +7,10 @@ class AppLink {
 
   static String getCartItmes = "$appRoot/";
 
+  static String fetchFavorite = "$appRoot/favorite";
+
+  static String fetchOrders = "$appRoot/orders";
+
   static String decreseCartItemQuantity = "$appRoot/remove";
 
   static String completePayment = "$appRoot/checkout";

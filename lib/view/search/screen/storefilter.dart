@@ -21,8 +21,10 @@ class StoreSearchFilter extends StatelessWidget {
         Expanded(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: MediaQueryUtil.screenWidth / 20.6,
+              padding: EdgeInsets.only(
+                right: MediaQueryUtil.screenWidth / 20.6,
+                left: MediaQueryUtil.screenWidth / 20.6,
+                bottom: MediaQueryUtil.screenHeight / 2.81,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

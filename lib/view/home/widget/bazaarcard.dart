@@ -126,10 +126,7 @@ class CustomBazaarCard extends StatelessWidget {
               child: SizedBox(
                 width: MediaQueryUtil.screenWidth / 14.71,
                 height: MediaQueryUtil.screenHeight / 30.14,
-                child: CardFavIcon(
-                    kind: 'bazaar',
-                    isAddedTofavorite: data.isFavorite,
-                    id: data.id.toString()),
+                child: CardFavIcon(kind: 'bazaar', id: data.id.toString()),
               ),
             ),
           ],

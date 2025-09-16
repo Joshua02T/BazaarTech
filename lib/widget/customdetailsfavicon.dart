@@ -7,45 +7,50 @@ import 'package:get/get.dart';
 
 class FavIcon extends StatelessWidget {
   final String kind;
-  final bool isAddedTofavorite;
   final String id;
-  const FavIcon(
-      {super.key,
-      required this.id,
-      required this.kind,
-      required this.isAddedTofavorite});
+
+  const FavIcon({
+    super.key,
+    required this.id,
+    required this.kind,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(builder: (controller) {
-      return SizedBox(
+    return GetBuilder<HomeController>(
+      builder: (controller) {
+        final isLoading = controller.isLoadingAddingToFavorite[id] == true;
+        final isFav = controller.getIsFavorite(kind, id);
+
+        return SizedBox(
           width: MediaQueryUtil.screenWidth / 10.04,
           height: MediaQueryUtil.screenHeight / 20.58,
           child: MaterialButton(
-              onPressed: () async {
-                await controller.addToFavorite(kind, id);
-              },
-              height: MediaQueryUtil.screenHeight / 20.58,
-              padding: EdgeInsets.zero,
-              color: AppColors.primaryOrangeColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(MediaQueryUtil.screenWidth / 51.5)),
-              child: controller.isLoadingAddingToFavorite[id] == true
-                  ? SizedBox(
-                      width: MediaQueryUtil.screenWidth / 20,
-                      height: MediaQueryUtil.screenWidth / 20,
-                      child: const CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.white,
-                        backgroundColor: Colors.transparent,
-                      ),
-                    )
-                  : Image.asset(
-                      isAddedTofavorite
-                          ? AppImages.filledHeart
-                          : AppImages.heart,
-                      width: MediaQueryUtil.screenWidth / 17.16)));
-    });
+            onPressed: () => controller.addOrRemoveFavorite(kind, id),
+            height: MediaQueryUtil.screenHeight / 20.58,
+            padding: EdgeInsets.zero,
+            color: AppColors.primaryOrangeColor,
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(MediaQueryUtil.screenWidth / 51.5),
+            ),
+            child: isLoading
+                ? SizedBox(
+                    width: MediaQueryUtil.screenWidth / 20,
+                    height: MediaQueryUtil.screenWidth / 20,
+                    child: const CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppColors.white,
+                      backgroundColor: Colors.transparent,
+                    ),
+                  )
+                : Image.asset(
+                    isFav ? AppImages.filledHeart : AppImages.heart,
+                    width: MediaQueryUtil.screenWidth / 17.16,
+                  ),
+          ),
+        );
+      },
+    );
   }
 }

@@ -80,35 +80,48 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<bool> addToFavorite(String kind, String id) async {
+  Future<bool> addOrRemoveFavorite(String kind, String id) async {
+    isLoadingAddingToFavorite[id] = true;
+    update();
+
     try {
-      isLoadingAddingToFavorite[id] = true;
-      update();
-      await favoriteRepo.addToFavorite(kind, id);
+      final bool newState = await favoriteRepo.toggleFavorite(kind, id);
+
       if (kind == 'product') {
-        int index = productCardItem.indexWhere((c) => c.id.toString() == id);
-        if (index != -1) {
-          productCardItem[index].isFavorite = true;
-        }
+        final index = productCardItem.indexWhere((c) => c.id.toString() == id);
+        if (index != -1) productCardItem[index].isFavorite = newState;
       } else if (kind == 'store') {
-        int index = storeCardItem.indexWhere((c) => c.id.toString() == id);
-        if (index != -1) {
-          storeCardItem[index].isFavorite = true;
-        }
+        final index = storeCardItem.indexWhere((c) => c.id.toString() == id);
+        if (index != -1) storeCardItem[index].isFavorite = newState;
       } else {
-        int index = bazaarCardItem.indexWhere((c) => c.id.toString() == id);
-        if (index != -1) {
-          bazaarCardItem[index].isFavorite = true;
-        }
+        final index = bazaarCardItem.indexWhere((c) => c.id.toString() == id);
+        if (index != -1) bazaarCardItem[index].isFavorite = newState;
       }
 
-      ToastUtil.showToast('Added to Favorite!');
+      ToastUtil.showToast(
+        newState ? 'Added to Favorite!' : 'Removed from Favorite!',
+      );
+
       return true;
     } catch (e) {
+      ToastUtil.showToast('Failed to update favorite');
       return false;
     } finally {
       isLoadingAddingToFavorite[id] = false;
       update();
+    }
+  }
+
+  bool getIsFavorite(String kind, String id) {
+    if (kind == 'product') {
+      final i = productCardItem.indexWhere((c) => c.id.toString() == id);
+      return productCardItem[i].isFavorite;
+    } else if (kind == 'store') {
+      final i = storeCardItem.indexWhere((c) => c.id.toString() == id);
+      return storeCardItem[i].isFavorite;
+    } else {
+      final i = bazaarCardItem.indexWhere((c) => c.id.toString() == id);
+      return bazaarCardItem[i].isFavorite;
     }
   }
 
@@ -117,7 +130,7 @@ class HomeController extends GetxController {
       await loadInitialData();
       updateSelectedIndex(0);
     } catch (e) {
-      ToastUtil.showToast("Couldn't refresh products");
+      ToastUtil.showToast("Couldn't refresh data");
     }
   }
 
