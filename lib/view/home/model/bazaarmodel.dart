@@ -10,6 +10,7 @@ class Bazaar {
   final String details;
   final String firstDate;
   int userRate;
+  bool isFavorite;
   final String lastDate;
   final String address;
   final String status;
@@ -25,6 +26,7 @@ class Bazaar {
       required this.details,
       required this.firstDate,
       this.userRate = 0,
+      required this.isFavorite,
       required this.lastDate,
       required this.status,
       required this.comments,
@@ -44,6 +46,7 @@ class Bazaar {
         address: json['address'] ?? '',
         image: json['image'] ?? '',
         name: json['name'] ?? '',
+        isFavorite: json['isFavorite'],
         details: json['details'] ?? '',
         firstDate: json['firstDate'] ?? '',
         lastDate: json['lastDate'] ?? '',

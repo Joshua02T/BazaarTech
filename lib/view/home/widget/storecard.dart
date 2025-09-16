@@ -109,7 +109,10 @@ class CustomStoreCard extends StatelessWidget {
                           ])
                         ]),
                   ),
-                  const CardFavIcon()
+                  CardFavIcon(
+                      kind: 'store',
+                      isAddedTofavorite: data.isFavorite,
+                      id: data.id.toString())
                 ],
               ),
             )

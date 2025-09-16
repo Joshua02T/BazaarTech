@@ -4,7 +4,6 @@ import 'package:bazaartech/core/const_data/font_family.dart';
 import 'package:bazaartech/core/service/media_query.dart';
 import 'package:bazaartech/core/service/my_service.dart';
 import 'package:bazaartech/core/service/routes.dart';
-import 'package:bazaartech/view/cart/controller/cartcontroller.dart';
 import 'package:bazaartech/view/home/controller/home_controller.dart';
 import 'package:bazaartech/view/productdetails/controller/productdetailscontroller.dart';
 import 'package:bazaartech/view/productdetails/screens/ratingwidget.dart';
@@ -352,7 +351,13 @@ class ProductDetails extends StatelessWidget {
                                               color: AppColors.white)))),
                               SizedBox(
                                   width: MediaQueryUtil.screenWidth / 25.75),
-                              FavIcon(id: id),
+                              FavIcon(
+                                  isAddedTofavorite:
+                                      Get.find<ProductDetailsController>()
+                                          .product!
+                                          .isFavorite,
+                                  kind: 'product',
+                                  id: id),
                             ]))
                       ]));
                 },

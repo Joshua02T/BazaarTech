@@ -1,5 +1,6 @@
 import 'package:bazaartech/core/repositories/bazaarrepo.dart';
 import 'package:bazaartech/core/repositories/cartrepo.dart';
+import 'package:bazaartech/core/repositories/favoriterepo.dart';
 import 'package:bazaartech/core/repositories/productrepo.dart';
 import 'package:bazaartech/core/repositories/storerepo.dart';
 import 'package:bazaartech/view/cart/models/cartitemmodel.dart';
@@ -14,6 +15,7 @@ class HomeController extends GetxController {
   final ProductRepository productRepo = ProductRepository();
   final StoreRepository storeRepo = StoreRepository();
   final BazaarRepository bazaarRepo = BazaarRepository();
+  final FavoriteRepository favoriteRepo = FavoriteRepository();
   final CartRepo cartRepo = CartRepo();
 
   final List<Product> productCardItem = <Product>[];
@@ -22,6 +24,7 @@ class HomeController extends GetxController {
 
   bool isLoading = false;
   bool isLoadingAddingToCart = false;
+  Map<String, bool> isLoadingAddingToFavorite = {};
 
   int selectedIndex = 0;
   final PageController pageController = PageController();
@@ -73,6 +76,38 @@ class HomeController extends GetxController {
       ToastUtil.showToast('Failed to load data, ${e.toString()}');
     } finally {
       isLoading = false;
+      update();
+    }
+  }
+
+  Future<bool> addToFavorite(String kind, String id) async {
+    try {
+      isLoadingAddingToFavorite[id] = true;
+      update();
+      await favoriteRepo.addToFavorite(kind, id);
+      if (kind == 'product') {
+        int index = productCardItem.indexWhere((c) => c.id.toString() == id);
+        if (index != -1) {
+          productCardItem[index].isFavorite = true;
+        }
+      } else if (kind == 'store') {
+        int index = storeCardItem.indexWhere((c) => c.id.toString() == id);
+        if (index != -1) {
+          storeCardItem[index].isFavorite = true;
+        }
+      } else {
+        int index = bazaarCardItem.indexWhere((c) => c.id.toString() == id);
+        if (index != -1) {
+          bazaarCardItem[index].isFavorite = true;
+        }
+      }
+
+      ToastUtil.showToast('Added to Favorite!');
+      return true;
+    } catch (e) {
+      return false;
+    } finally {
+      isLoadingAddingToFavorite[id] = false;
       update();
     }
   }

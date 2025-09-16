@@ -521,7 +521,13 @@ class StoreDetails extends StatelessWidget {
                                                 color: AppColors.white)))),
                                 SizedBox(
                                     width: MediaQueryUtil.screenWidth / 25.75),
-                                FavIcon(id: id)
+                                FavIcon(
+                                    isAddedTofavorite:
+                                        Get.find<StoreDetailsController>()
+                                            .store!
+                                            .isFavorite,
+                                    kind: 'store',
+                                    id: id),
                               ]))
                         ]));
                   })

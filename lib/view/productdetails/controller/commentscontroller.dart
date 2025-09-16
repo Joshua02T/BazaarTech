@@ -62,7 +62,6 @@ class CommentsController extends GetxController {
       if (index != -1) {
         allComments[index] = updatedComment;
       }
-
       ToastUtil.showToast('You liked the comment!');
       update();
     } catch (e) {
